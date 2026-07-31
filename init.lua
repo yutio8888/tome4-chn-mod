@@ -6,8 +6,8 @@ addon_version = {0,2,0}
 weight = 999999
 author = {'yutio888'}
 homepage = '-'
-description = [[补充和调整 ToME 1.7.6 汉化文本。
-Curated Chinese translation updates for ToME 1.7.6.]]
+description = [[补充和调整 ToME 1.7.6 汉化文本，并保留对 Nullpackreloaded 的额外支持。
+Curated Chinese translation updates for ToME 1.7.6, with optional Nullpackreloaded support.]]
 tags = {'translate'}
 data = true
 superload = true
