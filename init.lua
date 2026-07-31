@@ -2,12 +2,12 @@ long_name = "Modified Chinese Translation"
 short_name = "chn-mod"
 for_module = "tome"
 version = {1,7,6}
-addon_version = {0,1,0}
+addon_version = {0,2,0}
 weight = 999999
 author = {'yutio888'}
 homepage = '-'
-description = [[部分汉化文本补充和调整测试。目前加入了对Nullpackreloaded插件提供的多个新职业的文本汉化测试。
-Update&test some chinese translation. Recently added the translation of Nullpackreloaded addon.]]
+description = [[补充和调整 ToME 1.7.6 汉化文本。
+Curated Chinese translation updates for ToME 1.7.6.]]
 tags = {'translate'}
 data = true
 superload = true
