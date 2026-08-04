@@ -1,3 +1,9 @@
+-- The engine only auto-loads an addon's data/locales/<lang>.lua
+-- (see Module.lua loadLocale), so standalone translation files must be
+-- loaded explicitly. They carry a locale header and register into zh_hans.
+local I18N = require("engine.I18N")
+I18N:loadLocale("/data-chn-mod/null_translation.lua")
+
 local _popup = engine.ui.Dialog.listPopup
 function engine.ui.Dialog:listPopup(title, text, list, ...)
     title = _t(title) or title
