@@ -1,0 +1,35 @@
+ToME4 汉化插件（chn-mod）许可声明
+================================
+
+本插件（chn-mod, "Modified Chinese Translation"）是《ToME4 - Tales of Maj'Eyal》
+及其官方扩展（Ashes of Urh'Rok、Cults of Entropy、Embers of Rage）的中文本地化
+衍生作品。
+
+上游作品版权与许可
+------------------
+Copyright (C) 2009-2019 Nicolas Casalini "DarkGod" (darkgod@te4.org)
+
+上游游戏与扩展以 GNU General Public License 第 3 版（或任何更新版本）发布，
+详见本目录 COPYING（GNU GPL v3 官方全文）与各 addon 的 init.lua 头部声明。
+
+本插件许可
+----------
+依据 GPL v3 第 5 条（分发衍生作品的义务），本插件全部内容
+（含 data/locales/zh_hans.lua、data/lore_translation.lua、
+data/null_translation.lua、hooks/、superload/、overload/、init.lua）以
+GNU General Public License 第 3 版（或任何更新版本）发布。
+
+本插件中由译者创作的译文文本，其版权归各自译者所有，并按上述许可向所有
+使用者授权：你可以自由使用、阅读、修改与再分发本插件，但再分发时必须
+保留本声明、随附 COPYING 全文，并同样以 GPL v3（或更新版本）许可你的
+修改版本。
+
+无担保声明
+----------
+本插件按 GPL v3 第 11-12 条提供，不附带任何担保；除非适用法律或书面协议
+另有规定。
+
+联系
+----
+作者：yutio888
+主页：te4.org
