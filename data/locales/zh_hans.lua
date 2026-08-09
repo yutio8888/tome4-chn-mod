@@ -97,27 +97,23 @@ t("%s maximum action radius set to %d.", "%s 的最大活动范围被设定为 %
 section "mod-tome/class/Player.lua"
 
 t("#LIGHT_RED#LIFE LOST WARNING!", "#LIGHT_RED#生命流失警告！", "say")
+t("#LIGHT_GREEN#Accepted quest '%s'!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#接受了任务“%s”！#WHITE#（按下“j”查看任务日志）", "logPlayer")
+t("#LIGHT_GREEN#Quest '%s' status updated!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#任务“%s”状态已经更新！#WHITE#（按下“j”查看任务日志）", "logPlayer")
+t("#LIGHT_GREEN#Quest '%s' completed!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#任务“%s”完成！#WHITE#（按下“j”查看任务日志）", "logPlayer")
+t("#LIGHT_GREEN#Quest '%s' is done!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#任务“%s”完成！#WHITE#（按下“j”查看任务日志）", "logPlayer")
+t("#LIGHT_RED#Quest '%s' is failed!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_RED#任务“%s”失败！#WHITE#（按下“j”查看任务日志）", "logPlayer")
 
 ------------------------------------------------
 section "mod-tome/class/Trap.lua"
 
-t("#LIGHT_GREEN#%d turns#WHITE#", "#LIGHT_GREEN#%d 回合#WHITE#", "tformat")
 t("ignore", "无视", "_t")
 
 ------------------------------------------------
 section "mod-tome/class/UserChatExtension.lua"
 
-t("#ANTIQUE_WHITE#has linked an item:#WHITE# %s", "#ANTIQUE_WHITE#链接了一件物品:#WHITE# %s", "tformat")
-t("#ANTIQUE_WHITE#has linked a creature:#WHITE# %s", "#ANTIQUE_WHITE#链接了一个生物:#WHITE# %s", "tformat")
-t("#ANTIQUE_WHITE#has linked a talent:#WHITE# %s", "#ANTIQUE_WHITE#链接了一个技能:#WHITE# %s", "tformat")
-
-------------------------------------------------
-section "mod-tome/class/generator/actor/Arena.lua"
-
-t("#LIGHT_GREEN#Your powerful attack completely obliterates#WHITE#%s#LIGHT_GREEN#!", "#LIGHT_GREEN#你强力的攻击将#WHITE#%s#LIGHT_GREEN#完全毁灭！", "log")
-t("#LIGHT_GREEN#You destroy#WHITE#%s#LIGHT_GREEN#in a single blow!", "#LIGHT_GREEN#你一击秒杀了#WHITE#%s#LIGHT_GREEN#！", "log")
-t("#LIGHT_GREEN#Your score multiplier increases by#WHITE#%d#LIGHT_GREEN#!", "#LIGHT_GREEN#你的分数加成增加了#WHITE#%d#LIGHT_GREEN#!", "log")
-t("#LIGHT_GREEN#Your score multiplier increases by#WHITE#0.1#LIGHT_GREEN#!", "#LIGHT_GREEN#你的分数加成增加了#WHITE#0.1#LIGHT_GREEN#!", "log")
+t("#ANTIQUE_WHITE#has linked an item: #WHITE# %s", "#ANTIQUE_WHITE#链接了一件物品:#WHITE# %s", "tformat")
+t("#ANTIQUE_WHITE#has linked a creature: #WHITE# %s", "#ANTIQUE_WHITE#链接了一个生物:#WHITE# %s", "tformat")
+t("#ANTIQUE_WHITE#has linked a talent: #WHITE# %s", "#ANTIQUE_WHITE#链接了一个技能:#WHITE# %s", "tformat")
 
 ------------------------------------------------
 section "mod-tome/class/interface/ActorInscriptions.lua"
@@ -139,15 +135,6 @@ section "mod-tome/class/interface/Combat.lua"
 t("#ORCHID#%s cleverly deflects the attack with %s shield!#LAST#", "#ORCHID#%s用%s的盾牌机智地偏转了这次攻击!#LAST#", "logSeen")
 t("%s(%d parried#LAST#)", "%s(%d 点伤害被格挡#LAST#)", "tformat")
 t("#Source# counter attacks #Target# with %s shield shards!", "#Source#用%s枚盾牌碎片反击了#Target#！", "logCombat")
-
-------------------------------------------------
-section "mod-tome/class/interface/PlayerQuestPopup.lua"
-
-t("#LIGHT_GREEN#Accepted quest '%s'!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#接受了任务“%s”！#WHITE#（按下“j”查看任务日志）", "logPlayer")
-t("#LIGHT_GREEN#Quest '%s' status updated!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#任务“%s”状态已经更新！#WHITE#（按下“j”查看任务日志）", "logPlayer")
-t("#LIGHT_GREEN#Quest '%s' completed!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#任务“%s”完成！#WHITE#（按下“j”查看任务日志）", "logPlayer")
-t("#LIGHT_GREEN#Quest '%s' is done!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#任务“%s”完成！#WHITE#（按下“j”查看任务日志）", "logPlayer")
-t("#LIGHT_RED#Quest '%s' is failed!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_RED#任务“%s”失败！#WHITE#（按下“j”查看任务日志）", "logPlayer")
 
 ------------------------------------------------
 section "mod-tome/class/interface/TooltipsData.lua"
@@ -804,10 +791,10 @@ t("w...what was that about?", "什……那是怎么回事？", "_t")
 t([[#LIGHT_GREEN#*The gate opens, revealing a mature human woman in crimson robes.
 #LIGHT_GREEN#She looks at you with a wide smile*
 #WHITE# My, my, what a fine @playerdescriptor.race@ you are. What was your name again, @playername@? I am soo delighted to be your rival today.
-#LIGHT_GREEN#*She speaks quietly as if telling a secret*#WHITE#You know, so few get past the little one as of late, it's such a bore.#LIGHT_GREEN#*She giggles*#WHITE#
+#LIGHT_GREEN#*She speaks quietly as if telling a secret* #WHITE#You know, so few get past the little one as of late, it's such a bore.#LIGHT_GREEN#*She giggles*#WHITE#
 So! I am Riala, the Crimson. I came directly from Angolwen. Despite, you know, the whole thing with the Spellblaze, people still enjoy a few magic tricks!
 #LIGHT_GREEN#*She snaps her fingers, and then flames start dancing around her!*#WHITE#
-Fryjia told me about you, the poor thing, so I will not underestimate such a promising aspirant #LIGHT_GREEN#*She smiles warmly*#WHITE#So, let's make haste my dear!
+Fryjia told me about you, the poor thing, so I will not underestimate such a promising aspirant #LIGHT_GREEN#*She smiles warmly* #WHITE#So, let's make haste my dear!
 There is a battle to fight here!]], [[#LIGHT_GREEN#*大门打开了，进来的是一位风韵十足穿着深红色长袍的女子。
 #LIGHT_GREEN#她看着你并对你露齿一笑*
 #WHITE# 我的，我的天呐，你是多么强大的一个 @playerdescriptor.race@ 。你能重复一遍你的名字吗，@playername@？我很高兴今天能成为你的对手。
@@ -1663,7 +1650,6 @@ t("%s(%d antimagic)#LAST#", "%s(%d 反魔盾)#LAST#", "tformat")
 t("%s(%d flat reduction)#LAST#", "%s(%d 固定减伤)#LAST#", "tformat")
 t("#LIGHT_GREY#(%d resilience)#LAST#", "#LIGHT_GREY#(%d 弹性体质)#LAST#", "tformat")
 t("#CRIMSON##Source# damages %s through Martyrdom!", "#CRIMSON##Source#通过殉难伤害了%s！", "delayedLogMessage")
-t("#Source##LIGHT_GREEN#HEALS#LAST# from %s %s #LAST# damage!", "#Source#因%s%s#LAST#伤害受到了#LIGHT_GREEN#治疗#LAST#！", "tformat")
 t("raked", "被抓伤", "_t")
 t("mutilated", "被肢解", "_t")
 t("splattered", "被击成肉泥", "_t")
@@ -1760,6 +1746,11 @@ section "mod-tome/data/general/events/rat-lich.lua"
 
 t("Forsaken Crypt", "废弃地穴", "_t")
 t("collapsed forsaken crypt", "坍塌的废弃地穴", "_t")
+
+------------------------------------------------
+section "mod-tome/data/general/events/sludgenest.lua"
+
+t("Suddenly it comes back to you. You remember long ago somebody told you about a strange lush forest... If only you could remember where!", "突然你想了起来。很久以前曾有人向你提起过一片奇异而葱郁的森林……要是你还能记得它在哪里就好了！", "_t")
 
 ------------------------------------------------
 section "mod-tome/data/general/events/spellblaze-scar.lua"
@@ -6580,7 +6571,7 @@ section "mod-tome/data/quests/brotherhood-of-alchemists.lua"
 
 t("#LIGHT_GREEN#Thanks to your timely aid, %s is the newest member of the Brotherhood of Alchemists.#WHITE#", "#LIGHT_GREEN#感谢你的及时帮助，%s成为了炼金术士兄弟会的新成员。#WHITE#", "tformat")
 t("#RED#You aided various denizens of Maj'Eyal in their attempts to join the Brotherhood of Alchemists, though you did not prove the deciding factor for any. This year's new member is %s.#WHITE#", "#RED#你帮助了马基·埃亚尔的许多人加入炼金术士兄弟会，但是你没有成为任何一个决定性因素。今年的新成员是%s。#WHITE#", "tformat")
-t("#LIGHT_GREEN# * You've found the needed %s.#WHITE#", "#LIGHT_GREEN# * 你找到了所需要的%s。#WHITE#", "tformat")
+t("#LIGHT_GREEN#  * You've found the needed %s.#WHITE#", "#LIGHT_GREEN# * 你找到了所需要的%s。#WHITE#", "tformat")
 
 ------------------------------------------------
 section "mod-tome/data/quests/charred-scar.lua"
@@ -6854,10 +6845,12 @@ t("You must now finish what the Sher'tuls started. Take the Staff of Absorption 
 ------------------------------------------------
 section "mod-tome/data/quests/west-portal.lua"
 
+t("Zemekkys in the Gates of Morning can build a portal back to your homeland for you.", "晨曦之门的伊莫克斯可以为你建造一座返回故乡的传送门。", "_t")
 t("#LIGHT_GREEN#* You have found a Blood-Runed Athame.#WHITE#", "#LIGHT_GREEN#* 你找到了血符仪式匕首。#WHITE#", "_t")
 t("#SLATE#* Find a Blood-Runed Athame.#WHITE#", "#SLATE#* 寻找血符仪式匕首。#WHITE#", "_t")
 t("#LIGHT_GREEN#* You have found the Resonating Diamond.#WHITE#", "#LIGHT_GREEN#* 你找到了共鸣钻石。#WHITE#", "_t")
 t("#SLATE#* Find a Resonating Diamond.#WHITE#", "#SLATE#* 寻找共鸣钻石。#WHITE#", "_t")
+t("#LIGHT_GREEN#* The portal is now functional and can be used to go back, although, like all portals, it is one-way only.#WHITE#", "#LIGHT_GREEN#* 传送门现已启用，可以用它返回；不过和所有传送门一样，它只能单向通行。#WHITE#", "_t")
 t("Zemekkys points to the location of Briagh's lair on your map.", "伊莫克斯在你的地图上指出了布莱亚的巢穴的位置。", "logPlayer")
 t("#VIOLET#Zemekkys starts to draw runes on the floor using the athame and gem dust.", "#VIOLET#伊莫克斯开始用仪式匕首和宝石粉末在地板上绘制符文。", "logPlayer")
 
@@ -8243,7 +8236,7 @@ t([[This talent allows you to prepare up to %d different trap(s) of tier %d or l
 		Traps prepared this way are difficult to detect (%d detection 'power') and disarm (%d disarm 'power') based on your Cunning.  They gain %+d%% effectiveness, and can be deployed without breaking stealth %d%% of the time.
 		You are immune to the damage and negative effects of your traps, and traps may critically strike based on your physical crit chance.
 		Most traps last %d turns if not triggered, and refund 80%% of their stamina cost on expiration.
-		More designs may be discovered via disarming or learned from special instructors in the world.]], [[该技能允许你准备 %d 个不同的陷阱，最高材质等级为 %d。（使用该技能选择需要准备的陷阱。） 
+		More designs may be discovered via disarming or learned from special instructors in the world.]], [[该技能允许你准备 %d 个不同的陷阱，最高材质等级为 %d。（使用该技能选择需要准备的陷阱。）
 		已知陷阱：
 %s
 
@@ -10633,10 +10626,10 @@ t([[Assume a defensive mental state.
 		这个技能需要一把念动武器。]], "tformat")
 t([[Focus your will into a powerful thrust of your telekinetically-wielded weapon to impale your target and then viciously rip it free.
 		This deals %d%% weapon damage and then causes the victim to bleed for %0.1f Physical damage over four turns.
-		At level 3 the thrust is so powerful that it has %d%% chance to shatter a temporary damage shield if one exists.
+		At level 3 the thrust is so powerful that it has %d%% chance to shatter a random temporary magical or psionic damage absorbing shield if one exists.
 		The bleeding damage increases with your Mindpower.]], [[将你的意志灌入你的念动武器，使它猛力推进并刺穿你的目标并恶毒的绞开它的身体。
 		这次攻击将造成 %d%% 武器伤害，并使目标流血 4 回合，累计造成 %0.1f 物理伤害。
-		在 3 级时，武器将势不可挡地突进，有 %d%% 几率击碎目标身上一个临时性的伤害护盾（如果存在）。
+		在 3 级时，武器将势不可挡地突进，有 %d%% 几率随机击碎目标身上一个临时的魔法或灵能伤害吸收护盾（如果存在）。
 		流血伤害受精神强度加成。]], "tformat")
 
 ------------------------------------------------
@@ -11952,6 +11945,11 @@ t([[Tries to perform a killing blow, doing %d%% weapon damage and dealing an aut
 t([[Hits the target with your weapon, doing %d%% damage. If the attack hits, the target is stunned for %d turns.
 		The stun chance increases with your Physical Power.]], [[用你的武器攻击目标并造成 %d%% 伤害。如果此次攻击命中，则目标会震慑 %d 回合。
 		震慑概率受物理强度加成。]], "tformat")
+t([[Hits the target with your weapon, doing %d%% damage. If the attack hits, the target's armour and saves are reduced by %d for %d turns.
+		Also if the target is protected by any temporary magical or psionic damage absorbing shields there is %d%% chance to shatter one random shield.
+		Armor reduction chance increases with your Physical Power.]], [[用武器攻击目标，造成 %d%% 伤害。若攻击命中，目标的护甲和所有豁免降低 %d 点，持续 %d 回合。
+		如果目标受到临时的魔法或灵能伤害吸收护盾保护，还有 %d%% 几率随机击碎其中一个护盾。
+		护甲削减的成功几率受物理强度加成。]], "tformat")
 t([[Hits the target with your weapon, doing %d%% damage. If the attack hits, the target's Accuracy is reduced by %d for %d turns.
 		Accuracy reduction chance increases with your Physical Power.]], [[用武器攻击目标，造成 %d%% 伤害。若攻击命中，目标的命中降低 %d 点，持续 %d 回合。
 		命中削减的成功几率受物理强度加成。]], "tformat")
@@ -12419,9 +12417,9 @@ The physical power and accuracy increase with your Dexterity. This requires a bo
 section "mod-tome/data/talents/techniques/strength-of-the-berserker.lua"
 
 t([[Hits the target with your weapon, doing %d%% damage. If the attack hits, the target's armour and saves are reduced by %d for %d turns.
-		Also if the target is protected by a temporary damage shield there is %d%% chance to shatter it.
+		Also if the target is protected by any temporary magical or psionic damage absorbing shields there is %d%% chance to shatter a random shield.
 		Armor reduction chance increases with your Physical Power.]], [[用武器攻击目标，造成 %d%% 伤害。若攻击命中，目标的护甲和所有豁免降低 %d 点，持续 %d 回合。
-		如果目标受临时伤害护盾保护，还有 %d%% 几率将其粉碎。
+		如果目标受到临时的魔法或灵能伤害吸收护盾保护，还有 %d%% 几率随机击碎其中一个护盾。
 		护甲削减的成功几率受物理强度加成。]], "tformat")
 
 ------------------------------------------------
@@ -12741,6 +12739,7 @@ t([[You infuse blighted energies into all of your summons, granting them Bone Sh
 		- Bone Giants: Bone Spike and Ruin
 		- Ghouls: Virulent Disease
 		- Dread: Slumber
+		%s
 		]], [[你把枯萎能量灌注进你的召唤生物中，让他们获得白骨护盾（等级 3），并获得相当于你魔力值的法术强度加成。
 		你的自然召唤和死灵随从将会得到特殊的枯萎技能（等级 3），其他的召唤物将会获得 10%% 枯萎伤害转换，并获得剧毒瘟疫（等级 3）。
 		#GREEN#自然召唤:#LAST#
@@ -12761,6 +12760,7 @@ t([[You infuse blighted energies into all of your summons, granting them Bone Sh
 		- 骨巨人：白骨尖刺和 毁伤
 		- 食尸鬼：剧毒瘟疫
 		- 梦魇：沉睡
+		%s
 		]], "tformat")
 t([[You can now control the recent past. Upon using this prodigy you gain a temporal effect for 20 turns.
 		While this effect holds you can use the prodigy again to rewrite history.
@@ -13534,63 +13534,6 @@ There are trolls to the west. Go use your bow and arrows to kill them!
 * 选择你的弓和箭矢，选择装备。
 
 西部有一些巨魔，用弓箭来杀死他们！
-]], "_t")
-
-------------------------------------------------
-section "mod-tome/data/texts/tutorial/stats/stats1.lua"
-
-t([[Basic character attributes such as strength and willpower are important, but their importance lies in how they affect your #GOLD#combat stats#WHITE#, the subject of this entire tutorial.
-The first two of these #GOLD#combat stats#WHITE# are:
-
-#LIGHT_GREEN#Accuracy:#WHITE#Determines whether your physical attacks hit your target.  
-#LIGHT_GREEN#Defense:#WHITE#Your ability to avoid attacks.
-
-When you try to stab somebody, your #LIGHT_GREEN#Accuracy#WHITE# score is measured against your target's #LIGHT_GREEN#Defense#WHITE# score, and a percentage chance of success is determined. We'll look at the exact calculation later.
-
-]], [[基础角色属性比如力量和意志是非常重要的，重要性在于他们如何影响你的 #GOLD#战斗属性#WHITE#，
-这是本次教程的一个主题。
-首先两个 #GOLD#战斗属性#WHITE# 是：
-
-#LIGHT_GREEN#命中：#WHITE#决定了你的物理攻击是否可以击中目标。
-#LIGHT_GREEN#闪避：#WHITE#你躲避攻击的能力。
-
-当你尝试攻击某个目标，你的 #LIGHT_GREEN#命中#WHITE# 等级会和目标的 #LIGHT_GREEN#闪避#WHITE# 等级进行一个计算得出成功击
-中目标概率，我们在后面会看到实际的计算结果。
-
-]], "_t")
-
-------------------------------------------------
-section "mod-tome/data/texts/tutorial/stats/stats2.lua"
-
-t([[The next three important #GOLD#combat stats#WHITE#:
-
-#LIGHT_GREEN#Physical save:#WHITE#Your ability to shrug off physical effects.
-#LIGHT_GREEN#Spell save:#WHITE#Your ability to shrug off magical effects.
-#LIGHT_GREEN#Mental save:#WHITE#Your ability to shrug off mental effects.
-
-]], [[另外三个主要的 #GOLD#战斗属性#WHITE#：
-
-#LIGHT_GREEN#物理豁免：#WHITE#你摆脱物理效果的能力。
-#LIGHT_GREEN#法术豁免：#WHITE#你摆脱法术效果的能力。
-#LIGHT_GREEN#精神豁免：#WHITE#你摆脱精神效果的能力。
-
-]], "_t")
-
-------------------------------------------------
-section "mod-tome/data/texts/tutorial/stats/stats3.lua"
-
-t([[The final three important #GOLD#combat stats#WHITE# of your character are these:
-
-#LIGHT_GREEN#Physical power:#WHITE#Your ability to inflict damage and effects with weapons (including fists).
-#LIGHT_GREEN#Spellpower:#WHITE#Your ability to inflict damage and effects with spells.
-#LIGHT_GREEN#Mindpower:#WHITE#Your ability to inflict damage and effects with your mind.
-
-]], [[角色的最后三个重要 #GOLD#战斗属性#WHITE# ：
-
-#LIGHT_GREEN#物理强度：#WHITE#你的武器造成伤害或效果的能力(包括徒手攻击)。
-#LIGHT_GREEN#法术强度：#WHITE#你的法术造成伤害或效果的能力。
-#LIGHT_GREEN#精神强度：#WHITE#你的精神造成伤害或效果的能力。
-
 ]], "_t")
 
 ------------------------------------------------
@@ -14395,10 +14338,10 @@ At its core lies the Uttercold, a cold so cold it can even damage creatures norm
 You have mastered ice magic and can now create new Archmage and Necromancer characters that can learn the #LIGHT_GREEN#Ice talents#WHITE#.
 
 Talents:
-- #YELLOW#Freeze:#WHITE#Condense ambient water on a target, damaging and freezing it
-- #YELLOW#Frozen Ground:#WHITE#Unleash a nova of ice on the ground, stopping the movements of anything caught inside
-- #YELLOW#Shatter:#WHITE#Shatter all frozen creatures in your sight, dealing increased damage or even killing them
-- #YELLOW#Uttercold:#WHITE#Master the Uttercold and pierce even through cold immunities
+- #YELLOW#Freeze: #WHITE#Condense ambient water on a target, damaging and freezing it
+- #YELLOW#Frozen Ground: #WHITE#Unleash a nova of ice on the ground, stopping the movements of anything caught inside
+- #YELLOW#Shatter: #WHITE#Shatter all frozen creatures in your sight, dealing increased damage or even killing them
+- #YELLOW#Uttercold: #WHITE#Master the Uttercold and pierce even through cold immunities
 ]], [[自始以来法师们进行着各种元素试验。
 大多数法师满足于使用水系魔法，有些人则进行深入的研究并创造出了冰系魔法。
 其终极魔法技能就是“绝对零度”，它甚至可以对那些常规免疫寒冷魔法的生物造成伤害。
@@ -14423,10 +14366,10 @@ At its core lies the Crystalline Focus, which can create attacks so sharp they c
 You have mastered stone magic and can now create new Archmage and Arcane Blade characters that can learn the #LIGHT_GREEN#Stone talents#WHITE#.
 
 Talents:
-- #YELLOW#Earthen Missiles:#WHITE#Fire multiple missiles of stone independently at targets
-- #YELLOW#Body of Stone:#WHITE#Turn into stone, reducing the cooldown of many stone/earth talents
-- #YELLOW#Earthquake:#WHITE#Create a localized earthquake, stunning all in the area
-- #YELLOW#Crystalline Focus:#WHITE#Master the Stone and pierce even through physical immunities
+- #YELLOW#Earthen Missiles: #WHITE#Fire multiple missiles of stone independently at targets
+- #YELLOW#Body of Stone: #WHITE#Turn into stone, reducing the cooldown of many stone/earth talents
+- #YELLOW#Earthquake: #WHITE#Create a localized earthquake, stunning all in the area
+- #YELLOW#Crystalline Focus: #WHITE#Master the Stone and pierce even through physical immunities
 ]], [[自始以来法师们进行着各种元素试验。
 大多数法师满足于使用大地系魔法，有些人则进行深入的研究并创造出了石系魔法。
 其终极魔法技能就是“水晶力场”，使攻击更加犀利可以对物理免疫的生物造成伤害。
@@ -14496,10 +14439,10 @@ At its core lies the Wildfire, a fire so hot it can even damage creatures normal
 You have mastered Wildfire magic and can now create new Archmage characters that can learn the #LIGHT_GREEN#Wildfire talents#WHITE#.
 
 Talents:
-- #YELLOW#Blastwave:#WHITE#Unleash a fire nova around you, damaging and knocking back anything caught inside
-- #YELLOW#Dancing Fires:#WHITE#Project your inner fire to all creatures in your line of sight, setting them ablaze
-- #YELLOW#Combust:#WHITE#Disrupt normal burning effects and make them combust at once
-- #YELLOW#Wildfire:#WHITE#Master the Wildfire and pierce even through fire immunities
+- #YELLOW#Blastwave: #WHITE#Unleash a fire nova around you, damaging and knocking back anything caught inside
+- #YELLOW#Dancing Fires: #WHITE#Project your inner fire to all creatures in your line of sight, setting them ablaze
+- #YELLOW#Combust: #WHITE#Disrupt normal burning effects and make them combust at once
+- #YELLOW#Wildfire: #WHITE#Master the Wildfire and pierce even through fire immunities
 ]], [[自始以来法师们进行着各种元素试验。
 大多数法师满足于使用火系魔法，有些人则进行深入的研究并创造出了焱系魔法。
 其终极魔法技能就是“野火燎原”，它甚至可以对那些常规免疫火焰魔法的生物造成伤害。
@@ -14524,10 +14467,10 @@ At its core lies the Tempest, a storm so powerful it can even damage creatures n
 You have mastered storm magic and can now create new Archmage characters that can learn the #LIGHT_GREEN#Storm talents#WHITE#.
 
 Talents:
-- #YELLOW#Nova:#WHITE#Unleash a lightning nova around you, dazing and damaging creatures caught inside
-- #YELLOW#Shock:#WHITE#Fire a fast bolt of lightning, dazing the target
-- #YELLOW#Hurricane:#WHITE#Call down a Hurricane on any creatures you daze, creating a lightning storm around each of them
-- #YELLOW#Tempest:#WHITE#Master the Tempest and pierce even through lightning immunities
+- #YELLOW#Nova: #WHITE#Unleash a lightning nova around you, dazing and damaging creatures caught inside
+- #YELLOW#Shock: #WHITE#Fire a fast bolt of lightning, dazing the target
+- #YELLOW#Hurricane: #WHITE#Call down a Hurricane on any creatures you daze, creating a lightning storm around each of them
+- #YELLOW#Tempest: #WHITE#Master the Tempest and pierce even through lightning immunities
 ]], [[自始以来法师们进行着各种元素试验。
 大多数法师满足于使用大气系魔法，少数人则深入研究，创造出了风暴魔法。
 其核心是“无尽风暴”，强大到甚至能穿透通常对闪电免疫的防御。
@@ -14752,10 +14695,10 @@ Many creatures use them, along with some shady people.
 You have made a deal with such a person and can now create new Rogue or Archer characters that can learn the #LIGHT_GREEN#Poisons talents#WHITE#.
 
 Talents:
-- #YELLOW#Vile Poisons:#WHITE#Learn new dangerous and terrible poisons to coat your weapons or ammo with, infecting your foes
-- #YELLOW#Venomous Strike:#WHITE#A terrible strike that deals increased nature damage based on the number of poison effects
-- #YELLOW#Empower Poisons:#WHITE#Learn to make your poisons even more lethal and fast
-- #YELLOW#Toxic Death:#WHITE#Spread the toxic joy to your foe's friends!
+- #YELLOW#Vile Poisons: #WHITE#Learn new dangerous and terrible poisons to coat your weapons or ammo with, infecting your foes
+- #YELLOW#Venomous Strike: #WHITE#A terrible strike that deals increased nature damage based on the number of poison effects
+- #YELLOW#Empower Poisons: #WHITE#Learn to make your poisons even more lethal and fast
+- #YELLOW#Toxic Death: #WHITE#Spread the toxic joy to your foe's friends!
 ]], [[毒素取自植物、野生动物或更奇异的所在，自古便已存在。
 许多生物会使用毒素，一些见不得光的人也一样。
 
@@ -15044,6 +14987,7 @@ t("-Invis", "-隐形", "_t")
 t("Improves/gives invisibility (power %d), reducing damage dealt by %d%%%s.", "提升或获得隐形（强度 %d），造成的伤害降低 %d%%%s。", "tformat")
 t("Invisible (power %d), damage dealt reduced by %d%%, all resistances increased by %d%%, movement speed increased by %d%%.", "隐形（强度 %d），造成的伤害降低 %d%%，所有抗性提高 %d%%，移动速度提高 %d%%。", "tformat")
 t("The target is protected a raging storm deflecting up to %d instances of damage over %d.", "目标受到狂暴风暴的保护，可以偏转至多 %d 次伤害，持续 %d 回合。", "tformat")
+t("#BLUE##Target#'s stormshield is out of charges and dissipates!#LAST#.", "#BLUE##Target#的风暴护盾超过吸收次数而消失了!#LAST#.", "logCombat")
 t("#Target#'s eyes tingle.", "#Target#的眼睛感到刺痛。", "_t")
 t("#Target#'s eyes tingle no more.", "#Target#的眼睛不再刺痛。", "_t")
 t("You have an arcane eye observing for you in a radius of %d.", "你有一只奥术之眼，正在为你观察半径 %d 码内的区域。", "tformat")
@@ -15312,7 +15256,7 @@ t("#LIGHT_RED#You've altered your destiny and will not be pulled into the past."
 t("Paradox Clone", "悖论分身", "_t")
 t("The target is partially removed from the timeline, reducing all damage dealt by %d%%, all damage received by %d%%, and the duration of all detrimental effects by %d%%.", "目标暂时被从时间线中移除，造成的伤害减少 %d%%，减少受到伤害 %d%%，并减少 %d%% 回合所有不良效果持续时间。", "tformat")
 t([[An aura of death surrounds you.
-#CRIMSON#Penalty :#WHITE#Fear of Death: %+d%% resistance against damage from the undead.
+#CRIMSON#Penalty : #WHITE#Fear of Death: %+d%% resistance against damage from the undead.
 #CRIMSON#Power 1+: %sPower over Death: %+d%% damage against the undead.
 #CRIMSON#Power 2+: %s%+d Luck, %+d Strength, %+d Magic
 #CRIMSON#Power 3+: %sLiving Death: Ghoulish retch heals you. Once every %d turns, retch (level %d) when you fall below %d%% health
@@ -15322,19 +15266,8 @@ t([[An aura of death surrounds you.
 #CRIMSON# 强度 2+：%s%+d 幸运 , %+d 力量 , %+d 魔法
 #CRIMSON# 强度 3+：%s 活死人之躯：腐秽呕吐能治疗你。每 %d 回合一次，当你生命值降至 %d%% 以下时，释放一次等级 %d 的腐秽呕吐。
 #CRIMSON# 强度 4+：%s 死缓：你杀死的人形生物有 %d%% 几率变成食尸鬼并替你作战持续 6 回合。]], "tformat")
-t([[You feel your grip on reality slipping.
-#CRIMSON#Penalty :#WHITE#Fractured Sanity: %+d%% Mind Resistance, %+d%% Confusion Immunity
-#CRIMSON#Power 1+: %sUnleashed: %+d%% critical damage, %+d%% off-hand weapon damage
-#CRIMSON#Power 2+: %s%+d Luck, %+d Dexterity
-#CRIMSON#Power 3+: %sConspirator: Your madness is contagious. Every time you critically damage a foe there is a %d%% chance to spread one of your current detrimental mental effect to them.
-#CRIMSON#Power 4+: %sMania: Once per turn, when an attack does more than %0.1f%% of your life, the remaining cooldown of all your talents is reduced by 1.]], [[你觉得你对现实失去控制。
-#CRIMSON# 惩罚 ：#WHITE# 扰乱心智： %+d%% 精神抗性 , %+d%% 混乱免疫
-#CRIMSON# 强度 1+：%s 解除束缚： %+d%% 暴击伤害， %+d%% 副手武器伤害。
-#CRIMSON# 强度 2+：%s%+d 幸运， %+d 敏捷
-#CRIMSON# 强度 3+：%s 阴谋：你的疯狂是会传染的。每次你对敌人造成暴击伤害时，都有 %d%% 的几率将你当前的负面精神效果传播给他们。
-#CRIMSON# 强度 4+：%s 狂热：每回合一次，当一次攻击超过你生命的 %0.1f%% 时，你所有技能的剩余冷却时间减少 1 。]], "tformat")
 t([[A shroud of darkness seems to fall across your path.
-#CRIMSON#Penalty :#WHITE#Shroud of Weakness: Small chance of becoming enveloped in a Shroud of Weakness (reduces damage dealt by %d%%) for 4 turns.
+#CRIMSON#Penalty : #WHITE#Shroud of Weakness: Small chance of becoming enveloped in a Shroud of Weakness (reduces damage dealt by %d%%) for 4 turns.
 #CRIMSON#Power 1+: %sNightwalker: %+d Darkness Resistance, %+d%% Max Darkness Resistance, %+d See Invisible
 #CRIMSON#Power 2+: %s%+d Luck, %+d Constitution
 #CRIMSON#Power 3+: %sShroud of Passing: Your form seems to fade as you move, reducing all damage taken by %d%% for 1 turn after movement.
@@ -15346,7 +15279,7 @@ t([[A shroud of darkness seems to fall across your path.
 #CRIMSON# 强度 4+：%s 死亡屏障：每一次杀死目标可以让你笼罩在一个屏障内，减少 %d%% 所受伤害持续 3 回合。]], "tformat")
 t("Shroud of Passing", "消逝之纱", "_t")
 t([[Horrible visions fill your mind.
-#CRIMSON#Penalty :#WHITE#Plagued by Visions: Your mental save has a 20%% chance to be reduced by %d%% when tested.
+#CRIMSON#Penalty : #WHITE#Plagued by Visions: Your mental save has a 20%% chance to be reduced by %d%% when tested.
 #CRIMSON#Power 1+: %sRemoved from Reality: %+d Physical Resistance, %+d Maximum Physical Resistance
 #CRIMSON#Power 2+: %s%+d Luck, %+d Willpower
 #CRIMSON#Power 3+: %sHarrow: When a foe attempts to inflict a detrimental effect upon you, your harrowing aura retaliates against a random foe in range 10, dealing %d mind and %d darkness damage.
@@ -15357,7 +15290,7 @@ t([[Horrible visions fill your mind.
 #CRIMSON# 强度 3+：%s 折磨 ：当敌人试图对你造成负面效果时，你的折磨光环会对 10 范围内的一个随机敌人进行报复，造成 %d 精神和 %d 暗影伤害。
 #CRIMSON# 强度 4+：%s 噩梦：每次受到目标攻击有概率 (当前 %d%%) 触发一个范围为 %d 码的噩梦（有减速、召唤梦魇和直接造成%d精神、%d暗影伤害的效果）持续 8 回合。  触发几率  在每次你受到打击时提高，同时随时间下降。]], "tformat")
 t([[Mayhem and destruction seem to follow you.
-#CRIMSON#Penalty :#WHITE#Lost Fortune: You seem to find less gold in your journeys.
+#CRIMSON#Penalty : #WHITE#Lost Fortune: You seem to find less gold in your journeys.
 #CRIMSON#Power 1+: %sMissplaced Endeavours: The endeavours of those around you begin to fail (+%d%% chance to avoid traps).
 #CRIMSON#Power 2+: %s%+d Luck, %+d Cunning
 #CRIMSON#Power 3+: %sMissed Opportunities: Opportunities are fleeting, and those close to you begin to miss them (+%d%% evasion).
@@ -15541,8 +15474,7 @@ t("shadowblade", "暗影之刃", "entity name")
 ------------------------------------------------
 section "mod-tome/data/zones/arena/zone.lua"
 
-t("#LIGHT_GREEN#The public is pleased by your performance! You now have the rank of#WHITE#%s#LIGHT_GREEN#!", "#LIGHT_GREEN#观众为你精彩的表现所折服！你获得了新级别#WHITE#%s#LIGHT_GREEN#!", "log")
-t("#YELLOW#Items lying around will disappear in#WHITE#%d#YELLOW# turns!#LAST#", "#YELLOW#地上的物品将会在#WHITE#%d#YELLOW#回合内消失!#LAST#", "log")
+t("#YELLOW#Items lying around will disappear in #WHITE#%d#YELLOW# turns!#LAST#", "#YELLOW#地上的物品将会在#WHITE#%d#YELLOW#回合内消失!#LAST#", "log")
 
 ------------------------------------------------
 section "mod-tome/data/zones/arena-unlock/npcs.lua"
