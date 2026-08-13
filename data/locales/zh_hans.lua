@@ -97,6 +97,7 @@ t("%s maximum action radius set to %d.", "%s 的最大活动范围被设定为 %
 section "mod-tome/class/Player.lua"
 
 t("#LIGHT_RED#LIFE LOST WARNING!", "#LIGHT_RED#生命流失警告！", "say")
+t("Your antimagic disrupts %s.", "你的反魔法技能打断了 %s 。", "tformat")
 t("#LIGHT_GREEN#Accepted quest '%s'!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#接受了任务“%s”！#WHITE#（按下“j”查看任务日志）", "logPlayer")
 t("#LIGHT_GREEN#Quest '%s' status updated!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#任务“%s”状态已经更新！#WHITE#（按下“j”查看任务日志）", "logPlayer")
 t("#LIGHT_GREEN#Quest '%s' completed!#WHITE#(Press 'j' to see the quest log)", "#LIGHT_GREEN#任务“%s”完成！#WHITE#（按下“j”查看任务日志）", "logPlayer")
@@ -882,6 +883,11 @@ t("WEALTH!! AND!! GLORYYYYY!!", "财富！！和！！荣耀！！", "_t")
 t("I won't need to save chicks from cults anymore!", "我再也不用从邪教那里救姑娘们了！", "_t")
 
 ------------------------------------------------
+section "mod-tome/data/chats/artifact-maker.lua"
+
+t("#LIGHT_BLUE#You are given: %s", "#LIGHT_BLUE#你获得了：%s", "log")
+
+------------------------------------------------
 section "mod-tome/data/chats/assassin-lord.lua"
 
 t("#LIGHT_GREEN#You and the Lord discuss your new relationship at some length, including the merits of assassination by proxy and some additional trapping techniques.", "#LIGHT_GREEN#你和盗贼头子讨论了你们的新关系，同时还讨论了部分暗杀和陷阱技巧。", "log")
@@ -1665,14 +1671,17 @@ t("spaghettified across the whole of space and time", "被时空之力拉成了�
 t("time dilated", "因时间膨胀", "_t")
 t("sticky smoke", "粘性烟雾", "damage type")
 t("fire repulsion", "火焰排斥", "damage type")
+t("% chance of gloom effects", "%几率随机黑暗效果", "damage type")
 t("item blight disease", "物品枯萎疾病", "damage type")
 t("* #LIGHT_GREEN#%d%%#LAST# chance to slow global speed by #YELLOW#%d%%#LAST#%s", "* #LIGHT_GREEN#%d%%#LAST#几率降低#YELLOW#%d%%#LAST#全局速度%s", "tformat")
+t("item antimagic scouring", "物品反魔清除", "damage type")
 t("item lightning daze", "物品闪电眩晕", "damage type")
 t("* #LIGHT_GREEN#%d%%#LAST# chance to #ROYAL_BLUE#daze#LAST# at end of turn%s", "* #LIGHT_GREEN#%d%%#LAST#几率在回合结束时#ROYAL_BLUE#眩晕#LAST#%s", "tformat")
 t("item light blind", "物品光致盲", "damage type")
 t("prismatic repulsion", "棱镜排斥", "damage type")
 t("implosion", "内爆", "damage type")
 t("%s has not been stopped!", "%s没有被阻止！", "logSeen")
+t("draining physical", "生命汲取", "damage type")
 t("entangle", "纠缠", "damage type")
 t("%s has no mana to burn.", "%s没有法力可供燃烧。", "logSeen")
 t("%s resists the baneful energy!", "%s抵抗了厄运能量！", "logSeen")
@@ -1680,6 +1689,7 @@ t("decaying darkness", "衰败黑暗", "damage type")
 t("orc spirit", "兽人灵魂", "_t")
 t("%s resists the forge bellow!", "%s抵抗了熔炉鼓风！", "logSeen")
 t("telekinetic shove", "念力推挤", "damage type")
+t("dimensional anchor", "时空锚", "damage type")
 t("terror", "恐惧", "damage type")
 t("%s resists the blinding flare!", "%s抵抗了致盲闪光！", "logSeen")
 t("sticky pitch", "粘性沥青", "damage type")
@@ -2358,6 +2368,61 @@ t("ash", "灰烬", "_t")
 ------------------------------------------------
 section "mod-tome/data/general/objects/gem.lua"
 
+t("alchemist diamond", "炼金钻石", "alchemist gem")
+t("diamond", "钻石", "gem name")
+t("white", "白宝石", "gem subtype")
+t("alchemist pearl", "炼金珍珠", "alchemist gem")
+t("pearl", "珍珠", "gem name")
+t("alchemist moonstone", "炼金月亮石", "alchemist gem")
+t("moonstone", "月亮石", "gem name")
+t("alchemist fire opal", "炼金火焰石", "alchemist gem")
+t("fire opal", "火焰石", "gem name")
+t("red", "红宝石", "gem subtype")
+t("alchemist bloodstone", "炼金血滴石", "alchemist gem")
+t("bloodstone", "血滴石", "gem name")
+t("alchemist ruby", "炼金红宝石", "alchemist gem")
+t("ruby", "红宝石", "gem name")
+t("alchemist amber", "炼金琥珀", "alchemist gem")
+t("amber", "琥珀", "gem name")
+t("yellow", "黄宝石", "gem subtype")
+t("alchemist turquoise", "炼金绿松石", "alchemist gem")
+t("green", "绿宝石", "gem subtype")
+t("turquoise", "绿松石", "gem name")
+t("alchemist jade", "炼金翡翠", "alchemist gem")
+t("jade", "翡翠", "gem name")
+t("alchemist sapphire", "炼金青玉", "alchemist gem")
+t("blue", "蓝色", "gem subtype")
+t("sapphire", "青玉", "gem name")
+t("alchemist quartz", "炼金石英", "alchemist gem")
+t("quartz", "石英", "gem name")
+t("alchemist emerald", "炼金祖母绿", "alchemist gem")
+t("emerald", "祖母绿", "gem name")
+t("alchemist lapis lazuli", "炼金天青石", "alchemist gem")
+t("lapis lazuli", "天青石", "gem name")
+t("alchemist garnet", "炼金石榴石", "alchemist gem")
+t("garnet", "石榴石", "gem name")
+t("alchemist onyx", "炼金缟玛瑙", "alchemist gem")
+t("black", "黑色", "gem subtype")
+t("onyx", "缟玛瑙", "gem name")
+t("alchemist amethyst", "炼金紫水晶", "alchemist gem")
+t("amethyst", "紫水晶", "gem name")
+t("violet", "紫色", "gem subtype")
+t("alchemist opal", "炼金蛋白石", "alchemist gem")
+t("opal", "蛋白石", "gem name")
+t("alchemist topaz", "炼金黄玉", "alchemist gem")
+t("topaz", "黄玉", "gem name")
+t("alchemist aquamarine", "炼金海蓝宝石", "alchemist gem")
+t("aquamarine", "海蓝宝石", "gem name")
+t("alchemist ametrine", "炼金紫黄晶", "alchemist gem")
+t("ametrine", "紫黄晶", "gem name")
+t("alchemist zircon", "炼金锆石", "alchemist gem")
+t("zircon", "锆石", "gem name")
+t("alchemist spinel", "炼金尖晶石", "alchemist gem")
+t("spinel", "尖晶石", "gem name")
+t("alchemist citrine", "炼金黄水晶", "alchemist gem")
+t("citrine", "黄水晶", "gem name")
+t("agate", "玛瑙石", "gem name")
+t("alchemist agate", "炼金玛瑙石", "alchemist gem")
 t("onyx", "缟玛瑙", "entity name")
 t("alchemist onyx", "炼金缟玛瑙", "entity name")
 t("black", "黑色", "entity subtype")
@@ -2725,6 +2790,43 @@ t("@Target@ triggers a water jet!", "@Target@触发了喷水陷阱！", "_t")
 ------------------------------------------------
 section "mod-tome/data/ingredients.lua"
 
+t("organic", "有机", "ingredient type")
+t("length of troll intestine", "一截巨魔肠子", "ingredient name")
+t("skeleton mage skull", "骷髅法师头骨", "ingredient name")
+t("ritch stinger", "里奇螫针", "ingredient name")
+t("orc heart", "兽人心脏", "ingredient name")
+t("naga tongue", "娜迦舌头", "ingredient name")
+t("vial of greater demon bile", "大恶魔的胆汁", "ingredient name")
+t("pouch of bone giant dust", "一袋骨巨人的骨灰", "ingredient name")
+t("ice ant stinger", "冰蚁的螫针", "ingredient name")
+t("minotaur nose", "米诺陶的鼻子", "ingredient name")
+t("vial of elder vampire blood", "一瓶长老吸血鬼的血液", "ingredient name")
+t("multi-hued wyrm scale", "多彩的龙鳞", "ingredient name")
+t("giant spider spinneret", "巨蛛的丝腺", "ingredient name")
+t("honey tree root", "蜜蜂树的根", "ingredient name")
+t("bloated horror heart", "浮肿的恐魔心脏", "ingredient name")
+t("electric eel tail", "电鳗尾巴", "ingredient name")
+t("vial of squid ink", "一瓶乌贼墨汁", "ingredient name")
+t("bear paw", "熊爪", "ingredient name")
+t("ice wyrm tooth", "冰霜巨龙的牙齿", "ingredient name")
+t("red crystal shard", "红色水晶碎片", "ingredient name")
+t("vial of fire wyrm saliva", "一瓶火龙涎", "ingredient name")
+t("chunk of ghoul flesh", "腐烂的食尸鬼肉块", "ingredient name")
+t("mummified bone", "木乃伊骨头", "ingredient name")
+t("sandworm tooth", "沙虫之牙", "ingredient name")
+t("black mamba head", "黑曼巴头", "ingredient name")
+t("snow giant kidney", "雪巨人的肾脏", "ingredient name")
+t("storm wyrm claw", "风暴之龙的爪子", "ingredient name")
+t("green worm", "翡翠蠕虫", "ingredient name")
+t("vial of wight ectoplasm", "一瓶尸妖灵质", "ingredient name")
+t("xorn fragment", "索尔石碎片", "ingredient name")
+t("warg claw", "座狼爪", "ingredient name")
+t("pouch of faeros ash", "一袋法罗灰烬", "ingredient name")
+t("wretchling eyeball", "酸液树魔之眼", "ingredient name")
+t("faerlhing fang", "费尔荷毒牙", "ingredient name")
+t("vampire lord fang", "吸血鬼领主的毒牙", "ingredient name")
+t("hummerhorn wing", "大黄蜂翅膀", "ingredient name")
+t("pouch of luminous horror dust", "一袋金色恐魔的粉尘", "ingredient name")
 t("organic", "有机", "entity type")
 t("length of troll intestine", "一截巨魔肠子", "entity name")
 t("A length of troll intestines. Fortunately, the troll appears to have eaten nothing in some time.", "一截巨魔肠子。幸运的是，这只巨魔碰巧没吃任何东西。", "_t")
@@ -7334,7 +7436,7 @@ t("Call temporal hounds to aid you in combat.", "召唤时空猎犬协助作战�
 t("Fluctuate spacetime.", "使时空波动。", "_t")
 t("Call upon the force of gravity to crush, push, and pull your foes.", "召唤重力粉碎、推动并拉扯敌人。", "_t")
 t("Manipulate chronomantic spells.", "操纵时空法术。", "_t")
-t("Manifold", "多态", "talent type")
+t("Manifold", "多重效应", "talent type")
 t("Age Manipulation", "年龄操纵", "talent type")
 t("Manipulate the age of creatures you encounter.", "操纵你所遇生物的年龄。", "_t")
 t("paradox", "紊乱", "talent type")
@@ -15114,6 +15216,7 @@ t("Lord of Skulls", "骷髅王", "_t")
 t("Damage reduced by %d%%.", "伤害减少 %d%%。", "tformat")
 t("Physical resistance reduced by %d%% and talents cooldowns increased by %d%%.", "物理抗性降低 %d%%，技能冷却时间增加 %d%%。", "tformat")
 t("Spellpower and physical power increased by %d.", "法术强度和物理强度提升 %d。", "tformat")
+t("flat", "固定伤害减免", "effect subtype")
 t("Reduces all damage by %d.", "降低所有伤害 %d。", "tformat")
 t("Damage from necrotic minions increased by %d%%.", "来自死灵随从的伤害增加 %d%%。", "tformat")
 t("Magically frozen wound that deals %0.2f cold damage per turn and movement speed reduced by %d%%.", "被魔法伤口割伤，每回合受到 %0.2f 寒冷伤害，移动速度降低 %d%%。", "tformat")
@@ -15155,6 +15258,7 @@ t("The target has been harassed by its stalker, reducing damage by %d%%.", "目�
 t("The target has been dominated.  It is unable to move and has lost %d armor and %d defense. Attacks from %s gain %d%% damage penetration.", "目标已被支配，无法移动，并失去 %d 点护甲和 %d 点闪避。来自 %s 的攻击获得 %d%% 抗性穿透。", "tformat")
 t("Madness reduces the target's global speed by %d%% and lowers mind resistance by %d%%.", "疯狂使目标的全局速度降低 %d%%，精神抗性降低 %d%%。", "tformat")
 t("Madness has stunned the target, reducing damage by 50%%, lowering mind resistance by %d%%, putting 4 random talents on cooldown and reducing movement speed by 50%%.  While stunned talents cooldown twice as slow.", "目标因疯狂而被震慑，造成的伤害降低 50%%，精神抗性降低 %d%%，4 个随机技能进入冷却，移动速度降低 50%%。震慑期间，技能冷却速度减半。", "tformat")
+t("power", "强度", "effect subtype")
 t("Maligned", "恶意缠身", "_t")
 t("The target is under a malign influence. All resists have been lowered by %d%%.", "目标受到恶意影响，所有伤害抗性降低 %d%%。", "tformat")
 t("#F53CBE##Target# has been maligned!", "#F53CBE##Target#受到恶意影响！", "_t")
@@ -15406,6 +15510,7 @@ t("#Target# is less impervious to physical effects.", "#Target#不再对物理�
 t("#Target#'s nature damage is no longer so potent.", "#Target#的自然伤害不再那么强大。", "_t")
 t("#Target# is covered in slippery moss!", "#Target#被光滑苔藓覆盖！", "_t")
 t("#Target# is free from the slippery moss.", "#Target#摆脱了光滑苔藓。", "_t")
+t("superiority", "优势", "effect subtype")
 t("Reduces physical damage received by %d%% and provides a %d%% chance to ignore critical hits.", "减少 %d%% 物理伤害并有 %d%% 几率无视暴击伤害。", "tformat")
 t("Increases critical hit chance by %d%%.", "增加 %d%% 暴击率。", "tformat")
 t("Increases stamina regeneration by %d, movement and attack speed by %d%%.", "增加 %d 体力回复、%d%% 攻击和移动速度。", "tformat")
@@ -16215,7 +16320,7 @@ t("Dungeon of Adventurer Enlightenment Completed", "冒险者启蒙地下城已�
 ------------------------------------------------
 section "mod-tome/data/zones/unhallowed-morass/npcs.lua"
 
-t("spiderkin", "蜘蛛亚种", "entity type")
+t("spiderkin", "蜘蛛族", "entity type")
 t("A nearly translucent spider hatchling.", "一只近乎半透明的蜘蛛幼体。", "_t")
 
 ------------------------------------------------
@@ -18591,7 +18696,7 @@ t("slowing void", "减速之虚", "damage type")
 t("draining void", "汲取之虚", "damage type")
 t("mesmerize", "催眠", "damage type")
 t("obliterating void", "湮灭之虚", "damage type")
-t("aging temporal", "衰老", "damage type")
+t("aging temporal", "时空衰老", "damage type")
 t("decaying ground", "腐朽之地", "damage type")
 t("defiled blood", "污血", "damage type")
 t("antropy energies", "反熵", "damage type")
@@ -18935,7 +19040,7 @@ t("#PURPLE#For an instant you feel as if time slowed down over the world! #{ital
 t("#YELLOW#A pair of ... brains in jar appear on the Egress! You quickly put them in your ingredients cache.", "#YELLOW#一对……瓶中脑出现在了出口！你赶紧把它们放进了你的材料库里。", "_t")
 t("Forbidden Cults", "禁忌邪教", "newLore category")
 t("our origins (1)", "我们的起源 (1)", "_t")
-t([[I do not remember anything from before. My earliest memories are of these ruins. My people are known as the Drem to the surface dwellers of this world. We are seen as monsters, and perhaps that is not an unfair presumption. We were once mindless creatures roaming the underground, capable only of violence and acting on instinct.
+t([[I do not remember anything from before. My earliest memories are of these ruins. My people are known as the Drem to the surface dwellers of this world. We are seen as monsters, and perhaps that is not an unfair presumption. We were once mindless creatures roaming the underground, capable only of violence and acting on instinct. 
 
 It is only after these ruins were found that thought finally manifested in our bodies. I am fortunate in that the ruins have gifted me with sublime intelligence. For some, it did not help at all. For others, it barely raised them above mindlessness. Whatever grants us intelligence in these ruins seems to work on a case-by-case basis. Since our self awareness is only a recent thing, we have much we need to learn about the world around us and about ourselves as well.
 
@@ -18969,7 +19074,7 @@ It is a vague hope, but I hope in my heart of hearts that this place will finall
 t("our origins (3)", "我们的起源 (3)", "_t")
 t([[The exploration of the cavity has been interesting, to say the least. At its very centre, we discovered a strange, egg-shaped structure. It's made out of some sort of metal which I have not seen before. Despite being covered in layers of ancient dust, the metal was untarnished and showed no noticeable signs of decay. It was highly resistant to damage, as our attempts to cut through it were met with failure, even when we employed magical means. There was a notable dent in its side, something which could have only been caused by a tremendous amount of force.
 
-There was a passage way leading into the egg, which I volunteered to step through first. The inside of the egg was stranger still. There were dozens of metal tubes which covered the ceiling. Even as I stood there, I could hear the sound of some liquid pouring through them. The walls were covered in blinking lights and yet more metallic objects which I could not make sense of. It is obvious that the egg was some sort of massive machine. I cannot understand how it works or how it was made, though. There is no magic that I can sense, so this machine must rely entirely on mechanical means to function. No race that I know of has the knowledge to build such a thing. I could only imagine what sort of genius could design such a thing, let alone build it.
+There was a passage way leading into the egg, which I volunteered to step through first. The inside of the egg was stranger still. There were dozens of metal tubes which covered the ceiling. Even as I stood there, I could hear the sound of some liquid pouring through them. The walls were covered in blinking lights and yet more metallic objects which I could not make sense of. It is obvious that the egg was some sort of massive machine. I cannot understand how it works or how it was made, though. There is no magic that I can sense, so this machine must rely entirely on mechanical means to function. No race that I know of has the knowledge to build such a thing. I could only imagine what sort of genius could design such a thing, let alone build it. 
 
 Most interesting of all is that the egg has a thin layer of void energy over its entire surface. Us Drem are familiar with such energies, as we have dedicated much of our study to the otherworldly. The even spread of these energies suggests that this egg was completely bathed in them at some point. I do not know what circumstances could have lead to this, for such a concentration of these energies simply couldn't exist on Eyal. Not without causing a violent explosion, at least. We have done such experiments before.
 
@@ -20217,7 +20322,7 @@ It is this dream which keeps Kroshkkur alive. Even as our bodies continue to war
 
 这就是让克诺什库尔保持生机的梦想。就算我们的身体将继续变异、衰败，我们也依然希望着能够找到方法来让我们的姿态变得更优秀。到了那时，我们的存在将不需要任何人的许可。]], "_t")
 t("Researcher Dremnot's Demystification of the Gods: Prelude", "研究员德瑞姆诺特的揭露诸神：前言", "_t")
-t([[Gods are beings which have been frequently mentioned throughout Eyal's history. They are a foreign concept to most readers, since most Eyalites of the current age have not encountered them. The word god gives you the impression of some almighty and obscenely powerful being, which these beings most certainly are. But, there has been little scholarly work dedicated to defining what exactly a god is. Multiple cultures across Eyal's history all have varying descriptions of the gods, despite the same names frequently appearing among them.
+t([[Gods are beings which have been frequently mentioned throughout Eyal's history. They are a foreign concept to most readers, since most Eyalites of the current age have not encountered them. The word god gives you the impression of some almighty and obscenely powerful being, which these beings most certainly are. But, there has been little scholarly work dedicated to defining what exactly a god is. Multiple cultures across Eyal's history all have varying descriptions of the gods, despite the same names frequently appearing among them. 
 
 As a scholar of Kroshkkur, I spent much time wandering the surface of Eyal and learning from the surface races regarding the gods, including many famous places of learning such as Anglowen. It was a hard sell, but I even managed to [i]convince[/i] an imp to retrieve certain documentation on Urk'Rok as well. This series of documents has been written to catalogue information regarding the gods and to develop as accurate a picture of them as myth and history will allow and this preface is to give a general impression of what exactly a god is supposed to be.
 
@@ -20351,7 +20456,7 @@ His fate after the Godhunt is unknown. Some sources speculate that he still rema
 
 他在弑神之战之后的命运无从知晓。有些人猜测他至今仍然待在自己的藏书馆里，等待着一个相配的学生来继承他的学识。]], "_t")
 t("Mightier than Gods: Azorol", "比诸神更加强大：阿茨萝尔", "_t")
-t([[Azorol was the great marksman. She was an instructor in the use of weapons and seemed to favour an antiquated approach to their use. Many Sher'tul believed her to be foolish, for they could not see why she would use primitive projectile weapons when far more devastating weaponry had already been developed. She did not give up her ways, however harsh her critics were, for she believed there was value in preserving the old ways of war. Many tales tell of her unerring accuracy. No matter how small the target and how far the distance, her mighty spear throws would always land.
+t([[Azorol was the great marksman. She was an instructor in the use of weapons and seemed to favour an antiquated approach to their use. Many Sher'tul believed her to be foolish, for they could not see why she would use primitive projectile weapons when far more devastating weaponry had already been developed. She did not give up her ways, however harsh her critics were, for she believed there was value in preserving the old ways of war. Many tales tell of her unerring accuracy. No matter how small the target and how far the distance, her mighty spear throws would always land. 
 
 For her, the spear Thoral was made, a throwing weapon of unparalleled might. She seemed to care little for the reasons behind the Godhunt, for the spear alone was a great enough prize for her. With this new weapon, there were tales of Azorol striking targets in the darkness beyond our world while standing on the flat plains of Eyal. She proved to be one of the mightiest of the Godslayers, for there was nowhere on Eyal which was safe from Thoral and its user.
 
@@ -20497,7 +20602,7 @@ My first instinct was to lead a charge into the crag and cleanse this terrible p
 t("page from a logbook (2)", "日志上的一页 (2)", "_t")
 t([[In my dreams, I saw the inside of the pits. How the hatchlings devoured each other in a cannibalistic frenzy, how the weak and frail ones were dragged underneath the surface of that mass of tentacles... All I could do is gape in horror. But there was one fiendish shape which towered above them all, a nightmarish fusion between dragon and tentacle... I could not bear to look at it, yet I could not look away. It whispered to me, speaking words that a mortal's tongue could never hope to mimic.
 
-I am not the only one who has been dreaming about the pits. One of my men was hysterical today, whispering about the black gulfs of space and how it has chosen its vessel to conquer this world. He had to be forcefully sedated.
+I am not the only one who has been dreaming about the pits. One of my men was hysterical today, whispering about the black gulfs of space and how it has chosen its vessel to conquer this world. He had to be forcefully sedated. 
 
 Whatever is here is touching our minds. Any fool could guess that. I woke up to find that I had been writing notes in my sleep. I do not wish to guess what unspeakable blasphemies these symbols represent. It wants me to keep writing. It wants me to do its bidding. I can feel its whispers gnawing at the back of my head. We must act while we can still think for ourselves. I dread what will become of us if we succumb to the whispers... The whispers. They won't stop.
 
@@ -20593,7 +20698,7 @@ Thoughts are treasure. Treasure thoughts. Thoughtlessness is useless. Thoughtles
 t("an escape from reality (1)", "逃避现实 (1)", "_t")
 t([[So, what does an adventurer do when they get bored with it all? For me, I wanted to find a nice castle somewhere out in the countryside and spend the rest of my days in idle contentment. The issue there is that I made a lot of enemies who would have loved for me to settle down in one spot, so I needed to think of a solution.
 
-That's when I found this place. Everyone else avoided it because people never left once they went inside it. Being used to the adventuring life, I saw such a thing as a challenge. Turns out that this cursed castle, as people referred to it, constantly changes its inside layout. No one really knows how or why it does it, but I'm not really one to question such things. If I could just work out the logic behind how it shifted itself, I could have an unassailable fortress.
+That's when I found this place. Everyone else avoided it because people never left once they went inside it. Being used to the adventuring life, I saw such a thing as a challenge. Turns out that this cursed castle, as people referred to it, constantly changes its inside layout. No one really knows how or why it does it, but I'm not really one to question such things. If I could just work out the logic behind how it shifted itself, I could have an unassailable fortress. 
 
 However, I also found that this still didn't deter people from coming to kill me. They all swarmed in and although a lot of them got lost in the hallways, a few actually managed to reach me. I had grown rather attached to the place at this point, but neither could I stay there. My solution came with a bizarre tome I had found in my adventures. When I opened the cover and pointed it in the right direction, it could suck things into its very pages.
 
@@ -20779,7 +20884,7 @@ t("chronophage", "噬宙", "talent type")
 t("Feast upon the ruined timelines of your enemies.", "享受你敌人毁灭的时间线。", "_t")
 t("scourge drake", "天谴龙", "talent type")
 t("Take on the defining aspects of a Scourge Drake.", "化身成为天谴龙形态使你能使用天谴龙技能。", "_t")
-t("doom", "终焉", "talent type")
+t("doom", "末日", "talent type")
 t("Foretell the dire fate of your enemies.", "预言你敌人的悲惨命运。", "_t")
 t("prophecy", "预言", "talent type")
 t("The various prophecies you can tell.", "各种各样的预言。", "_t")
@@ -20790,9 +20895,9 @@ t("Let yourself walk in chaos!", "在混乱中行走！", "_t")
 t("Diseased Tongue", "疫病之舌", "talent name")
 t([[Your tongue turns into a diseased tentacle that you use to #{italic}#lick#{normal}# enemies in a cone.
 		Licked creatures take %d%% tentacle damage that ignores armor and get sick, gaining a random disease for %d turns that deals %0.2f blight damage per turn and reduces strength, dexterity or constitution by %d.
-
+		
 		If at least one enemy is hit you gain %d insanity.
-
+		
 		Disease damage will increase with your Spellpower.]], [[ 你的舌头化作疫病触手，让你能 #{italic}#舔舐#{normal}# 锥形范围内的敌人。
 		被舔舐的敌人受到无视护甲的 %d%% 触手伤害并获得一种持续 %d 回合的随机疾病，每回合造成 %0.2f 枯萎伤害并减少力量、敏捷或体质 %d 点。
 		如果你至少命中了一名敌人，你获得 %d 疯狂值。
@@ -20849,7 +20954,7 @@ t([[Utter a prophecy of the impending treachery of your target. For the next 6 t
 t("Grand Oration", "隆重演说", "talent name")
 t([[You speak a chosen prophecy to the masses. When applying this prophecy, it will spread to all targets in radius %d.
 		A prophecy can only be affected by one of Grand Oration, Twofold Curse or Revelation.
-
+		
 		Current prophecy: %s]], [[你隆重地宣读某种预言，令其在周围 %d 格内传播。
 		同一种预言只能以一种方式进行强化，隆重演说，双重诅咒或者天启。
 
@@ -20857,7 +20962,7 @@ t([[You speak a chosen prophecy to the masses. When applying this prophecy, it w
 t("Twofold Curse", "双重诅咒", "talent name")
 t([[Weave your chosen prophecy into your speech, dooming your foe twice over. The chosen prophecy will apply instantly to your primary target whenever you cast any other prophecy at talent level %d.
 		A prophecy can only be affected by one of Grand Oration, Twofold Curse or Revelation.
-
+		
 		Current prophecy: %s]], [[对你的听众施加双重诅咒。每当你施加其他预言时，你选择的预言将同时施加给主要目标 (技能等级 %d )。
 		同一种预言只能以一种方式进行强化，隆重演说，双重诅咒或者天启。
 		当前预言 : %s]], "tformat")
@@ -20867,7 +20972,7 @@ t([[As you speak the chosen prophecy whispers from the void guide you in how to 
 		Prophecy of Ruin. Each time the target takes damage you are healed for %d%% of the damage dealt.
 		Prophecy of Treason: %d%% of all damage you take is redirected to a random target affected by Prophecy of Treason.
 		A prophecy can only be affected by one of Grand Oration, Twofold Curse or Revelation.
-
+	
 		Current prophecy: %s]], [[当你宣读预言时，来自虚空的回响将指引你带来敌人的末日。你选择的预言将提供以下三种加成之一。
 		疯狂预言：每次目标使用技能时，你的一个技能的冷却时间将减少 %d 。
 		毁灭预言：每次目标受到伤害时，你回复 %d%% 伤害值。
@@ -20930,7 +21035,7 @@ t([[You invoke a long standing pact with a fellow horror, a Worm that Walks, to 
 		等级 5 ：戒指 /戒指/ 饰品
 
 		试图改变其装备时，先将装备交给它，再切换控制。]], "tformat")
-t("Foul Convergence", "阴险同谋", "talent name")
+t("Foul Convergence", "污秽夹击", "talent name")
 t("Your friendly horror is dead.", "你的恐魔伙伴死了。", "logPlayer")
 t("%s's teleport fizzles!", "%s的传送失败了！", "logSeen")
 t([[You and your Worm that Walks both teleport to an enemy in range %d and make a melee attack for %d%% damage.
@@ -20986,7 +21091,7 @@ t([[Each time an enemy takes damage from Dark Whispers, there is a %d%% chance f
 t("Sanity Warp", "失智冲击", "talent name")
 t("When a hallucination from Hideous Visions is slain, it unleashes a psychic shriek dealing %0.2f darkness damage to enemies in radius %d.", "每当幻象被消灭时，它将释放心灵冲击，对 %d 格内的敌人造成 %0.2f 暗影伤害。", "tformat", {2, 1})
 t("Cacophony", "心灵尖啸", "talent name")
-t([[Raise your Dark Whispers in radius %d to a deafening crescendo for %d turns, applying another stack and drowning out all thought.
+t([[Raise your Dark Whispers in radius %d to a deafening crescendo for %d turns, applying another stack and drowning out all thought. 
 			Targets afflicted by Dark Whispers will have 20%% higher chance to spawn hallucinations, and each time they take damage from your Dark Whispers or Sanity Warp they will take an additional %d%% damage as temporal damage.
 		The damage will improve with your Spellpower.]], [[ 使 %d 格内的黑暗低语音量提升 %d 回合，达到震耳欲聋的地步，额外施加一层低语效果，同时干扰一切思考能力。
 		被黑暗低语影响的目标产生幻象的几率增加 20%%，每次受到黑暗低语或失智冲击的伤害时，会受到额外 %d%% 时空伤害。
@@ -21205,10 +21310,10 @@ t("Lash Out", "旋风鞭挞", "talent name")
 t("You require an empty offhand to use your tentacle hand.", "你需要副手空手才能使用触手。", "logPlayer")
 t("You require a weapon and an empty offhand!", "你必须有一把武器和一只空手！", "logPlayer")
 t([[Spin around, extending your weapon and damaging all targets around you for %d%% weapon damage while your tentacle hand extends and hits all targets in radius 3 for %d%% tentacle damage.
-
+				
 				If the mainhand attack hits at least one enemy you gain %d insanity.
 				If the tentacle attack hits at least one enemy you gain %d insanity.
-
+		
 		#YELLOW_GREEN#When constricting:#WHITE# Your tentacle attack is centered around your constricted target (but not your weapon attack) and only in radius 1 but it also dazes anything hit for 5 turns.]], [[飞速旋转，伸展武器对周围单位造成 %d%% 武器伤害，并且伸展触手对 3 码内单位造成 %d%% 触手伤害。
 		如果武器击中敌人，你获得 %d 疯狂值。
 		如果触手击中敌人，你获得 %d 疯狂值。
@@ -21286,6 +21391,23 @@ t("%s rends the essence of %s, restoring %d void shards!", "%s撕裂了%s的精�
 t([[You rend the very essence of the target, drawing on their life and converting it to void stars. The target takes %0.2f darkness and %0.2f temporal damage, and you gain %d void star(s).
 		The damage will increase with your Spellpower.]], [[撕开目标的核心部位，汲取生命转化为虚空之星。目标受到 %0.2f 黑暗和 %0.2f 时空伤害，你获得 %d 虚空之星。
 		伤害随法术强度升高。]], "tformat")
+t("Mutated Hereragegand", "异变之手", "talent name")
+t([[		Also increases Physical Power by %d, and increases weapon damage by %d%% for your tentacles attacks.
+
+		Your tentacle hand currently has those stats%s:
+		%s]], [[		同时增加 %d 点物理强度，并使触手攻击的武器伤害提高 %d%%。
+
+		你的触手之手当前具有以下属性%s：
+		%s]], "tformat")
+t("Lash Outrthrthrth", "旋风鞭挞", "talent name")
+t([[Spin around, extending your weapon and damaging all targets around you for %d%% weapon damage while your tentacle hand extends and hits all targets in radius 3 for %d%% tentacle damage.
+		]], [[飞速旋转，伸展武器对周围单位造成 %d%% 武器伤害，并且伸展触手对 3 码内单位造成 %d%% 触手伤害。
+		]], "tformat")
+t("Piercing Tentacle", "穿刺触手", "talent name")
+t([[You quickly extend your tentacle hand up to range %d, impaling all creatures in the way.
+		Impaled creatures take %d%% tentacle damage and get sick, gaining a random disease for %d turns that deals %0.2f blight damage per turn and reduces strength, dexterity or constitution by %d.]], [[你迅速伸长触手，最远达到 %d 码，刺穿沿途所有生物。
+		被刺穿的生物受到 %d%% 触手伤害，并感染一种随机疾病，持续 %d 回合；该疾病每回合造成 %0.2f 枯萎伤害，并使力量、敏捷或体质降低 %d 点。]], "tformat")
+t("Tentaclesrsthrhrhrh Ground", "地下触手", "talent name")
 t("glass golem", "玻璃傀儡", "_t")
 t("Self destruct in a glorious explosion of gore dealing %0.2f blight damage to all enemies in %d radius.  Your summoner must be dead to use this talent.", "自爆成一团光荣的血肉，对周围 %d 码半径内所有敌人造成 %0.2f 枯萎伤害。这个技能只有主人死亡时能够使用。", "tformat", {2, 1})
 t("Teleport: Kroshkkur", "传送: 克诺什库尔", "talent name")
@@ -21485,7 +21607,7 @@ t("damage", "伤害", "effect subtype")
 t("insanity", "疯狂", "effect subtype")
 t("Chaos Orbs", "混沌之球", "_t")
 t("%d stacks, +%d%% to all damage dealt.", "%d 层, +%d%% 伤害。", "tformat")
-t("horror", "恐魔", "effect subtype")
+t("horror", "恐怖", "effect subtype")
 t("Putrescent Pustule", "腐败脓包", "_t")
 t("%d pustules increasing resistance by %d%%.", "%d 脓包，增加 %d%% 抗性。", "tformat")
 t("eat", "吞食", "effect subtype")
@@ -21856,7 +21978,7 @@ Let flesh be your canvas.
 Let flesh fuel dreams.
 Thoughts are treasures.
 Treasure thoughts.
-Thoughts treasured when they are alone.
+Thoughts treasured when they are alone. 
 
 #RED#Reading this tome will slowly pull you in over 5 turns.]], [[在安全中发现清晰。
 在舒适中找到清晰。
@@ -22094,7 +22216,7 @@ As with all things here, nothing restrains you in what path you #{bold}#ultimate
 ]], "_t")
 t([[Welcome #LIGHT_GREEN#@name@#WHITE#.
 
-You are a Krog, a former ogre stripped of its runes by the Ziguranth. Ogres cannot live without runes, yet you a Krog have been kept alive by the powers of nature coursing through your body.
+You are a Krog, a former ogre stripped of its runes by the Ziguranth. Ogres cannot live without runes, yet you a Krog have been kept alive by the powers of nature coursing through your body. 
 
 All Krogs are infused with anti-magic forces as a result of the changes made to their bodies by the Ziguranth. While much of Maj'Eyal shuns the arcane, there is still those who practice it, and you would like nothing more then to eradicate them from the world.
 
@@ -22208,10 +22330,10 @@ You have encountered the horror that came out of Kroltar, the mightiest wyrm, an
 You can now master Scourge Drake magic and create new Wyrmic characters that can learn the #LIGHT_GREEN#Scourge Drake talents#WHITE#.
 
 Talents:
-- #YELLOW#Tentacled Wings:#WHITE#Project slimy tentacles to pull your foes to you
-- #YELLOW#Decaying Grounds:#WHITE#Cover the ground in blighted energies, increasing cooldowns
-- #YELLOW#Augment Despair:#WHITE#Hit where it hurts, doing more damage based on detrimental effects
-- #YELLOW#Maggot Breath:#WHITE#Breath maggots to slow down your foes
+- #YELLOW#Tentacled Wings: #WHITE#Project slimy tentacles to pull your foes to you
+- #YELLOW#Decaying Grounds: #WHITE#Cover the ground in blighted energies, increasing cooldowns
+- #YELLOW#Augment Despair: #WHITE#Hit where it hurts, doing more damage based on detrimental effects
+- #YELLOW#Maggot Breath: #WHITE#Breath maggots to slow down your foes
 ]], [[龙是自然力量的化身，是究极的捕食者。然而，就连他们也能够被绝望所腐化。
 你遇到了从最恐怖的巨龙库洛塔身上产生的恐魔，并击败了它。
 你现在可以掌握天谴龙的魔法，你创建的新龙战士角色可以使用新的#LIGHT_GREEN#天谴之龙#WHITE#系技能
@@ -22250,6 +22372,19 @@ t("#RED#You can't enter a Forbidden Tome from here!#LAST#", "#RED#你不能在�
 t("The protagonist of the story is dead.", "故事的主角死了。", "_t")
 t("#PURPLE#%s starts to crumble to dust, it will be gone once you exit it!", "#PURPLE#%s开始粉碎成尘土，如果你离开这本书，它就会消失！", "log")
 t("%s of the Blightspawn", "枯萎之子 %s", "tformat")
+t("Entropic Wormhole", "熵虫洞", "_t")
+t("Handicap: ", "难度系数：", "_t")
+t("Player", "玩家", "_t")
+t("Character", "角色", "_t")
+t("Entropic Wormhole failure", "熵虫洞连接失败", "_t")
+t([[The wormwhole failed to latch on a timeline, you should retry an other one.
+
+#{italic}##GREY#The character you tried to download either contained errors, was somehow corrupt or failed to load. Possible reasons are numerous and could be related to addons. Please simply try an other one.#{normal}#]], [[虫洞未能锁定一条时间线，请尝试连接另一条。
+
+#{italic}##GREY#你尝试下载的角色可能包含错误、已经损坏或加载失败。原因很多，也可能与插件有关。请直接尝试其他角色。#{normal}#]], "_t")
+t([[As your foe crumbles Yiilkgur's safety protocols activate and pull you out of the arena.
+You have defeated #CRIMSON#%s#LAST#, congratulations!]], [[随着敌人倒下，伊克格的安全协议启动，将你拉出竞技场。
+你击败了#CRIMSON#%s#LAST#，恭喜！]], "_t")
 t([[The font of sacrifice allows you to spend gold to reroll specific parts of a random artifact or rare item (you must first unequip it).
 Each reroll costs #GOLD#500 gold#LAST# for a lesser ego and #GOLD#1000 gold#LAST# for a greater ego per each time you've rerolled that ego type on the same object.
 Lesser and Greater egos can only be rerolled into the same type, and only egos with compatible power sources will be offered.
@@ -22598,6 +22733,7 @@ You #{italic}#dare#{normal}# carry her ring around like a trophy! I can feel it 
 t("Oh you liked that paladin lady? I loved killing her!", "你喜欢那个女圣骑士？我爱死杀她的感觉了", "_t")
 t("She left me no choice; I had to protect #{bold}#my#{normal}# people.", "她令我别无选择; 我必须保护 #{bold}#我的#{normal}# 族民。", "_t")
 t("Whatever.", "还行吧。", "_t")
+t("Whatever.", "还行吧。", "chat_john-worldmap")
 t("What?", "什么?", "_t")
 t([[#LIGHT_GREEN#*As you open the door to the shop, you are greeted by a pair of Steam Giant guards, staring at you and holding their steamguns tightly, at the ready but not aimed at you.*#WHITE#
 No sudden moves, @playername@. Kaltor's orders are to consider you a customer for now. Try anything foolish, and you'll be a live demonstration for his newest guns instead.  Understand?]], [[#LIGHT_GREEN#*当你打开商店大门，你被两名蒸汽巨人守卫迎接，他们盯着你看，手中紧握蒸汽枪，准备就绪，但并没有瞄准你。*#WHITE#
@@ -22617,7 +22753,7 @@ t("Die giant scum! For Kruk! For Garkul! For the Pride!", "死吧，巨人渣渣
 t("No need for shopping now.", "现在不需要购物。", "_t")
 t([[#LIGHT_GREEN#*A well-dressed giant stands in front of you, covered in expensive jewelry; judging from the poorly-fastened clasp on his necklace, you can assume he acquired it all fairly recently.  He grins as he leans down over the counter to get a good view of you.*#WHITE#
 Ah, welcome, @playername@! #LIGHT_GREEN#*he yells in a voice loud enough to catch the attention of all in the shop, as he lifts his head to look around.*#WHITE# Yes, you heard me right, @playername@! The very same one who's been running rampant through the Vaporous Emporium is coming to ME for armaments! I don't think I could've asked for a stronger endorsement! #LIGHT_GREEN#*He looks back down to you, leaning over the counter to point out a glass display case loaded with exotic weaponry and armor.*#WHITE#
-Well, I'm not one to turn down anyone with gold, and seeing as you've already made me rich, I'll even give you a discount, down to my pre-attack prices. #LIGHT_GREEN#*He leans in uncomfortably close, staring you in the eyes.*#WHITE#Or, if you came to do here what you did in the Emporium... #LIGHT_GREEN#*He directs his glare toward the multiple well-armed guards staring at you and standing still on the sides of the room.*#WHITE# I'm sure my #{italic}#emergency safety measures#{normal}# would just #{italic}#love#{normal}# an opportunity to try out their shiny new toys.]], [[#LIGHT_GREEN#*一名衣着讲究的巨人站在你面前，戴满昂贵的珠宝；从他松垮的项链扣上看，你猜测他是最近才拿到的。他微笑着从柜台往下看，注视着你。*#WHITE#
+Well, I'm not one to turn down anyone with gold, and seeing as you've already made me rich, I'll even give you a discount, down to my pre-attack prices. #LIGHT_GREEN#*He leans in uncomfortably close, staring you in the eyes.* #WHITE#Or, if you came to do here what you did in the Emporium... #LIGHT_GREEN#*He directs his glare toward the multiple well-armed guards staring at you and standing still on the sides of the room.*#WHITE# I'm sure my #{italic}#emergency safety measures#{normal}# would just #{italic}#love#{normal}# an opportunity to try out their shiny new toys.]], [[#LIGHT_GREEN#*一名衣着讲究的巨人站在你面前，戴满昂贵的珠宝；从他松垮的项链扣上看，你猜测他是最近才拿到的。他微笑着从柜台往下看，注视着你。*#WHITE#
 哦，欢迎，@playername@! #LIGHT_GREEN#*他的声音大的让店里所有人都听见，同时他抬起头张望四周。*#WHITE# 是的，听见了么， @playername@！就是那个在蒸汽商场猖獗无比的家伙，他到我这来买装备了!我认为不会有比这更好的宣传了! #LIGHT_GREEN#*他转过头看你，指出一个玻璃展台，那上面装满异种武器和护甲。*#WHITE#
 好吧，我不会拒绝任何带着钱过来的人，同时你也已经让我富裕不少了。我甚至还能给你打个折，降到进攻前的价格。 #LIGHT_GREEN#*他靠得过近，让你感觉不太舒服。他直视着你的眼睛。*#WHITE#或者，你也可以试试你在蒸汽商店里干的事情...
 #LIGHT_GREEN#*他指向周围和房间里那些装备良好的警卫。*#WHITE# 
@@ -22637,6 +22773,7 @@ Oh, what a pity.  Guards?  Ten thousand gold to whoever gets the killing blow.  
 真遗憾。警卫？谁杀了他，就有一万金的赏钱。当然，记在商店账上。]], "_t")
 t("I am looking for special training.", "我是来寻求特殊训练的。", "_t")
 t("Sorry, I have to go!", "抱歉，我要走了！", "_t")
+t("Sorry, I have to go!", "抱歉，我要走了！", "chat_kruk-tinker-shop")
 t("I can indeed offer some training (talent category Steamtech/Physics and Steamtech/Chemistry) for a fee of 100 gold pieces each.", "我能教你物理学或者化学知识，学费100金一次。", "_t")
 t("Please train me in physics.", "教我物理学知识吧。", "_t")
 t("The tinker spends some time with you, teaching you the basics of smithing.", "工匠花费时间传授你铁匠的基础知识。", "logPlayer")
@@ -22650,6 +22787,7 @@ t("Soft-foot of the Kruk, I come to give you a warning, an apology, and a plea f
 t("The rest of us have fled, hiding in caverns across the peninsula...  I cannot in good conscience ask you to face certain death before his magic for our sakes, but striking first may be the only way to save your people.  He appears to be stalling the invasion, buying you some time, but if you cannot catch him off-guard before he finally commits to it...  I've seen his power cut through a mountain like it was a leaf, soft-foot.  There can be no victory against that kind of magic.  Run, hide, and hope he falls victim to an accident or loses the remaining fragments of his sanity that keep him capable of casting spells.", "我们其他人都跑了，藏身在洞穴中... 凭良心说，我不应让你直面他的魔法，那一定会带来死亡。但只有抢先下手，才能拯救你的族民。他暂时不会进攻，为你赢得了一些时间。但如果你不能在他进攻前打他个措手不及...软蹄者，我曾经看着他的力量洞穿山脉，仿佛穿过一片树叶般轻松。算了，不可能战胜这种魔法的。跑吧，躲起来，希望他能意外身亡，或者进一步失去理智以至于不能施法吧。", "_t")
 t("I will check it out", "我要去看看", "_t")
 t("We of the Krimbul Clan have faced our near-certain deaths all too many times, even after our hearts stopped beating; this is the first time we have been shown the kindness of utter salvation by an outsider.  Those who were not enthralled by Nektosh and are not delusionally faithful to his \"cause\" will reclaim the Mana Caves in time; until then, we will join your Pride in your revolution.  You have liberated us, and we will not rest until you are freed of your oppressors as well.", "我们氏族曾无数次直面灭族危机，哪怕是在我们的心脏停止跳动之后；然而，这是第一次，我们被外人的友善所拯救。那些未被纳克托什蛊惑、也未执迷于他的“事业”的人，终将收复魔法洞穴。在此之前，我们将加入你的部落，参与你的革命。你解放了我们，在你们脱离压迫者之前，我们都不会停下脚步。", "_t")
+t("Thanks.", "多谢。", "chat_metash")
 t("Hail, @playername@!", "嘿, @playername@!", "_t")
 t("Our is free Metash, the tyrant is no more.", "我们自由了梅塔什，暴君被打败了！", "_t")
 t([[I came here to warn the Kruk Pride of the threat Nektosh poses and ask for their help, but they have some more immediate threats to deal with...  We should help them repel these Steam Giants.  They are the only people who have ever treated us with respect and dignity; if they are crushed by the Atmos Tribe or the Allied Kingdoms, we will surely be next.  Their success is our survival.
@@ -22659,6 +22797,7 @@ Unfortunately, they cannot afford to spare the warriors to retake the Mana Caves
 不幸的是，他们现在没有空闲的战士来帮我们从暴君手中夺回魔法洞穴。我需要留在这保护他们。解放我们氏族的任务就交给你了，做好准备去吧。]], "_t")
 t("Nektosh claims he is the invincible, omnipotent descendant of a unicorn, but I don't believe that bull for a second.  While the great magical power that suddenly awakened within him is as fearsome as it is insanity-inducing,  he has yet to use it to make a shield or teleport himself, and even with his all-powerful beam, his aim isn't always perfect...  I think he has a weakness he's trying to hide.  Fight with courage, fellow Whitehoof, and the Krimbul Clan may be free once more!", "独角者纳克托什声称他是无可战胜无所不能的独角兽后裔。但他说的每一句话我都不信。尽管他体内突然觉醒的魔法力量既强大得可怕又令人疯狂，但他还从未用它制造过护盾或传送自己；即便使用他那全能的射线，他的准头也不总是完美……我想他有个想要隐藏的弱点。勇敢战斗吧，我的白蹄伙伴，克林布尔氏族也许就能重获自由！", "_t")
 t("I will!", "我会的！", "_t")
+t("I will!", "我会的！", "chat_metash")
 t([[He...  he found a wand?  And he realized it was running dry, but only after taking over the tribe?  I pity him, but I cannot forgive him for being willing to sacrifice so many Whitehooves and Orcs to escape the consequences of his brief lapse into madness...  still, as a personal request I ask that you not tell others of his last thoughts.  The Nektosh we once knew saved our tribe from the corrupted magic deep under Eyal; he deserves to, at worst, be remembered as one who tragically succumbed to its influence.
 
 Ultimately, though, the choice is yours; it is more important that he is no longer a threat.  There are some who may still cling to the false hope he gave them, but we will retake the Mana Caves from them in time.  We owe you a great debt, and now that we have no more pressing concerns, we can aid Kruk Pride in their rebellion.  Good travels, @playername@.]], [[他...  他找到了一根魔棒？然后等到他掌控了我们氏族，才发现能量快用完了？我对此感到遗憾，但我不能原谅他。为了逃避自己陷入疯狂的责任，他准备牺牲这么多重要的白蹄族人和兽人……尽管如此，我请求你不要告诉别人他的想法。纳克托什是曾经将我们从埃亚尔深处的堕落魔法中拯救出来的英雄，他至少应该被铭记为一个悲剧性地屈服于那种影响的人。
@@ -22714,7 +22853,7 @@ Do you still wish to take this path?]], [[反魔法技能是非常特殊的。�
 确定要学习么？]], "_t")
 t("Very well. We can teach you a talent (unlocking the talent category is separate). Which do you want?", "很好，我们可以教你一个技能（解锁该技能树是另一回事）。你想要哪个？", "_t")
 t("Very well. We can increase one of your core stats by 4, which one?", "很好，我们能强化你一项属性4点。选择哪个？", "_t")
-t("pulse detonator", "震荡榴弹", "damage type")
+t("pulse detonator", "脉冲爆弹", "damage type")
 t("darkness pull", "黑暗抓取", "damage type")
 t("%s is pulled!", "%s被拖动!", "logSeen")
 t("%s resists the pull!", "%s抵抗了拖动!", "logSeen")
@@ -22741,7 +22880,7 @@ t("phosphorous", "磷火", "damage type")
 t("fire wall", "火墙", "damage type")
 t("volatile fuel", "易燃燃料", "damage type")
 t("chemical", "化学", "damage type")
-t("debilitating acid", "腐蚀酸液", "damage type")
+t("debilitating acid", "弱化酸液", "damage type")
 t("caustic steam", "腐蚀蒸汽", "damage type")
 t("galvanic", "放电", "damage type")
 t("occult", "玄机", "damage type")
@@ -23505,6 +23644,22 @@ t("aracane psi collector", "奥术灵能收集者", "entity name")
 t("rune and infusion collector", "符文和纹身收集者", "entity name")
 t("sand pit", "沙坑", "entity name")
 t("@Target@ slides into a sand pit!", "@Target@滑入了沙坑！", "_t")
+t("metal", "金属", "ingredient type")
+t("lump of iron", "铁块", "ingredient name")
+t("lump of steel", "钢块", "ingredient name")
+t("lump of dwarven steel", "矮人钢块", "ingredient name")
+t("lump of stralite", "蓝锆石块", "ingredient name")
+t("lump of voratun", "沃瑞钽块", "ingredient name")
+t("herbs", "草药", "ingredient type")
+t("stack of herbs (viperweed)", "一束植物 (蛇草)", "ingredient name")
+t("stack of herbs (sessali)", "一束植物 (延龄草)", "ingredient name")
+t("stack of herbs (bilberry)", "一束植物 (越桔)", "ingredient name")
+t("stack of herbs (burdock)", "一束植物 (牛蒡)", "ingredient name")
+t("stack of herbs (goldleaf)", "一束植物 (金叶)", "ingredient name")
+t("misc", "杂项", "ingredient type")
+t("brain in a jar", "瓶中脑", "ingredient name")
+t("mechanical core", "机械核", "ingredient name")
+t("primal core", "原始之核", "ingredient name")
 t("metal", "金属", "entity type")
 t("lump of iron", "铁块", "entity name")
 t("A lump of iron.", "一块铁。", "_t")
@@ -27381,7 +27536,7 @@ t([[#LIGHT_RED#- Rod (%d): %d turns
 t("cunning", "灵巧", "effect subtype")
 t("Incoming Disasters", "灾祸临近", "_t")
 t("Vulnerable to more cross tier effects.", "会受到更多跨层效果影响。", "tformat")
-t("technique", "格斗", "effect subtype")
+t("technique", "技巧", "effect subtype")
 t("Strafing", "扫射中", "_t")
 t("The target is moving while shooting, and will reload %sammo when finished strafing.", "目标在移动中射击，效果结束后恢复 %s 弹药。", "tformat")
 t("%s reloads.", "%s 装载弹药。", "logSeen")
@@ -28189,6 +28344,9 @@ t("This yeti towers over its comrades. You see a cunning in its eyes unmatched b
 t("Yeti's Muscle Tissue (Patriarch)", "雪人族的肌肉组织（族长）", "entity name")
 t("Yetis Cave", "雪人洞穴", "_t")
 t("Embers of Rage", "余烬怒火", "init.lua long_name")
+t([[Play as an orc of the Kruk Pride, located on an island near Var'Eyal.
+Learn to master steam technology, battle the terrible Atmos Tribe and ensure dominion of Var'Eyal for your race.]], [[扮演来自克鲁克部落的兽人，该部落位于瓦·埃亚尔附近的一座岛屿上。
+学习掌握蒸汽科技，对抗可怕的气之部族，并确保你的种族统治瓦·埃亚尔。]], "init.lua description")
 t("Remembrance", "铭记月", "calendar orc")
 t("Retaking", "收复月", "calendar orc")
 t("Revenge", "复仇月", "calendar orc")
@@ -28409,7 +28567,7 @@ Class features:#YELLOW#
 - Unleash the power of your heavy weapons
 - Construct automated turrets for war or even medical purposes
 - Build an mecharachnid bot to help you in combat that can act independently or be directly piloted
-- Make your foes suffer in many new ways: fire rockets and grenades at them, equip an exoskeleton, ...#WHITE#
+- Make your foes suffer in many new ways: fire rockets and grenades at them, equip an exoskeleton, ... #WHITE#
 
 All Tinker classes use Steam for their powers.
 ]], [[研究过众多敌人的残骸后，你找到了把真正的“战斗之火”带给敌人的新方法！
@@ -28455,10 +28613,10 @@ You have encountered one such and vanquished it.
 You can now master Undead Drake magic and create new Wyrmic characters that can learn the #LIGHT_GREEN#Undead Drake talents#WHITE#.
 
 Talents:
-- #YELLOW#Raze:#WHITE#Augment your melee strikes with deadly energies, absorbing the souls of your foes
-- #YELLOW#Infectious Miasma:#WHITE#Release a deadly cloud of diseases and blight
-- #YELLOW#Vampiric Surge:#WHITE#Revel in the pain of others to heal yourself
-- #YELLOW#Necrotic Breath:#WHITE#Breath pure darkness
+- #YELLOW#Raze: #WHITE#Augment your melee strikes with deadly energies, absorbing the souls of your foes
+- #YELLOW#Infectious Miasma: #WHITE#Release a deadly cloud of diseases and blight
+- #YELLOW#Vampiric Surge: #WHITE#Revel in the pain of others to heal yourself
+- #YELLOW#Necrotic Breath: #WHITE#Breath pure darkness
 ]], [[龙是自然的伟力，是位于食物链顶端的捕食者。然而随着年岁增长，一些龙会产生智慧，其中又有一些希望让生命延续到死亡之后。
 你曾遇到并击败这样一头龙。
 
