@@ -4,6 +4,11 @@
 local I18N = require("engine.I18N")
 I18N:loadLocale("/data-chn-mod/null_translation.lua")
 
+-- Keep level-up comparisons focused on the changing numbers even when a
+-- Chinese sentence has no whitespace around them.
+local talent_description_diff = dofile("/hooks/chn-mod/talent_description_diff.lua")
+talent_description_diff.install()
+
 local _popup = engine.ui.Dialog.listPopup
 function engine.ui.Dialog:listPopup(title, text, list, ...)
     title = _t(title) or title
