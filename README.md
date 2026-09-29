@@ -18,10 +18,12 @@
 
 ## 安装
 
-1. 下载本仓库（或 [Release](https://github.com/yutio8888/tome4-chn-mod/releases) 包）
-2. 将 `chn-mod` 目录复制到游戏 `game/addons/` 下
-3. 启动游戏，在 addons 菜单勾选 chn-mod
-4. 游戏语言需选择简体中文（zh_hans）
+1. 从 [Release](https://github.com/yutio8888/tome4-chn-mod/releases) 下载 `tome-chn-mod.teaa`
+2. 将它放入游戏 `game/addons/` 目录，不需要解压
+   （也可以直接使用源码：把本仓库放到 `game/addons/tome-chn-mod/`；游戏只识别以 `tome-` 开头的插件名）
+3. 同一插件只保留一份：升级前删除旧的 `tome-chn-mod.teaa` 或 `tome-chn-mod/` 目录，否则游戏会报 Duplicate Addon
+4. 启动游戏，在 addons 菜单勾选 chn-mod
+5. 游戏语言需选择简体中文（zh_hans）
 
 ## 许可
 
