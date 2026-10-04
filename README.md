@@ -8,12 +8,12 @@
 
 | 部分 | 说明 |
 |---|---|
-| 核心 tome 译文 | 6,670 条覆盖/新增条目（相对官方中文 locale） |
+| 核心 tome 译文 | 6,946 条覆盖/新增条目（相对官方中文 locale） |
 | 官方 DLC 译文 | Ashes of Urh'Rok 743、Cults of Entropy 1,569、Embers of Rage 3,149，共 5,461 条 |
 | Nullpackreloaded 支持 | 464 条译文 + 特殊物品运行时挂钩 |
 | 运行时挂钩 | 角色面板、技能、出生描述、游戏选项等文本翻译注入 |
 
-译文由 `tome4-chinese-translation-review-fixes` 工具链确定性构建（`tools/i18n publish`），
+译文由 `tome4-chinese-translation` 工具链确定性构建（`tools/i18n publish`），
 每次发布同步此仓库的 `data/locales/zh_hans.lua`。
 
 ## 安装
