@@ -69,12 +69,14 @@ t("have too much committed", "已预留量过多，无法", "_t")
 t("do not have enough uncommitted", "可用（未预留）量不足，无法", "_t")
 t("You do not have enough %s to use %s.", "你没有足够的%s来施展%s。", "logPlayer")
 t("You fail to use %s due to your equilibrium!", "由于你的失衡值过高，你未能使用 %s！", "logPlayer")
+t("%s is confused and fails to use %s.", "%s陷入混乱，未能使用%s。", "logSeen")
 t("%s fumbles and fails to use %s, injuring %s!", "%s使用%s失败，还弄伤了%s！", "logSeen")
 t("%s casts #{bold}#%s%s.#{normal}##LAST#", "%s施放了#{bold}#%s%s。#{normal}##LAST#", "logSeen")
 t("%s uses #{bold}#%s%s.#{normal}##LAST#", "%s使用了#{bold}#%s%s。#{normal}##LAST#", "logSeen")
 t("Fortress Energy cost: ", "堡垒能量消耗：", "_t")
 t("Drains", "消耗", "_t")
 t("melee/personal", "近战/自身", "_t")
+t("Is: ", "类型：", "_t")
 t("Automatic use enabled", "自动使用已启用", "_t")
 t("%s will now be used as often as possible automatically.", "%s将会尽可能多地自动使用。", "tformat")
 t("- requires a target, your last hostile one will be automatically used", "- 需要目标，会自动以最后一个敌对目标为对象", "_t")
@@ -126,6 +128,7 @@ t("[Allow training of talent category %s (at mastery %0.2f)]", "[允许训练技
 section "mod-tome/class/Game.lua"
 
 t("<Scroll mode, press direction keys to scroll, press again to exit>", "<地图滚动模式，按方向键滚动地图，再次按键退出>", "_t")
+t("Character Creation ( %s unlocked options)", "角色创建（已解锁：%s）", "tformat")
 t("Welcome to #LIGHT_BLUE#Tales of Maj'Eyal", "欢迎来到#LIGHT_BLUE#马基·埃亚尔的传说", "_t")
 t("%s the %s %s", "%s，%s %s", "tformat")
 t("#LIGHT_RED#You may not change level without your own body!", "#LIGHT_RED#你不能在没有自己身体的情况下切换楼层！", "logPlayer")
@@ -137,8 +140,9 @@ t("Log the problem, Stay: level %s of %s", "记录问题，待在：第%s层，%
 t("Debug the problem (move to the failed zone/level)", "调试问题（进入失败的地图/楼层）", "_t")
 t("Level Generation Failure", "楼层生成失败", "_t")
 t("You feel a thrill of terror and your heart begins to pound in your chest. You feel terribly threatened upon entering this area.", "一阵恐惧袭来，你的心开始在胸中狂跳。进入这片区域让你感到极大的威胁。", "_t")
-t("#Source# hits #Target# for %s (#RED##{bold}#%0.0f#LAST##{normal}# total damage)%s.", "#Source#击中#Target#造成%s (#RED##{bold}#%0.0f#LAST##{normal}#合计伤害)%s。", "logMessage")
+t("#Source# hits #Target# for %s (#RED##{bold}#%0.0f#LAST##{normal}# total damage)%s.", "#Source#击中#Target#造成%s（共计#RED##{bold}#%0.0f#LAST##{normal}#点伤害）%s。", "logMessage")
 t("Kill (%d)!", "杀死（%d）！", "tformat")
+t("#{bold}##Source# killed #Target#!#{normal}#", "#{bold}##Source#击杀了#Target#！#{normal}#", "_t")
 t("Showing big healthbars and tactical borders.", "显示大血条和战术边框。", "log")
 t("Showing healthbars only.", "只显示血条信息。", "log")
 t("Showing no tactical information.", "不显示战术信息。", "log")
@@ -203,7 +207,7 @@ t(" looking %s", "正看着%s", "tformat")
 section "mod-tome/class/Object.lua"
 
 t("Object can be used.", "物品可以使用。", "_t")
-t("%s, %d apr, %s damage", "%s, %d 护甲穿透，%s 伤害", "tformat")
+t("%s, %d apr, %s damage", "%s，%d 护甲穿透，%s 伤害", "tformat")
 t("%s, %d apr, %s element", "%s，%d 护甲穿透，%s 元素", "tformat")
 t("%s def, %s armour", "%s 闪避，%s 护甲", "tformat")
 t("%s accuracy, %s apr, %s power", "%s 命中，%s 护甲穿透，%s 强度", "tformat")
@@ -261,8 +265,26 @@ t("Talent on hit(spell): %s (%d%% chance level %d).", "技能（法术）命中�
 t("Talent on hit(nature): %s (%d%% chance level %d).", "技能（自然）命中后释放：%s（%d%% 几率等级 %d）。", "tformat")
 t("Talent on hit(mindpower): %s (%d%% chance level %d).", "技能（精神）命中后释放：%s（%d%% 几率等级 %d）。", "tformat")
 t("It can be used to %s, with %d charges out of %d.", "可以用于 %s，剩余 %d 次充能，共 %d 次。", "tformat")
-t("%d out of %d/%d.", "%d，总计%d/%d。", "tformat")
+t("%d out of %d/%d.", "%d（当前 %d/%d）。", "tformat")
 t("It can be used to activate talent %s, placing all other charms into a %s cooldown :", "它可以用于触发技能%s，将所有其他护符置入%s回合冷却：", "tformat")
+t([[Powered by #VIOLET#arcane forces#LAST#
+]], [[力量来源：#VIOLET#奥术力量#LAST#
+]], "_t")
+t([[Infused by #OLIVE_DRAB#nature#LAST#
+]], [[力量来源：#OLIVE_DRAB#自然力量#LAST#
+]], "_t")
+t([[Infused by #ORCHID#arcane disrupting forces#LAST#
+]], [[力量来源：#ORCHID#反魔法力量#LAST#
+]], "_t")
+t([[Crafted by #LIGHT_UMBER#a master#LAST#
+]], [[制造者：#LIGHT_UMBER#某位大师#LAST#
+]], "_t")
+t([[Infused by #YELLOW#psionic forces#LAST#
+]], [[力量来源：#YELLOW#灵能#LAST#
+]], "_t")
+t([[Powered by #CRIMSON#unknown forces#LAST#
+]], [[力量来源：#CRIMSON#未知力量#LAST#
+]], "_t")
 t("This object's appearance was changed to %s", "这个物品的外观被改变为 %s", "tformat")
 t("Press <control> to compare", "按住 Ctrl 键比较", "_t")
 
@@ -283,6 +305,7 @@ t("Level change (%s)!", "地图切换 (%s)！", "tformat")
 t("#LIGHT_RED#LIFE LOST WARNING!", "#LIGHT_RED#生命流失警告！", "say")
 t("LOW HEALTH!", "生命值低！", "_t")
 t("Automatic use of talent %s #DARK_RED#skipped#LAST#: cooldown too low (%d).", "%s 的自动施法被#DARK_RED#跳过#LAST#了：冷却时间太低(%d)。", "logPlayer")
+t("hostile spotted to the %s (%s%s)", "在%s有敌对目标（%s%s）", "tformat")
 t("losing breath!", "窒息！", "_t")
 t("losing health!", "生命值下降！", "_t")
 t("Your antimagic disrupts %s.", "你的反魔法干扰了 %s。", "logPlayer")
@@ -1277,17 +1300,19 @@ t("#LIGHT_BLUE# * +4 Magic, +3 Willpower, +0 Cunning", "#LIGHT_BLUE# * +4 魔力
 section "mod-tome/data/birth/descriptors.lua"
 
 t("All healing for the player increased by 10%", "玩家受到的所有治疗效果增加 10%", "_t")
+t("Stairs can not be used for 2 turns after a kill.", "杀死生物后 2 回合内不能使用楼梯。", "_t")
 t("Nightmare", "噩梦", "birth descriptor name")
 t("Unfair game setting", "不公平的游戏设定", "_t")
 t("All zone levels increased by 25% by the time Player reaches level 10", "所有区域等级提高 25%（随玩家等级逐步生效，10 级时达到全额）", "_t")
 t("Unique (fixed) bosses advance in bonus classes 30% faster", "独有（固定）Boss 的额外职业等级提升速度快 30%", "_t")
-t("Stairs can not be used for 3 turns after a kill.", "你杀死生物 3 回合内不能使用楼梯。", "_t")
+t("Stairs can not be used for 3 turns after a kill.", "杀死生物后 3 回合内不能使用楼梯。", "_t")
 t("Easy is for the weak! Normal is for the weak! Nightmare is too easy! Bring on the true pain!", "简单难度，弱鸡！普通难度，菜鸟！噩梦难度，弱爆了！迎接真正的痛苦吧！", "_t")
 t("All zone levels increased by 50% + 1 by the time Player reaches level 10", "所有区域等级提高 50% + 1（随玩家等级逐步生效，10 级时达到全额）。", "_t")
 t("Unique (fixed) bosses advance in bonus classes 70% faster", "独有（固定）Boss 的额外职业等级提升速度快 70%", "_t")
+t("Stairs can not be used for 5 turns after a kill.", "杀死生物后 5 回合内不能使用楼梯。", "_t")
 t("All zone levels increased by 150% + 2 by the time Player reaches level 10", "所有区域等级提高 150% + 2（随玩家等级逐步生效，10 级时达到全额）。", "_t")
 t("Unique (fixed) bosses advance in bonus classes 170% faster", "独有（固定）Boss 的额外职业等级提升速度快 170%", "_t")
-t("Stairs can not be used for 9 turns after a kill.", "你杀死生物 9 回合内不能使用楼梯。", "_t")
+t("Stairs can not be used for 9 turns after a kill.", "杀死生物后 9 回合内不能使用楼梯。", "_t")
 t("Player is being hunted! Randomly all foes in a radius will get a feeling of where she/he is", "玩家处于被捕猎的状态，随机地，一定半径内的所有敌人都会感知到你所在的位置。", "_t")
 t("Use it if you want normal playing conditions but do not feel ready for just one life.#{normal}#", "如果你想要普通的游戏条件、但还没准备好一条命通关，就选择这个模式。#{normal}#", "_t")
 t("At level 1,2,5,7,14,24,35 get one more 'life' that allows you to resurrect at the start of the level.", "在 1,2,5,7,14,24,35 级时各获得一条额外生命，可在本层起点复活。", "_t")
@@ -19450,6 +19475,7 @@ t("Your combat focus allows you to keep your hatred burning (%0.1f hate refunded
 t("Your combat focus allows you to regenerate stamina faster (+%0.1f stamina/turn).", "你专注于战斗，使得你可以更快地回复体力 （+%0.1f 体力/回合）。", "tformat")
 t("Your combat focus allows you to regenerate life faster (+%0.1f life/turn).", "你专注于战斗，使你可以更快地回复生命值 （+%0.1f 生命值/回合）。", "tformat")
 t("Rigorous training allows you to be more resistant to some spell effects (+%d spell save).", "严格的训练使得你对某些法术效果具有更高的抗性 （+%d 法术豁免）。", "tformat")
+t("Unending Frenzy", "不休狂热", "talent name")
 
 ------------------------------------------------
 section "mod-tome/data/talents/techniques/combat-training.lua"
@@ -24260,7 +24286,8 @@ t("The target is off balance and is %d%% more likely to be crit by the target th
 t("#Target# has been set up!", "#Target#中了圈套！", "_t")
 t("+Set Up", "+露出破绽", "_t")
 t("-Set Up", "-露出破绽", "_t")
-t("#Target# is recovering from the damage!", "#Target#从伤害中恢复！", "_t")
+t("#Target# is recovering from the damage!", "#Target#开始从伤害中恢复！", "_t")
+t("#Target# has finished recovering.", "#Target#的恢复效果结束了。", "_t")
 t("Weakened Defenses", "防御削弱", "_t")
 t("The target's physical resistance has been reduced by %d%%.", "目标物理抗性下降 %d%%。", "tformat")
 t("Increases global speed by %d%%.", "全局速度提升 %d%%。", "tformat")
@@ -25990,6 +26017,7 @@ t("main", "主用", "_t")
 t("[E]quipment: %s set", "装备[E]：%s武器组", "tformat")
 t("#RED#Displaying %s set for %s (equipment NOT switched)", "#RED#正在显示%s武器组（角色：%s，装备未切换）", "logPlayer")
 t("Sort:  %s", "排序：%s", "tformat")
+t("Manage [I]nventory", "管理物品栏[I]", "_t")
 t([[Values #00FF00#in brackets ( )#LAST# show changes made from last character sheet checking.
 Keyboard: #00FF00#'u'#LAST# to save character dump. #00FF00#TAB key#LAST# to switch between tabs.
 Mouse: Hover over stat for info
@@ -26009,7 +26037,6 @@ t([[#GOLD#Days adventuring / current month:#LAST# %d / %s
 t("Antimagic adherent", "反魔拥护者", "_t")
 t("- Seed: #LIGHT_STEEL_BLUE#%s", "- 种子：#LIGHT_STEEL_BLUE#%s", "tformat")
 t("die:%+d", "死亡底线：%+d", "_t")
-t("%s%-8.8s: #00ff00#%s ", "%s%-8.8s：#00ff00#%s ", "tformat")
 t("Current Feedback gain is %0.1f%% of damage taken.", "现在获得的反馈值为受到伤害的 %0.1f%%。", "tformat")
 t("Global speed  : #00ff00#%s", "全局速度：#00ff00#%s", "tformat")
 t("(with heal mod): #00ff00#%s", "（治疗系数加成后）：#00ff00#%s", "tformat")
@@ -26103,6 +26130,8 @@ t([[Toggles between various tactical information display:
 - 不显示
 
 #{italic}#在游戏中按Shift+T可以直接切换#{normal}##WHITE#]], "_t")
+t("Enabled", "已启用", "_t")
+t("Disabled", "已禁用", "_t")
 t("If enabled new quests and quests updates will display a big popup, if not a simple line of text will fly on the screen.#WHITE#", "如果开启，新任务和任务更新会以大弹窗显示；如果关闭，只会有一行文字在屏幕上飘过。#WHITE#", "_t")
 t("Enable the WASD movement keys. Can be used to move diagonaly by pressing two directions at once.#WHITE#", "启用 WASD 键移动。当你同时按两个键的时候，可以实现对角线移动。#WHITE#", "_t")
 t("From 0(disable) to 10", "从 0（关闭）到 10", "_t")
@@ -26254,6 +26283,7 @@ A talent category point can be used either to learn a new category or increase t
 t("A generic talent allows you to perform various utility actions and improve your character. It represents a skill anybody can learn (should you find a trainer for it). You gain one point every level (except every 5th level). You may also find trainers or artifacts that allow you to learn more.", "通用技能让你能够执行各种实用动作并强化角色。它代表任何人都能学习的技能（只要能找到训练师）。你每升 1 级获得一点通用技能点（每第 5 级除外），也可以通过训练师或神器获得更多。", "_t")
 t("A class talent allows you to perform new combat moves, cast spells, and improve your character. It represents the core function of your class. You gain one point every level and two every 5th level. You may also find trainers or artifacts that allow you to learn more.", "职业技能让你能够施展新的战斗招式、施放法术并强化角色。它代表你职业的核心功能。你每升 1 级获得一点职业技能点，每第 5 级获得两点，也可以通过训练师或神器获得更多。", "_t")
 t("The last %d %s talents you learnt are always unlearnable.", "你最近学习的 %d 个%s技能始终可以遗忘。", "tformat")
+t("This talent can alter the world in a permanent way; as such, you can never unlearn it once known.", "本技能会永久性地改变这个世界，因此一旦学会就无法遗忘。", "_t")
 t("This talent was recently learnt; you can still unlearn it if you are out of combat or in a quiet area like a #{bold}#town#{normal}#.", "你刚在此技能上加点，你还可以在战斗外或者#{bold}#城市#{normal}#这样安全的地方遗忘它。", "_t")
 t("Current talent level: ", "当前技能等级： ", "_t")
 t("<Press 'x' to swap to simple display>", "<按 X 键切换简单显示>", "_t")
@@ -26816,6 +26846,547 @@ t([[Quekorja was the god of time and possibilities. What stands out about Eyal's
 
  根据安格利文的记载，奎科加在弑神之战之中被杀死了，它的尸体后来被法师莱娜尼尔发现。她成功通过一个危险的仪式吸收了此神的一小部分力量，而就是这微小的力量也使她成为了无可匹敌的大法师。这也证实了诸神的力量是多么的强大。]], "_t")
 t("You have accomplished great deeds, but if you enter the infinite dungeon there will be no way back. You will go on and on until you meet your glorious death.", "你已经完成了你的伟大使命，不过当你进入无尽地下城之后就永远不能再回来，你只有不断地前进直到你光荣地死去。", "_t")
+
+------------------------------------------------
+section "engine"
+
+t("Assassin lair", "刺客巢穴", "_t")
+t("Keepers of Reality", "现实守护者", "_t")
+t("Sorcerers", "巫师", "_t")
+t([[Today is the %s %s of the %s year of the Age of Ascendancy of Maj'Eyal.
+The time is %02d:%02d.]], [[今天是马基·埃亚尔卓越纪%s年，%s第%s天。
+当前时间 %02d:%02d。]], "nil", {3, 2, 1, 4, 5})
+t("Ungrol of Last Hope", "最后的希望城的温格洛", "_t")
+t("Water lair", "水下巢穴", "_t")
+t("lone alchemist", "落单的炼金术士", "_t")
+t("standby", "待命", "_t")
+t("unseen", "未探索区域", "_t")
+t("sunwell", "太阳井", "entity name")
+t("moonwell", "月亮井", "entity name")
+t("Exit menu", "退出菜单", "_t")
+t("Toggle list of seen creatures", "开关视野内生物列表", "_t")
+t("Character Creation: %s", "创建角色：%s", "tformat")
+t([[Keyboard: #00FF00#up key/down key#FFFFFF# to select an option; #00FF00#Enter#FFFFFF# to accept; #00FF00#Backspace#FFFFFF# to go back.
+Mouse: #00FF00#Left click#FFFFFF# to accept; #00FF00#right click#FFFFFF# to go back.
+]], [[键盘：#00FF00#上/下键#FFFFFF#选择选项，#00FF00#回车#FFFFFF#键确定，#00FF00#退格#FFFFFF#键返回。
+鼠标：#00FF00#左键#FFFFFF#确定，#00FF00#右键#FFFFFF#返回。
+]], "_t")
+t("Recreate", "重建同一角色", "_t")
+t("following chain...", "追踪链接…", "log")
+t("Unknown!", "未知！", "_t")
+t("Beta Addons Disabled", "Beta版插件已禁用", "_t")
+t([[This beta version is meant to be tested without addons, as such the following ones are currently disabled:
+#GREY#]], [[本Beta版本设计上用于纯原版测试环境，因此，以下插件被自动禁用：
+#GREY#]], "_t")
+t("#{italic}##PINK#Addons developers can still test their addons by enabling developer mode.#{normal}#", "#{italic}##PINK#插件开发者可以通过开启开发者模式继续测试他们的插件。#{normal}#", "_t")
+t([[Total playtime of all registered players:%s
+]], [[注册玩家总游玩时间：%s
+]], "tformat")
+t("#LIGHT_BLUE#%s#WHITE# is one of the top five played races", "#LIGHT_BLUE#%s#WHITE#是玩得最多的五大种族之一", "tformat")
+t("#LIGHT_BLUE#%s#WHITE# is one of the top five played classes", "#LIGHT_BLUE#%s#WHITE#是玩得最多的五大职业之一", "tformat")
+t("The latest donator is #LIGHT_GREEN#%s#WHITE#. Many thanks to all donators, you are keeping this game alive!", "最近的捐赠者是#LIGHT_GREEN#%s#WHITE#。感谢所有捐赠者，是你们延续了这个游戏的生命！", "tformat")
+t("#LIGHT_RED#Online profile disabled(switching to offline profile) due to %s.", "#LIGHT_RED#由于 %s，在线账户已禁用（切换至离线账户）。", "log")
+t("Requires:", "需求：", "_t")
+t("#YELLOW#Connection to online server established.", "#YELLOW#已连接至在线服务器。", "log")
+t("no online profile active", "未开启在线账户", "_t")
+t("savefile tainted", "存档带有作弊记录", "_t")
+t("%s fails to disarm a trap (%s).", "%s 拆除陷阱（%s）失败。", "logSeen")
+t("%s disarms a trap (%s).", "%s 拆除了陷阱（%s）。", "logSeen")
+t("%s triggers a trap (%s)!", "%s 触发了陷阱（%s）！", "logSeen")
+t([[#{bold}#Thank you#{normal}# for you donation, your support means a lot for the continued survival of this game.
+
+Your current donation total is #LIGHT_GREEN#%0.2f euro#WHITE# which equals to #ROYAL_BLUE#%d voratun coins#WHITE# to use on te4.org.
+Your Item Vault has #TEAL#%d slots#WHITE#.
+
+Again, thank you, and enjoy Eyal!
+
+#{italic}#Your malevolent local god of darkness, #GOLD#DarkGod#{normal}#]], [[#{bold}#感谢#{normal}# 你的捐赠，你的支持对本游戏的持续运营意义重大。
+
+你的捐款总额为#LIGHT_GREEN#%0.2f 欧元#WHITE# 相当于 #ROYAL_BLUE#%d 个沃瑞钽币#WHITE#，可以在 te4.org 上消费。
+你的共享仓库有 #TEAL#%d 个槽位#WHITE#。
+
+再次感谢你，祝你在埃亚尔玩得开心！
+
+#{italic}#你的邪恶的黑暗之神，#GOLD#DarkGod#{normal}#]], "tformat")
+t("Requesting...", "正在请求…", "_t")
+t("Requesting user info...", "正在请求用户信息…", "_t")
+t("The server does not know about this player.", "服务器里没有这个玩家。", "_t")
+t(" [spoilers]", " [剧透]", "_t")
+t("First time achievements (recommended to keep them on)", "第一次取得成就（建议开启）", "_t")
+t("Important achievements (recommended to keep them on)", "重要成就（建议开启）", "_t")
+t("Click a user to stop ignoring her/his messages.", "点击一个用户以停止屏蔽他/她的消息。", "_t")
+t("Continue? %s", "继续吗？%s", "tformat")
+t(" (progress will be saved)", " （游戏进度会被保存）", "_t")
+t("Game Menu", "游戏菜单", "_t")
+t("Resume", "继续游戏", "_t")
+t([[Enable developer mode?
+Developer Mode is a special game mode used to debug and create addons.
+Using it will #CRIMSON#invalidate#LAST# any savefiles loaded.
+When activated you will have access to special commands:
+- CTRL+L: bring up a lua console that lets you explore and alter all the game objects, enter arbitrary lua commands, ...
+- CTRL+A: bring up a menu to easily do many tasks (create NPCs, teleport to zones, ...)
+- CTRL+left click: teleport to the clicked location
+]], [[启动开发者模式？
+开发者模式是一种特殊的游戏模式，用于调试游戏和创建游戏插件。
+启用开发者模式时，所有读取的存档都会成为#CRIMSON#作弊状态#LAST#。
+在开发者模式下，你可以使用以下几种特殊指令：
+- CTRL+L：启动Lua控制台，可以让你探索和修改游戏物件，并执行任意Lua脚本……
+- CTRL+A：启动调试菜单，可以让你方便地进行各种操作(创建NPC，传送到地图，等等…)
+- CTRL+鼠标左键：传送到点击的位置。
+]], "_t")
+t("Enter a quantity.", "输入数量。", "_t")
+t("Must be between %i and %i characters.", "必须介于 %i 和 %i 个字符之间。", "tformat")
+t("      Press a key (escape to cancel, backspace to remove) for: %s", "      请按键（Esc 键取消，退格键删除）以绑定 %s 的键位", "tformat")
+t("Make gesture (using right mouse button) or type it (or escape) for: %s", "请用鼠标右键画出鼠标手势，或直接输入手势（按ESC取消），为 %s 绑定鼠标手势", "tformat")
+t([[#GOLD#Achieved on:#LAST# %s
+#GOLD#Achieved by:#LAST# %s
+%s
+#GOLD#Description:#LAST# %s]], [[#GOLD#成就达成时间：#LAST# %s
+#GOLD#成就获得者：#LAST# %s
+%s
+#GOLD#介绍：#LAST# %s]], "tformat")
+t("Progress: ", "进度： ", "_t")
+t("If you already reported that error, you do not have to do it again (unless you feel the situation is different).", "如果你已经汇报过了这个错误，你不需要再次进行汇报（除非你认为这一情况和之前有所不同）。", "_t")
+t("You #LIGHT_GREEN#already reported#WHITE# that error, you do not have to do it again (unless you feel the situation is different).", "你 #LIGHT_GREEN#已经汇报过了#WHITE# 这个错误，你不需要再次进行汇报（除非你认为这一情况和之前有所不同）。", "_t")
+t("You have already got this error but #LIGHT_RED#never reported#WHITE# it, please do.", "你以前遇到过这个错误，但#LIGHT_RED#还没有汇报过#WHITE#，请汇报一下。", "_t")
+t("Log saved to file (click to copy to clipboard):#LIGHT_BLUE#%s", "游戏日志已保存到文件（点击复制到剪贴板）:#LIGHT_BLUE#%s", "tformat")
+t("#YELLOW#Error report sent, thank you.", "#YELLOW#错误报告已发送，谢谢。", "log")
+t([[Purge all Steam Cloud saves.
+This will remove all saves from the cloud cloud (but not your local copy). Only use if you somehow encounter storage problems on it (which should not happen, the game automatically manages it for you).#WHITE#]], [[删除所有Steam云存档。
+这会删除Steam云中的所有存档，但不会删除你的本地存档。只有在你遇到存储问题的时候才使用这一功能。（一般情况下这不会发生，游戏会自动管理云存档）#WHITE#]], "_t")
+t([[You can bind a talent to a hotkey be pressing the corresponding hotkey while selecting a talent.
+Check out the keybinding screen in the game menu to bind hotkeys to a key (default is 1-0 plus control or shift).
+]], [[你可以把技能绑定到一个快捷键。方法是选择一个技能，然后按下对应的快捷键。
+请查看游戏菜单中的快捷键绑定界面，将快捷键绑定到键盘按键(默认绑定位置是1-0+Ctrl/Shift键)。
+]], "_t")
+t("Currently playing: ", "正在玩： ", "_t")
+t("Validation: ", "认证状态： ", "_t")
+t("If you have a very high DPI screen you may want to raise this value. Requires a restart to take effect.#WHITE#", "如果你的屏幕像素密度很高，可以调高该数值。重启后生效。#WHITE#", "_t")
+t([[Request this display refresh rate.
+Set it lower to reduce CPU load, higher to increase interface responsiveness.#WHITE#]], [[请求此显示刷新率。
+降低刷新率可以减轻 CPU 占用，提高刷新率可以提升界面响应速度。#WHITE#]], "_t")
+t("Enter density", "输入数值", "_t")
+t([[Controls the particle effects density.
+This option allows to change the density of the many particle effects in the game.
+If the game is slow when displaying spell effects try to lower this setting.#WHITE#]], [[设定粒子效果的密度。
+这一选项可以改变游戏内的粒子效果密度。
+如果你在施法时发现游戏运行变慢，请尝试降低这个设置。#WHITE#]], "_t")
+t([[Activates advanced shaders.
+This option allows for advanced effects (like water surfaces, ...). Disabling it can improve performance.
+
+#LIGHT_RED#You must restart the game for it to take effect.#WHITE#]], [[开启高级着色器效果。
+这个选项可以激活一些高级的视频效果（例如水面效果……）。关闭它可以提升运行速度。
+
+#LIGHT_RED#你必须重启游戏才能看到效果。#WHITE#]], "_t")
+t([[Activates distorting shaders.
+This option allows for distortion effects (like spell effects doing a visual distortion, ...). Disabling it can improve performance.
+
+#LIGHT_RED#You must restart the game for it to take effect.#WHITE#]], [[开启扭曲着色器效果。
+这个选项可以激活一些扭曲视频特效（例如会造成视觉扭曲的法术）。关闭它可以提升运行速度。
+
+#LIGHT_RED#你必须重启游戏才能看到效果。#WHITE#]], "_t")
+t([[Activates volumetric shaders.
+This option allows for volumetricion effects (like deep starfields). Enabling it will severely reduce performance when shaders are displayed.
+
+#LIGHT_RED#You must restart the game for it to take effect.#WHITE#]], [[开启体积着色器效果。
+这个选项可以激活体积效果（例如深邃星空）。显示这些着色器效果时，开启它会严重降低性能。
+
+#LIGHT_RED#你必须重启游戏才能看到效果。#WHITE#]], "_t")
+t([[Enable/disable usage of tilesets.
+In some rare cases on very slow machines with bad GPUs/drivers it can be detrimental.]], [[开启/关闭图块使用。
+在某些显卡或显卡驱动很差的极慢机器上，开启这个选项偶尔反而有害。]], "_t")
+t([[Request a specific origin point for the game window.
+This point corresponds to where the upper left corner of the window will be located.
+Useful when dealing with multiple monitors and borderless windows.
+
+The default origin is (0,0).
+
+Note: This value will automatically revert after ten seconds if not confirmed by the user.#WHITE#]], [[设置游戏窗口的原点。
+这个点表示窗口左上角所在的位置。
+这一选项用于在使用无边框窗口或者多显示器的场合。
+
+默认原点：(0,0)。
+
+注意：如果用户在十秒内未确认，这一数值将会自动恢复原值。#WHITE#]], "_t")
+t([[Welcome!
+
+I am #{italic}##ANTIQUE_WHITE#DarkGod#LAST##{normal}#, the creator of the game and before you go on your merry way I wish to take a few seconds of your time to explain why there are microtransactions in the game.
+
+Before you run off in terror let me put it plainly: I am very #{bold}#firmly #CRIMSON#against#LAST# pay2win#{normal}# things so rest assured I will not add this kind of stuff.
+
+So why put microtransactions? Tales of Maj'Eyal is a cheap/free game and has no subscription required to play. It is my baby and I love it; I plan to work on it for many years to come (as I do since 2009!) but for it to be viable I must ensure a steady stream of income as this is sadly the state of the world we live in.
+
+As for what kind of purchases are/will be available:
+- #GOLD#Cosmetics#LAST#: in addition to the existing racial cosmetics & item shimmers available in the game you can get new packs of purely cosmetic items & skins to look even more dapper!
+- #GOLD#Pay2DIE#LAST#: Tired of your character? End it with style!
+- #GOLD#Vault space#LAST#: For those that donated they can turn all those "useless" donations into even more online vault slots.
+- #GOLD#Community events#LAST#: A few online events are automatically and randomly triggered by the server. With those options you can force one of them to trigger; bonus point they trigger for the whole server so everybody online benefits from them each time!
+
+I hope I've convinced you of my non-evil intentions (ironic for a DarkGod I know ;)). I must say feel dirty doing microtransactions even as benign as those but I want to find all the ways I can to ensure the game's future.
+Thanks, and have fun!]], [[欢迎！
+
+我是游戏的制造者 #{italic}##ANTIQUE_WHITE#DarkGod#LAST##{normal}#。在愉快的探险开始之前，我希望占用短暂的时间向你解释游戏内购的存在意义。
+
+请不要听到“内购”就惊慌逃跑，听完我的解释再做选择：我本人 #{bold}# 坚决 #CRIMSON#反对#LAST# 氪金胜利 #{normal}#，因此我保证绝不会做这种事情。
+
+那么，为什么要加入内购呢？马基·埃亚尔的传说是一款便宜/免费的游戏，也不需要会员订阅。它就像我的孩子一样；我非常爱它，并计划为之长久工作（从2009年开始我就一直这么干了！）。但是，为了生存，我仍然需要在现实世界中取得必要的收入。
+
+目前，我提供了以下几种内购项：
+- #GOLD#时装#LAST#：除了游戏内现有的种族、物品时装之外，你可以获得更多时装效果，让你看起来更靓！
+- #GOLD#氪金速死#LAST#：已经不想玩这个角色了吗？用这个选项来迎接一个帅气的终结吧！
+- #GOLD#额外在线仓库格#LAST#：对于捐赠者而言，可以把那些“无用”的捐赠换成更多在线仓库格。
+- #GOLD#社区事件#LAST#：服务器会自动触发部分在线事件，而你可以强制让服务器触发特定事件。当然，当前在线的所有玩家都会收到该事件！
+
+我希望这些能说服你，我并没有什么邪恶的想法（虽然我名为DarkGod）。我不得不说，做内购让我感觉很龌龊，即使是上面这些无伤大雅的内购也不例外，但为了游戏的未来，我必须想尽一切办法。
+感谢你看到这里，去享受游戏吧！]], "_t")
+t("#{italic}##UMBER#Bonus vault slots from this order: #ROYAL_BLUE#%d#{normal}#", "#{italic}##UMBER#这项购买提供的额外在线仓库空间：#ROYAL_BLUE#%d#{normal}#", "_t")
+t([[For every purchase of #{italic}##GREY#%s#LAST##{normal}# you gain a permanent additional vault slot.
+#GOLD##{italic}#Because why not!#{normal}#]], [[每消费 #{italic}##GREY#%s#LAST##{normal}#，你就会永久获得一个额外的在线仓库格。
+#GOLD##{italic}#为什么不呢！#{normal}#]], "_t")
+t([[For every donations you've ever made you have earned voratun coins. These can be spent purchasing expansions or options on the online store. This is the amount you have left, if your purchase total is below this number you'll instantly get your purchase validated, if not you'll need to donate some more first.
+#GOLD##{italic}#Thanks for your support, every little bit helps the game survive for years on!#{normal}#]], [[你历次所做的每一笔捐赠，都为你赚取了沃瑞钽硬币，可以用于购买扩展DLC或者在线商店的商品。这是你当前可用的硬币，如果购买总额低于这个数值，购买会立即生效，否则你需要先追加捐赠。
+#GOLD##{italic}#感谢你的支持，每一分钱都让这游戏更加持久！#{normal}#]], "_t")
+t("Let's do it! (Opens in your browser)", "开始吧！（在浏览器中打开）", "_t")
+t("The Online Store (and expansions) are only purchasable by players that bought the game. Plaese go have a look at the donation page for more explanations.", "在线商店（和扩展包）只对购买过游戏本体的玩家开放。详情请查看捐赠页面。", "_t")
+t("  (%d items in cart, %s)", "  (购物车中有%d件物品，%s)", "tformat")
+t("Shimmer pack installed!", "时装包安装成功！", "_t")
+t([[Could not dynamically link addon to current character, maybe the installation weng wrong.
+You can fix that by manually downloading the addon from https://te4.org/ and placing it in game/addons/ folder.]], [[无法自动将插件链接至当前角色，可能安装失败了。
+你可以在 https://te4.org/ 手动下载该插件并放置于 game/addons/ 目录下来解决这个问题。]], "_t")
+t("Downloading cosmetic pack: #LIGHT_GREEN#%s", "时装包下载中：#LIGHT_GREEN#%s", "tformat")
+t("- #{bold}##ROYAL_BLUE#%s #SLATE#x%d#WHITE##{normal}#: The pack should be downloading or even finished by now.", "- #{bold}##ROYAL_BLUE#%s #SLATE#x%d#WHITE##{normal}#：该内容包现在应该正在下载，甚至已经下载完成了。", "tformat")
+t("- #{bold}##ROYAL_BLUE#%s #SLATE#x%d#WHITE##{normal}#: You can now trigger it whenever you are ready.", "- #{bold}##ROYAL_BLUE#%s #SLATE#x%d#WHITE##{normal}#：准备好的时候就可以触发它。", "tformat")
+t("- #{bold}##ROYAL_BLUE#%s #SLATE#x%d#WHITE##{normal}#: Your available vault space has increased.", "- #{bold}##ROYAL_BLUE#%s #SLATE#x%d#WHITE##{normal}#：你可用的在线仓库空间增加了。", "tformat")
+t("Steam Overlay should appear, if it does not please make sure it you have not disabled it.", "Steam 覆盖层应该出现，如果没有出现，请确认你并没有禁用该功能。", "_t")
+t("Finalizing transaction with Steam servers...", "正在完成与 Steam 服务器的交易……", "_t")
+t("Payment refused, you have not been billed.", "付款被拒绝，你未被扣款。", "_t")
+t([[#{bold}##GOLD#Community Online Event#WHITE##{normal}#: Once you have purchased a community event you will be able to trigger it at any later date, on whichever character you choose.
+Community events once triggered will activate for #{bold}#every player currently logged on#{normal}# including yourself. Every player receiving it will know you sent it and thus that you are to thank for it.
+To activate it you will need to have your online events option set to "all" (which is the default value).]], [[#{bold}##GOLD#社区在线事件#WHITE##{normal}#：成功购买一次社区事件后，你可以在任何时间、任何角色上触发。
+社区事件一旦激活，将对 #{bold}#当前所有在线玩家（包括你自己）#{normal}# 生效，所有收到这次事件的玩家将知晓你的名字，并因此而感激你。
+你需要将在线事件选项设置为“全部”才能激活这个效果，注意，默认值即为“全部”。]], "_t")
+t([[#{bold}##GOLD#Event#WHITE##{normal}#: Once you have purchased an event you will be able to trigger it at any later date, on whichever character you choose.
+To activate it you will need to have your online events option set to "all" (which is the default value).]], [[#{bold}##GOLD#事件#WHITE##{normal}#：成功购买一次事件后，你可以在任何时间、任何角色上触发。
+你需要将在线事件选项设置为“全部”才能激活这个效果，注意，默认值即为“全部”。]], "_t")
+t("#{bold}##GOLD#Non Immediate#WHITE##{normal}#: This events adds new content that you have to find by exploration. If you die before finding it, there can be no refunds.", "#{bold}##GOLD#非即时#WHITE##{normal}#：该事件会添加新内容，需要你通过探索去寻找。如果你在找到这些内容之前死去，也无法退款。", "_t")
+t("#{bold}##GOLD#Once per Character#WHITE##{normal}#: This event can only be received #{bold}#once per character#{normal}#. Usualy because it adds a new zone or effect to the game that would not make sense to duplicate.", "#{bold}##GOLD#每角色限一次#WHITE##{normal}#：这个事件 #{bold}#每名角色只能接收一次#{normal}#。通常是因为它添加了新地城或者其他游戏内不能重复添加的效果。", "_t")
+t([[#{bold}##GOLD#Shimmer Pack#WHITE##{normal}#: Once purchased the game will automatically install the shimmer pack to your game and enable it for your current character too (you will still need to use the Mirror of Reflection to switch them on).
+#LIGHT_GREEN#Bonus perk:#LAST# purchasing any shimmer pack will also give your characters a portable Mirror of Reflection to be able to change your appearance anywhere, anytime!]], [[#{bold}##GOLD#时装包#WHITE##{normal}#：购买后游戏会自动安装时装包，同时为当前角色自动开启。仍然需要使用反射之镜来切换。
+#LIGHT_GREEN#额外福利：#LAST# 购买任何时装包后，你的角色自动获得便携式反射之镜，可以随时随地切换时装！]], "_t")
+t("#{bold}##GOLD#UI Pack#WHITE##{normal}#: Once purchased the game will automatically install the UI pack to your game.", "#{bold}##GOLD#UI 组合包#WHITE##{normal}#：购买后游戏会自动安装UI组合包。", "_t")
+t("#{bold}##GOLD#Vault Space#WHITE##{normal}#: Once purchased your vault space is permanently increased.", "#{bold}##GOLD#仓库空间#WHITE##{normal}#：购买后，你的共享仓库大小会永久增加。", "_t")
+t("#YELLOW#-- connecting to server... --", "#YELLOW#-- 正在连接到服务器… --", "_t")
+t("Please use purchased options when not on the worldmap.", "请不要在世界地图上使用已购买的选项。", "_t")
+t([[This option requires you to accept to receive events from the server.
+Either you have the option currently disabled or you are playing a campaign that can not support these kind of events (mainly the Arena).
+Make sure you have #GOLD##{bold}#Allow online events#WHITE##{normal}# in the #GOLD##{bold}#Online#WHITE##{normal}# section of the game options set to "all". You can set it back to your own setting once you have received the event.
+]], [[这一选项需要你同意接收服务器发来的事件。
+可能是你当前关闭了这一选项，或者正在游玩不支持这类事件的战役（主要是竞技场）。
+请确保在游戏设置的#GOLD##{bold}#在线#WHITE##{normal}#选项中将#GOLD##{bold}#允许在线事件#WHITE##{normal}# 设置为“全部”。收到事件之后，你可以把它改回你原本的设置。
+]], "_t")
+t("This pack is already installed and in use for your character.", "这个包已经安装，并且正在你的角色上使用中。", "_t")
+t("You are about to use a charge of this option. You currently have %d charges remaining.", "你准备使用这个选项，这将消耗一次使用次数。你当前还剩 %d 次。", "tformat")
+t("There was an error from the server: %s", "服务器发生错误：%s", "tformat")
+t("Online Store", "在线商店", "_t")
+t("You have not purchased any usable options yet. Would you like to see the store?", "你还没有购买任何可用的选项。你要浏览在线商店吗？", "_t")
+t("%s picks up (%s.): %s%s.", "%s拾取了（%s）：%s%s。", "logSeen")
+t("wrong equipment slot", "无法在该装备栏装备", "_t")
+t("%s can not wear (%s): %s (%s).", "%s无法装备（%s）：%s（%s）。", "logSeen")
+t("%s wears: %s.", "%s装备了：%s。", "logSeen")
+t("%s wears (offslot): %s.", "%s在备用栏位装备了：%s。", "logSeen")
+t("%s wears (replacing %s): %s.", "%s装备了（替换%s）：%s。", "logSeen")
+t("%s attacks %s.", "%s攻击了%s。", "logSeen")
+t("%s is still on cooldown for %d turns.", "%s仍在冷却中，还需%d回合。", "logPlayer")
+t("Use %s?", "使用%s？", "tformat")
+t("not enough stat: %s", "属性不足：%s", "tformat")
+t("missing dependency", "未满足前置条件", "_t")
+t("- Lower talents of the same category: %d", "- 同系低阶技能数：%d", "tformat")
+t("- Talent %s (not known)", "- 技能%s（未学习）", "tformat")
+t("Tactical display disabled. Press shift+'t' to enable.", "战术视图关闭。请按 Shift+T 启用。", "_t")
+t("Tactical display enabled. Press shift+'t' to disable.", "战术视图启用。请按 Shift+T 关闭。", "_t")
+t("It can be used to %s, costing %d power out of %d/%d.", "可以用于 %s，消耗 %d 点能量（当前 %d/%d）。", "tformat")
+t("It can be used to activate talent: %s (level %d).", "可以用于激活技能：%s（等级 %d）。", "tformat")
+t("It can be used to activate talent: %s (level %d), costing %d power out of %d/%d.", "可以用于激活技能：%s（等级 %d），消耗 %d 点能量（当前 %d/%d）。", "tformat")
+t("Hotkey not defined", "快捷键未定义", "_t")
+t("You may define a hotkey by pressing 'm' and following the instructions there.", "你可以按 M 键打开技能窗口，按其中的提示绑定快捷键。", "_t")
+t("You do not have any %s .", "你的物品栏里没有%s。", "tformat")
+t("%s...", "%s中…", "tformat")
+t("%s starts...", "%s开始了…", "log")
+t("You don't see how to get there...", "你不知道怎么到达那里…", "logPlayer")
+t("Ran for %d turns (stop reason: %s).", "奔跑了%d回合（中断原因：%s）。", "log")
+t("#%s#Personal New Achievement: %s!", "#%s#个人新成就：%s！", "log")
+t("Personal New Achievement: #%s#%s", "个人新成就：#%s#%s", "tformat")
+t("#%s#New Achievement: %s!", "#%s#新成就：%s！", "log")
+t("New Achievement: #%s#%s", "新成就：#%s#%s", "tformat")
+t([[You have started to draw a mouse gesture for the first time!
+Gestures allow you to use talents or keyboard action by a simple movement of the mouse. To draw one you simply #{bold}#hold right click + move#{normal}#.
+By default no bindings are done for gesture so if you want to use them go to the Keybinds and add some, it's easy and fun!
+
+Gestures movements are color coded to better display which movement to do:
+#15ed2f##{italic}#green#{normal}##LAST#: moving up
+#1576ed##{italic}#blue#{normal}##LAST#: moving down
+#ed1515##{italic}#red#{normal}##LAST#: moving left
+#d6ed15##{italic}#yellow#{normal}##LAST#: moving right
+
+If you do not wish to see gestures anymore, you can hide them in the UI section of the Game Options.
+]], [[你第一次开始绘制鼠标手势了！
+鼠标手势可以让你通过简单的鼠标动作释放技能或执行键盘操作。你只需要#{bold}#按住右键并拖动#{normal}#就可以绘制鼠标手势。
+默认情况下，鼠标手势没有绑定到任何操作。如果你需要使用鼠标手势，你可以在“按键绑定”中添加一些，操作简单又有趣！
+
+手势动作以颜色编码，方便你更清楚地看出该做哪个动作：
+#15ed2f##{italic}#绿色#{normal}##LAST#: 向上拖动
+#1576ed##{italic}#蓝色#{normal}##LAST#: 向下拖动
+#ed1515##{italic}#红色#{normal}##LAST#: 向左拖动
+#d6ed15##{italic}#黄色#{normal}##LAST#: 向右拖动
+
+如果你不希望看到手势动作，请在游戏设置的UI栏设置关闭它。
+]], "_t")
+t("Are you sure you want to install this addon: #LIGHT_GREEN##{bold}#%s#{normal}##LAST# ?", "你确认要安装这个插件吗：#LIGHT_GREEN##{bold}#%s#{normal}##LAST#？", "_t")
+t("Are you sure you want to install this module: #LIGHT_GREEN##{bold}#%s#{normal}##LAST#?", "你确认要安装这个模组吗：#LIGHT_GREEN##{bold}#%s#{normal}##LAST#？", "tformat")
+t("Addon installation successful. New addons are only active for new characters.", "插件安装成功。新插件只对新角色生效。", "_t")
+t("Game installed!", "游戏安装完成！", "_t")
+t("Game installation successful. Have fun!", "游戏安装完成。玩得开心！", "_t")
+t([[#GOLD#"Tales of Maj'Eyal"#WHITE# is the main game, you can also install more addons or modules by going to https://te4.org/
+
+When inside a module remember you can press Escape to bring up a menu to change keybindings, resolution and other module specific options.
+
+Remember that in most roguelikes death is usually permanent so be careful!
+
+Now go and have some fun!]], [[#GOLD#马基·埃亚尔的传说#WHITE# 是主游戏，你也可以在 https://te4.org/ 下载到更多游戏插件和游戏模组。
+
+在游戏模组内，你可以按 Esc 键打开菜单，改变按键绑定、游戏分辨率以及其他与模组有关的设置。
+
+请记住，在大部分Roguelike游戏里，角色的死亡都是永久的，请小心！
+
+玩得开心！]], "_t")
+t([[The way the engine manages saving has been reworked for v1.0.5.
+
+The background saves should no longer lag horribly and as such it is highly recommended that you use the option. The upgrade turned it on for you.
+
+For the same reason the save per level option should not be used unless you have severe memory problems. The upgrade turned it off for you.
+]], [[游戏引擎管理游戏存档的方式在 v1.0.5 版本发生了变化。
+
+后台存档不会再严重拖慢游戏运行，因此强烈建议你开启这一选项。这次更新会自动帮你打开这个选项。
+
+出于同样的原因，每层存档的选项已经没有必要使用，除非你有严重的内存问题。这次更新会自动帮你关闭这个选项。
+]], "_t")
+t([[Oops! Either you activated safe mode manually or the game detected it did not start correctly last time and thus you are in #LIGHT_GREEN#safe mode#WHITE#.
+Safe Mode disabled all graphical options and sets a low FPS. It is not advisable to play this way (as it will be very painful and ugly).
+
+Please go to the Video Options and try enabling/disabling options and then restarting until you do not get this message.
+A usual problem is shaders and thus should be your first target to disable.]], [[糟糕！如果你不是手动开启了安全模式，那就说明游戏检测到上一次启动时发生了错误，目前游戏已进入#LIGHT_GREEN#安全模式#WHITE#。
+在安全模式下，所有图形选项都被关闭，FPS被设置为很低。不建议在这种情况下进行游戏（游戏画面会变得很难看）。
+
+请你进入游戏视频选项，尝试启用或禁用各项选项并重启游戏，直到不再弹出此消息。
+常见的问题一般是由着色器引发的，你可以先尝试关闭着色器。]], "_t")
+t([[Oops! It seems like you have the same addon/dlc installed twice.
+This is unsupported and would make many things explode. Please remove one of the copies.
+
+Addon name: #YELLOW#%s#LAST#
+
+Check out the following folder on your computer:
+%s
+%s
+]], [[糟糕！好像你安装了多份同一个插件/DLC。
+这种情况不受支持，会引发很多BUG。请你移除掉多余的文件。
+
+插件名称：#YELLOW#%s#LAST#
+
+请你检查你电脑里的以下文件夹：
+%s
+%s
+]], "_t")
+t("Updating addon: #LIGHT_GREEN#%s", "正在更新插件：#LIGHT_GREEN#%s", "tformat")
+t("Really exit T-Engine/ToME?", "真的要退出 T-Engine/马基·埃亚尔的传说吗？", "_t")
+t([[Welcome to #LIGHT_GREEN#Tales of Maj'Eyal#LAST#!
+
+Before you can start dying in many innovative ways we need to ask you about online play.
+
+This is a #{bold}#single player game#{normal}# but it also features many online features to enhance your gameplay and connect you to the community:
+* Play from several computers without having to copy unlocks and achievements.
+* Talk ingame to other fellow players, ask for advice, share your most memorable moments...
+* Keep track of your kill count, deaths, most played classes...
+* Cool statistics for to help sharpen your gameplay style
+* Install official expansions and third-party addons directly from the game, hassle-free
+* Access your purchaser / donator bonuses if you have bought the game or donated on https://te4.org/
+* Help the game developers balance and refine the game
+
+You will also have a user page on #LIGHT_BLUE#https://te4.org/#LAST# to show off to your friends.
+This is all optional, you are not forced to use this feature at all, but the developer would thank you if you did as it will make balancing easier.]], [[欢迎来到#LIGHT_GREEN#马基·埃亚尔的传说#LAST#！
+
+在你开始尝试这个游戏里无数有趣的死法之前，我们想问你一下有关在线游戏的事情。
+
+马基·埃亚尔的传说是一个#{bold}#单人游戏#{normal}#，但也提供了丰富的在线功能，可以增强你的游戏体验，并让你和游戏社区建立联系：
+* 在多台电脑上游玩，而不需要复制游戏解锁和成就。
+* 与其他玩家在游戏内聊天，寻求建议，分享难忘的时刻…
+* 记录你的击杀数量，死亡次数，以及玩得最多的职业…
+* 用有趣的统计数据帮你打磨自己的游戏风格
+* 在游戏里直接安装官方扩展包和第三方插件，免去手动安装的麻烦
+* 如果你购买了游戏或是在 https://te4.org/ 上进行了捐助，就可以获得购买者/捐赠者独享权益
+* 帮助游戏开发者调整游戏平衡，让这个游戏变得更好
+
+你也会获得一个 #LIGHT_BLUE#https://te4.org/#LAST# 上的用户页面，可以用来向你的朋友炫耀。
+这一切都是可选的，你可以自愿使用或者关闭这些功能。如果你愿意开启它们，开发者会感谢你的，因为这会让平衡调整变得更简单。]], "_t")
+t("Login failed!", "登录失败！", "_t")
+t("Logged in!", "登录成功！", "_t")
+t("Creation failed: %s (you may also register on https://te4.org/)", "创建失败：%s（你也可以在 https://te4.org/ 网站上注册）", "tformat")
+t("Kill!", "击杀！", "_t")
+t("A large and muscled wolf from the northern wastes. Its breath is cold and icy and its fur coated in frost.", "一头来自北部荒野的狼，体型庞大、肌肉结实。它的呼吸冰冷刺骨，皮毛上结满了冰霜。", "_t")
+t("You can get new addons at #LIGHT_BLUE##{underline}#Te4.org Addons#{normal}#", "在以下位置可以获得新的插件：#LIGHT_BLUE##{underline}#Te4.org 插件页面#{normal}#", "_t")
+t("You can get new addons on #LIGHT_BLUE##{underline}#Steam Workshop#{normal}#", "在以下位置可以获得新的插件：#LIGHT_BLUE##{underline}#Steam 创意工坊#{normal}#", "_t")
+t("#LIGHT_GREEN#Manual: Active", "#LIGHT_GREEN#手动：启用", "_t")
+t("#LIGHT_GREEN#Auto: Active", "#LIGHT_GREEN#自动：启用", "_t")
+t("Expert Shaders Design", "着色器设计专家", "_t")
+t("Welcome to Tales of Maj'Eyal", "欢迎来到马基·埃亚尔的传说", "_t")
+t([[You are about to disable all connectivity to the network.
+This includes, but is not limited to:
+- Player profiles: You will not be able to login, register
+- Characters vault: You will not be able to upload any character to the online vault to show your glory
+- Item's Vault: You will not be able to access the online item's vault, this includes both storing and retrieving items.
+- Ingame chat: The ingame chat requires to connect to the server to talk to other players, this will not be possible.
+- Purchaser / Donator benefits: The base game being free, the only way to give donators their bonuses fairly is to check their online profile. This will thus be disabled.
+- Easy addons downloading & installation: You will not be able to see ingame the list of available addons, nor to one-click install them. You may still do so manually.
+- Version checks: Addons will not be checked for new versions.
+- Discord: If you are a Discord user, Rich Presence integration will also be disabled by this setting.
+- Ingame game news: The main menu will stop showing you info about new updates to the game.
+
+#{bold}##CRIMSON#This is an extremely restrictive setting. It is recommended you only activate it if you have no other choice as it will remove many fun and acclaimed features.#{normal}#
+
+If you disable this option you can always re-activate it in the Online category of the Game Options menu later on.]], [[即将禁止所有网络请求。
+包括但不仅限于：
+- 用户信息：不能登录或者注册。
+- 角色仓库：不能将任何角色上传到在线仓库来展示你的荣耀。
+- 物品仓库：不能访问你的在线物品仓库（包括存入和取回）。
+- 游戏内聊天：游戏内聊天需要连接服务器才能与其他玩家交谈，这将无法使用。
+- 购买者/捐赠者福利：基础游戏免费，公平发放捐赠者奖励的唯一途径是检查他们的在线档案，因此该功能将被禁用。
+- 插件便捷下载与安装：你将无法在游戏内看到可用插件列表，也无法一键安装，但仍可手动安装。
+- 插件版本检查：插件将不再检查新版本。
+- Discord：如果你是 Discord 用户，此设置也会禁用 Rich Presence 集成。
+- 游戏内新闻：主菜单将不再显示游戏更新信息。
+
+#{bold}##CRIMSON#这是一个极端的选项。如果不是迫不得已，推荐你不要打开它，这会让你失去很多好用的功能和一些游戏体验。#{normal}#
+
+关闭后，可以通过游戏设置菜单的在线选项卡打开。]], "_t")
+t([[#{bold}##GOLD#%s: %s#WHITE##{normal}#
+Game version: %d.%d.%d
+Requires addons: %s
+
+%s]], [[#{bold}##GOLD#%s：%s#WHITE##{normal}#
+游戏版本：%d.%d.%d
+需要的插件：%s
+
+%s]], "tformat")
+t("You can simply grab an older version of the game from where you downloaded it.", "你可以直接到当初下载游戏的地方获取旧版本。", "_t")
+t([[This savefile was created with game version %s. You can try loading it with the current version if you wish but it is recommended you play it with the old version to ensure compatibility
+%s]], [[这个存档由游戏版本 %s 创建。如果你愿意，可以尝试用当前版本读取，但建议使用旧版本游玩，以确保兼容性。
+%s]], "tformat")
+t("#LIGHT_RED#WARNING: #LAST#Loading a savefile while in developer mode will permanently invalidate it. Proceed?", "#LIGHT_RED#警告：#LAST#在开发者模式下读取一个存档将会不可逆地将其标记为作弊存档。确定吗？", "_t")
+t("No data available for this game version.", "没有该游戏版本的数据。", "_t")
+t("Downloading old game data: #LIGHT_GREEN#", "正在下载旧版游戏数据：#LIGHT_GREEN#", "_t")
+t("Old game data for %s correctly installed. You can now play.", "%s 的旧版游戏数据已经安装成功了。你可以现在游玩了。", "tformat")
+t([[#{bold}##GOLD#Ashes of Urh'Rok - Expansion#LAST##{normal}#
+#{italic}##ANTIQUE_WHITE#Many in Maj'Eyal have heard of "demons", sadistic creatures who appear seemingly from nowhere, leaving a trail of suffering and destruction wherever they go.#{normal}##LAST#
+
+#{bold}#Features#{normal}#:
+#LIGHT_UMBER#New class:#WHITE# Doombringers. These avatars of demonic destruction charge into battle with massive two-handed weapons, cutting swaths of firey devastation through hordes of opponents. Armed with flame magic and demonic strength, they delight in fighting against overwhelming odds
+#LIGHT_UMBER#New class:#WHITE# Demonologists. Bearing a shield and the magic of the Spellblaze itself, these melee-fighting casters can grow demonic seeds from their fallen enemies. Imbue these seeds onto your items to gain a wide array of new talents and passive benefits, and summon the demons within them to fight!
+#LIGHT_UMBER#New race:#WHITE# Doomelves. Shalore who've taken to the demonic alterations especially well, corrupting their typical abilities into a darker form.
+#LIGHT_UMBER#New artifacts, lore, zones, events...#WHITE# For your demonic delight!
+
+]], [[#{bold}##GOLD#乌鲁洛克之烬 - 游戏扩展包#LAST##{normal}#
+#{italic}##ANTIQUE_WHITE#很多马基·埃亚尔的居民都曾经听说过“恶魔”的名字，它们是一群似乎凭空出现的暴虐生物，无论走到哪里都会带来痛苦和毁灭。#{normal}##LAST#
+
+#{bold}#扩展包特性#{normal}#:
+#LIGHT_UMBER#新职业：#WHITE# 毁灭使者。他们是恶魔毁灭力量的化身，手拿双手武器加入战斗，将敌人化为一片火海。他们的手中掌握着火焰的魔法和恶魔的力量，在与势不可挡的敌人战斗中寻求欢愉。
+#LIGHT_UMBER#新职业：#WHITE# 恶魔使者。这些近战施法者手拿盾牌，掌握魔法大爆炸本身的力量，可以从倒下的敌人身上培育出恶魔种子。将这些恶魔种子附魔到你的物品里，可以获得各种全新的技能和被动的能力，并召唤种子里的恶魔来加入战斗！
+#LIGHT_UMBER#新种族：#WHITE# 魔化精灵。那些对恶魔改造适应尤其良好的永恒精灵，他们的种族能力被腐化成了黑暗的形态。
+#LIGHT_UMBER#更多新神器、新手札、新地图、新事件……#WHITE# 体验恶魔的欢愉吧！
+
+]], "_t")
+t([[#{bold}##GOLD#Embers of Rage - Expansion#LAST##{normal}#
+#{italic}##ANTIQUE_WHITE#One year has passed since the one the Orcs call the "Scourge from the West" came and single-handedly crushed the Orc Prides of Grushnak, Vor, Gorbat, and Rak'Shor.  The Allied Kingdoms, now linked by farportal to their distant, long-lost Sunwall allies, have helped them conquer most of Var'Eyal.  The few remnants of the ravaged Prides are caged...  but one Pride remains.#{normal}##LAST#
+
+#{bold}#Features#{normal}#:
+#LIGHT_UMBER#A whole new campaign:#WHITE# Set one year after the events of the main game, the final destiny of the Orc Prides is up to you. Discover the Far East like you never knew it. 
+#LIGHT_UMBER#New classes:#WHITE# Sawbutchers, Gunslingers, Psyshots, Annihilators and Technomanchers. Harness the power of steam to power deadly contraptions to lay waste to all those that oppose the Pride!  
+#LIGHT_UMBER#New races:#WHITE# Orcs, Yetis, Whitehooves. Discover the orcs and their unlikely 'allies' as you try to save your Pride from the disasters caused by the one you call 'The Scourge from the West'.
+#LIGHT_UMBER#Tinker system:#WHITE# Augment your items with powerful crafted tinkers. Attach rockets to your boots, gripping systems to your gloves and many more.
+#LIGHT_UMBER#Salves:#WHITE# Bound to the tinker system, create powerful medical salves to inject into your skin, replacing the infusions§runes system.
+#LIGHT_UMBER#A ton#WHITE# of artifacts, lore, zones, events... 
+
+]], [[#{bold}##GOLD#余烬怒火 - 游戏扩展包#LAST##{normal}#
+#{italic}##ANTIQUE_WHITE#自从被兽人称为“西方天灾”的那个人，孤身一人粉碎了格鲁希纳克、沃尔、加伯特和拉克·肖四大部落之后，已经过了一年的时间。联合王国现在已经通过远行传送门，和他们失落已久的盟友太阳堡垒建立了联系，帮助他们征服了瓦·埃亚尔大陆的近乎全境。被战火蹂躏的兽人部落的少数残余，现在都被联军关押在监狱里……但是，还有一个部落存活了下来。#{normal}##LAST#
+
+#{bold}#扩展包特性#{normal}#:
+#LIGHT_UMBER#全新战役：#WHITE# 故事发生在主游戏事件的一年之后，兽人部落的最终命运由你决定。去探索一个你从未认识过的远东大陆吧！
+#LIGHT_UMBER#全新职业：#WHITE# 链锯屠夫，快枪手，灵能射手，歼灭者和科技法师。掌握蒸汽的力量，驱动致命的装置，粉碎那些胆敢反抗部落的人吧！
+#LIGHT_UMBER#全新种族：#WHITE# 兽人，雪人，白蹄。了解兽人和他们那些出人意料的“盟友”，努力将你的部落从那个你们称为“西方天灾”的人所带来的灾难中拯救出来。
+#LIGHT_UMBER#配件系统：#WHITE# 合成强大的配件，用于强化你的物品。包括给你的靴子安装火箭、给你的手套安装抓取系统等等。
+#LIGHT_UMBER#药剂系统：#WHITE# 在配件系统中，合成强大的医疗药剂，用于注入你的皮肤，替代原有的纹身和符文系统。
+#LIGHT_UMBER#大量#WHITE# 全新神器、手札、地图和事件！
+
+]], "_t")
+t([[#{bold}##GOLD#Forgotten Cults - Expansion#LAST##{normal}#
+#{italic}##ANTIQUE_WHITE#Not all adventurers seek fortune, not all that defend the world have good deeds in mind. Lately the number of sightings of horrors have grown tremendously. People wander off the beaten paths only to be found years later, horribly mutated and partly insane, if they are found at all. It is becoming evident something is stirring deep below Maj'Eyal. That something is you.#{normal}##LAST#
+
+#{bold}#Features#{normal}#:
+#LIGHT_UMBER#New class:#WHITE# Writhing Ones. Give in to the corrupting forces and turn yourself gradually into an horror, summon horrors to do your bidding, shed your skin and melt your face to assault your foes. With your arm already turned into a tentacle, what creature can stop you?
+#LIGHT_UMBER#New class:#WHITE# Cultists of Entropy. Using its insanity and control of entropic forces to unravel the normal laws of physic this caster class can turn healing into attacks and call upon the forces of the void to reduce its foes to dust.
+#LIGHT_UMBER#New race:#WHITE# Drems. A corrupt subrace of dwarves, that somehow managed to keep a shred of sanity to not fully devolve into mindless horrors. They can enter a frenzy and even learn to summon horrors.
+#LIGHT_UMBER#New race:#WHITE# Krogs. Ogres transformed by the very thing that should kill them. Their powerful attacks can stun their foes and they are so strong they can dual wield any one handed weapons.
+#LIGHT_UMBER#Many new zones:#WHITE# Explore the Scourge Pits, fight your way out of a giant worm (don't ask how you get *in*), discover the wonders of the Occult Egress and many more strange and tentacle-filled zones!
+#LIGHT_UMBER#New horrors:#WHITE# You liked radiant horrors? You'll love searing horrors! And Nethergames. And Entropic Shards. And ... more
+#LIGHT_UMBER#Sick of your own head:#WHITE#  Replace it with a nice cozy horror!
+#LIGHT_UMBER#A ton#WHITE# of artifacts, lore, events... 
+
+]], [[#{bold}##GOLD#禁忌邪教 - 游戏扩展包#LAST##{normal}#
+#{italic}##ANTIQUE_WHITE#不是所有的冒险者都在寻求财富，也不是所有保卫世界的人都心存善念。最近，恐魔在大陆上出现的次数急剧增加。不断有人在偏僻的小路上失踪，有时几年后才被人发现，身体却遭受了恐怖的变异，神智也部分失常，也有时候再也无法寻到踪迹。很明显，在马基·埃亚尔的大地深处，有某种东西正在暗中活动。那种东西——就是你。#{normal}##LAST#
+
+#{bold}#扩展包特性#{normal}#:
+#LIGHT_UMBER#新职业：#WHITE# 蠕动者。屈服于腐化的力量，让自己逐渐变成一只恐魔。你可以召唤恐魔在战斗中协助自己，褪去自己的皮肤，融化自己的脸庞，作为攻击的武器。当你的手臂也被转化成触手之后，还有什么敌人能阻挡你呢？
+#LIGHT_UMBER#新职业：#WHITE# 熵教徒。这种法师职业使用疯狂的能力，掌控了熵的力量，颠覆了传统的物理定律。他们可以将治疗转换成伤害，并召唤虚空的力量，将敌人粉碎为尘土。
+#LIGHT_UMBER#新种族：#WHITE# 德瑞姆。他们是矮人的一支腐化分支，但是因为某种原因，保持了一定程度的理性，而没有完全退化成无意识的恐魔。他们可以进入狂热状态，并学会召唤恐魔。
+#LIGHT_UMBER#新种族：#WHITE# 克罗格。他们是被本该杀死他们的力量所转化的食人魔。他们强大的攻击可以震慑敌人，而且他们力量强大，可以双持任何单手武器。
+#LIGHT_UMBER#大量全新地图：#WHITE# 探索天灾之穴，在一只巨大蠕虫的身体内杀出一条血路（不要问我你是怎么*进来*的），探索神秘的出口，以及更多奇异的，充满触手的地图！
+#LIGHT_UMBER#新的恐魔：#WHITE# 你喜欢光芒恐魔吗？你一定会喜欢上灼光恐魔的！还有彼世之门，还有熵之碎片，还有其他更多怪物！
+#LIGHT_UMBER#厌倦了你自己的头？#WHITE#  把它换成一个舒适惬意的恐魔吧！
+#LIGHT_UMBER#大量#WHITE# 全新神器、手札、事件……
+
+]], "_t")
+t([[Welcome to #GOLD#Tales of Maj'Eyal#LAST#.
+To enjoy all the features the game has to offer it is #{bold}#highly#{normal}# recommended that you register your steam account.
+Luckily this is very easy to do: you only require a profile name and optionally an email (we send very few email, maybe two a year at most).
+]], [[欢迎来到#GOLD#马基·埃亚尔的传说#LAST#。
+为了享受游戏的全部功能，我们#{bold}#强烈#{normal}#推荐你注册你的Steam账户。
+幸运的是，这非常容易：你只需要提供用户名，邮箱可选填（我们基本上不会给你发送邮件，每年最多发送一两份）。
+]], "_t")
+t("Email: ", "邮箱：", "_t")
+t("Accept to receive #{bold}#very infrequent#{normal}# (a few per year) mails about important game events from us.", "允许我们#{bold}#偶尔#{normal}#向你发送有关游戏重要新闻的邮件（每年最多只会有几封）。", "_t")
+t("Privacy Policy (opens in browser)", "隐私政策（用浏览器打开）", "_t")
+t("You need to be 16 years old or more or to have parental authorization to play this game.", "你需要年满16岁，或者得到了家长的许可，才可以游玩本游戏。", "_t")
+t("Registering...", "正在注册…", "_t")
+t("Registering on https://te4.org/, please wait...", "正在 https://te4.org/ 上注册，请稍候…", "_t")
+t("Steam client not found.", "找不到Steam客户端。", "_t")
+t("Username or Email already taken, please select an other one.", "用户名或邮件地址已被使用，请另选一个。", "_t")
+t([[All those components will be updated:
+]], [[需要更新的组件：
+]], "_t")
+t([[There was an error while downloading:
+]], [[下载时发生错误：
+]], "_t")
+t([[#{bold}##GOLD#%s#GREEN# High Scores#WHITE##{normal}#
+
+]], [[#{bold}##GOLD#%s#GREEN# 高分榜#WHITE##{normal}#
+
+]], "tformat")
+t([[#{bold}##GOLD#%s(%s)#GREEN# High Scores#WHITE##{normal}#
+
+]], [[#{bold}##GOLD#%s(%s)#GREEN# 高分榜#WHITE##{normal}#
+
+]], "tformat")
+t([[Bootmenu!
+]], [[启动菜单！
+]], "init.lua description")
 
 ------------------------------------------------
 section "ashes-urhrok"
@@ -28336,7 +28907,7 @@ t([[He chuckles, bubbles bursting from his mouth with every laugh.
 The sound of laughter fades under the roaring of water boiling around him as he charges you!]], [[他咯咯低笑，每笑一声，嘴里便有气泡迸出。
 #AQUAMARINE#"所以你现在装起无私来了……难道他们的死只因你犹豫不决？……我来帮你改掉……烫死还是溺死……由你选……"#WHITE#
 他周身沸水咆哮，笑声渐渐被淹没，他向你猛冲而来！]], "_t")
-t("Welcome to Tales of Maj'Eyal - #CRIMSON#Ashes of Urh'Rok", "欢迎来到马基埃亚尔的传说 - #CRIMSON#乌鲁洛克之烬", "_t")
+t("Welcome to Tales of Maj'Eyal - #CRIMSON#Ashes of Urh'Rok", "欢迎来到马基·埃亚尔的传说 - #CRIMSON#乌鲁洛克之烬", "_t")
 t([[Welcome #LIGHT_GREEN#@name@#WHITE#.
 You do not remember much of your life before you were on this burning continent, floating in the void between worlds.  You have been helping demons, happily participating in their experiments to shatter some sort of shield preventing them from taking their righteous revenge on Eyal.
 
@@ -28352,7 +28923,7 @@ As you recover, and your platform of searing earth splits from the main continen
 
 当你逐渐恢复意识、脚下这块灼热土地构成的平台正从主大陆分裂时，旧日的记忆涌入脑海。你终于清醒过来——恶魔们要毁灭你的故乡！
 
-#{bold}#你必须逃离这里！#{normal}#。
+#{bold}#你必须逃离这里！#{normal}#
 ]], "_t")
 t("New Class: #LIGHT_GREEN#Corruptor (Demonologist)", "新职业：#LIGHT_GREEN#腐化者（恶魔使者）", "_t")
 t([[Demons in their invasion of Eyal have abducted natives of the planet and mindwiped them to serve as double agents.
@@ -28436,7 +29007,7 @@ t([[Thank you for purchasing #CRIMSON#Ashes of Urh'Rok#WHITE#, the first expansi
 To begin your adventures as a fiery bringer of doom simply create a character with the class #LIGHT_GREEN#Doombringer#WHITE# (in the Defiler category) and a race of #LIGHT_BLUE#%s#WHITE#.
 
 Have fun crushing your foes!
-]], [[感谢你购买#CRIMSON#乌鲁洛克之烬#WHITE#，《马基埃亚尔的传说》的第一个扩展包。
+]], [[感谢你购买#CRIMSON#乌鲁洛克之烬#WHITE#，《马基·埃亚尔的传说》的第一个扩展包。
 
 要以带来毁灭的烈焰使者身份开始冒险，只需创建一个角色：职业选择#LIGHT_GREEN#毁灭使者#WHITE#（堕落系），种族选择#LIGHT_BLUE#%s#WHITE#。
 
@@ -28488,7 +29059,7 @@ t("Horns", "角", "birth facial category")
 t("Drem", "德瑞姆", "birth descriptor name")
 t("Faceless, but not mindless.", "没有面孔，但并非无脑。", "_t")
 t("Drem are mindless mutants who live deep in the earth. It is only recently that thinking Drem have appeared among them. They still remain deep below Eyal's surface, believing that they would not be welcomed among the surface races.", "德瑞姆是生存于地底深处、没有心智的异变种，直到最近才在其中出现具有思维能力的个体。他们仍生存于地底，认为他们不会被地上种族欢迎。", "_t")
-t("They possess the #GOLD#Frenzy#WHITE# talent which allows them to ignore cooldowns once in a while.", "他们拥有 #GOLD#狂热#WHITE# 技能，让他们偶尔能无视冷却时间。", "_t")
+t("They possess the #GOLD#Frenzy#WHITE# talent which allows them to ignore cooldowns once in a while.", "他们拥有#GOLD#狂热#WHITE#技能，让他们偶尔能无视冷却时间。", "_t")
 t("#LIGHT_BLUE# * +3 Strength, +1 Dexterity, +1 Constitution", "#LIGHT_BLUE# * +3 力量，+1 敏捷，+1 体质", "_t")
 t("#LIGHT_BLUE# * +2 Magic, -1 Willpower, +0 Cunning", "#LIGHT_BLUE# * +2 魔力，-1 意志，+0 灵巧", "_t")
 t("Demonic Beard", "恶魔络腮胡", "_t")
@@ -28496,7 +29067,7 @@ t("Demonic Redhead Beard", "恶魔红色络腮胡", "_t")
 t("Krog", "克罗格", "birth descriptor name")
 t("Once an abomination, now a weapon.", "曾为憎恶，现为兵器。", "_t")
 t("Krogs were formerly Ogres, that have been radically changed. Stripped of the runes from their bodies, the Ziguranth have managed to prevent the Krog from dying by injecting them with a concoction of natural infusions and drake blood. The Krog are entirely devoted to the anti-magic cause and seemingly know of nothing else in their lives.", "克罗格由食人魔彻底转变而来。伊格兰斯去除他们身上的符文，并为他们注射纹身与龙血的混合物以防止他们死亡。克罗格完全献身于反魔事业，生活中似乎对其他事物一无所知。", "_t")
-t("They possess the #GOLD#Wrath of the Wilds#WHITE# talent which allows them to stun/daze their foes.", "他们拥有 #GOLD#自然之怒#WHITE# 技能，让他们能震慑/眩晕敌人。", "_t")
+t("They possess the #GOLD#Wrath of the Wilds#WHITE# talent which allows them to stun/daze their foes.", "他们拥有#GOLD#自然之怒#WHITE#技能，让他们能震慑/眩晕敌人。", "_t")
 t("#LIGHT_BLUE# * +3 Strength, -1 Dexterity, +2 Constitution", "#LIGHT_BLUE# * +3 力量，-1 敏捷，+2 体质", "_t")
 t("#LIGHT_BLUE# * -2 Magic, +2 Willpower, +0 Cunning", "#LIGHT_BLUE# * -2 魔力，+2 意志，+0 灵巧", "_t")
 t("Facial Warpaint", "脸部战争印记", "_t")
@@ -28647,7 +29218,7 @@ t("entropic breach", "熵之裂口", "entity name")
 t("Entropic Wormhole Control Orb", "熵虫洞控制球", "entity name")
 t("#CRIMSON#The entropic forces are already at work. FIGHT!", "#CRIMSON#熵已经在起作用了。战斗！", "say")
 t("#CRIMSON#The entropic control orb seems unresponsive...", "#CRIMSON#熵控制球看上去不对你起反应……", "say")
-t("#PURPLE#Make sure you are connected and joined the main Tales of Maj'Eyal chat channel.", "#PURPLE#确认你连接到了网络，并加入了马基埃亚尔的传说的主聊天频道。", "log")
+t("#PURPLE#Make sure you are connected and joined the main Tales of Maj'Eyal chat channel.", "#PURPLE#确认你连接到了网络，并加入了马基·埃亚尔的传说的主聊天频道。", "log")
 t("godfeaster", "噬神者", "entity subtype")
 t("godfeaster wall", "噬神者墙", "entity name")
 t("godfeaster door", "噬神者门", "entity name")
@@ -30964,7 +31535,7 @@ t([[When you make your pustules explode you leave a pool of defiled blood on the
 		The healing received increases with your Spellpower.]], [[每次脓包爆裂时，你会在地上留下一滩持续 5 回合的污血。
 		范围内的敌人每回合会遭到黑色触手攻击，受到 %d%% 暗影触手伤害并被污血覆盖 2 回合。
 		被污血覆盖的生物击中你时，你回复相当于该伤害 %d%% 的生命值。
-		治疗系数受法术强度影响。]], "tformat")
+		回复量随法术强度提高。]], "tformat")
 t("Dark Whispers", "黑暗低语", "talent name")
 t([[Terrible visions and maddening voices fill the minds of enemies within a radius %d area, inflicting %0.2f darkness damage each turn for 5 turns. In addition, this distraction will reduce physical, spell and mindpower of those affected by %d.
 The power loss caused by this spell can stack, to a maximum of %d powers.
@@ -31182,7 +31753,7 @@ t([[Your left hand mutates into a disgusting mass of tentacles.
 		副手空闲时，当使用普通攻击，触手会自动攻击目标，以及以你为中心、位于攻击方向左右相邻格的敌人。
 		物理强度提高 %d， 触手武器伤害提高 %d%%。
 		每次触手攻击时，获得 %d 疯狂值。
-		附近有 #{italic}# 普通人 #{normal}# 时会自动生成微弱的灵能力场，避免被他们发现你的恐魔形态。
+		附近有#{italic}#“文明人”#{normal}#时会自动生成微弱的灵能力场，避免被他们发现你的恐魔形态。
 
 		你的触手当前属性%s：
 		%s]], "tformat")
@@ -32421,14 +32992,14 @@ t("#LIGHT_BLUE# * +6 Magic, +0 Willpower, +0 Cunning", "#LIGHT_BLUE# * +6 魔力
 t("Tinker", "工匠系", "birth descriptor name")
 t("Tinkers use steamtech to power their attacks, defenses, ...", "工匠们使用蒸汽科技来强化攻击、防御，……", "_t")
 t("Build, experiment, discover. The path of inventions is never over!", "制造、实验、发现。创造之路永无止境！", "_t")
-t("%s healing salve", "%s 治疗药剂", "tformat")
+t("%s healing salve", "%s治疗药剂", "tformat")
 t("simple", "简单的", "_t")
-t("%s frost salve", "%s 寒霜药剂", "tformat")
+t("%s frost salve", "%s寒霜药剂", "tformat")
 t("Sawbutcher", "链锯屠夫", "birth descriptor name")
 t("A formidable behemoth of war using steamsaws to improve his deadliness.", "可怕的战争巨兽，使用蒸汽链锯增加致命杀伤力。", "_t")
 t("Their most important stats are: Strength and Cunning", "他们最重要的属性是：力量和灵巧", "_t")
 t("#GOLD#Life per level:#LIGHT_BLUE# 2", "#GOLD#每等级生命加值：#LIGHT_BLUE# 2", "_t")
-t("Gunslinger", "枪手", "birth descriptor name")
+t("Gunslinger", "快枪手", "birth descriptor name")
 t("A tinker who dual-wields steamguns to great effect.", "双持蒸汽枪的工匠。", "_t")
 t("Their most important stats are: Cunning and Dexterity", "他们最重要的属性是：灵巧和敏捷", "_t")
 t("#LIGHT_BLUE# * +0 Strength, +4 Dexterity, +1 Constitution", "#LIGHT_BLUE# * +0 力量，+4 敏捷，+1 体质", "_t")
@@ -32445,8 +33016,8 @@ t("While normally wielding a steamgun loaded with experimental ammunition and an
 t("More adept at technology than most other tinkers, they supplement their weapons with automated turrets, mechanical minions and other such devices.", "他们比大多数其他工匠更精通技术，会用自动炮台、机械随从及其他类似装置来充实自己的武器库。", "_t")
 t("Research. Tinker. Annihilate.", "研究。制造。歼灭。", "_t")
 t("Orc", "兽人", "birth descriptor name")
-t("Orcs have a long and sad history. They are seen, and are, as an aggressive race that more than one time managed to imperil all of Maj'Eyal.", "兽人拥有久远而悲伤的历史。他们被视为（也确实如此）一个侵略性种族，曾不止一次危及整个马基埃亚尔世界。", "_t")
-t("But one year ago the Scourge from the West came and wiped four of the five Prides. And a hundred years ago King Toknor wiped all traces of orcs from Maj'Eyal.", "但是一年前，来自西方的天灾消灭了五个兽人部落中的四个。一百年前，图库纳国王消灭了马基埃亚尔本土的所有兽人。", "_t")
+t("Orcs have a long and sad history. They are seen, and are, as an aggressive race that more than one time managed to imperil all of Maj'Eyal.", "兽人拥有久远而悲伤的历史。他们被视为（也确实如此）一个侵略性种族，曾不止一次危及整个马基·埃亚尔世界。", "_t")
+t("But one year ago the Scourge from the West came and wiped four of the five Prides. And a hundred years ago King Toknor wiped all traces of orcs from Maj'Eyal.", "但是一年前，来自西方的天灾消灭了五个兽人部落中的四个。一百年前，图库纳国王消灭了马基·埃亚尔本土的所有兽人。", "_t")
 t("The orc race is dangerously on the brink of destruction. One wrong move is all that is needed.", "兽人种族正危险地处于毁灭边缘。只需走错一步，就足以令其毁灭。", "_t")
 t("But they are strong and will face whatever is needed to ensure a future of their own!", "但他们意志强大，敢于直面任何磨难，来创造属于他们的未来！", "_t")
 t("Goggles 1", "护目镜1", "_t")
@@ -33189,15 +33760,15 @@ t("potent", "强效", "_t")
 t("powerful", "强大", "_t")
 t("great", "卓越的", "_t")
 t("amazing", "惊人的", "_t")
-t("heal %d", "治疗%d", "_t")
-t("%s pain suppressor salve", "%s 痛苦压制药剂", "tformat")
+t("heal %d", "治疗 %d 点生命值", "_t")
+t("%s pain suppressor salve", "%s痛苦压制药剂", "tformat")
 t("let you fight up to -%%d life and reduces all damage by %d%%%% for %d turns (takes no time to activate)", "让你能继续战斗直到-%%d生命值，同时获得%d%%%%全体伤害抗性。效果持续%d回合，使用不消耗时间。", "tformat")
 t("remove %d physical effects and grants a frost aura (%s cold, darkness and nature affinity)", "清除%d项物理负面效果并制造寒霜光环，获得%s寒冷、暗影和自然伤害亲和。", "tformat")
-t("%s fiery salve", "%s 烈火药剂", "tformat")
+t("%s fiery salve", "%s烈火药剂", "tformat")
 t("remove %d magical effects and grants a fiery aura (%s fire, light and lightning affinity)", "清除%d项魔法负面效果并制造烈火光环，获得%s火焰、光系和闪电伤害亲和。", "tformat")
-t("%s water salve", "%s 静水药剂", "tformat")
+t("%s water salve", "%s静水药剂", "tformat")
 t("remove %d mental effects and grants a water aura (%s blight, mind and acid affinity).", "清除%d项精神负面效果并制造静水光环，获得%s枯萎、精神和酸性伤害亲和。", "tformat")
-t("%s unstoppable force salve", "%s 势不可挡药剂", "tformat")
+t("%s unstoppable force salve", "%s势不可挡药剂", "tformat")
 t("increases all saves by %d and healing factor by half", "增加全豁免%d点，并使治疗系数提高该数值的一半（按百分比计）", "_t")
 t("Life Support Suit", "生命支持服", "entity name")
 t("advanced medical armour", "高级医药装甲", "_t")
@@ -33388,7 +33959,7 @@ t("heavy lined cloak", "厚重的夹层披风", "_t")
 t("This cloak hides and protects a series of powerful steam compressors.", "这件披风隐藏并保护着一套强力蒸汽压缩机。", "_t")
 t("Eastern Wood Hat", "东方森林之帽", "entity name")
 t("worn leather hat", "破损的皮帽", "_t")
-t("This hat was made from materials from a forest whose name is long since lost, far in the east. It is said to have belonged to one of the first gunslingers.", "这顶皮帽的材料来自遥远东方的一片树林，那片树林的名字早已失传。据说它的主人曾是最早的枪手之一。", "_t")
+t("This hat was made from materials from a forest whose name is long since lost, far in the east. It is said to have belonged to one of the first gunslingers.", "这顶皮帽的材料来自遥远东方的一片树林，那片树林的名字早已失传。据说它的主人曾是最早的快枪手之一。", "_t")
 t("Steamcatcher", "蒸汽捕捉器", "entity name")
 t("pipe coated leather hat", "覆有管道的皮帽", "_t")
 t("There's an old saying that most of your body heat escapes through your head. It's not true of body heat, but strangely, is actually true of steam.", "传说人体热量大部分从头部散失。对于体热来说并不是这样，但奇怪的是，蒸汽是从头部散失的。", "_t")
@@ -36700,7 +37271,7 @@ t([[Activate the pistons to crush your target for %d turns and dealing %d%% unar
 		While the target is held it can not move and its armour and defense are reduced by %d.
 		#{italic}#Crush their bones!#{normal}#]], [[激活活塞碾压你的目标 %d 回合，并造成 %d%% 的徒手伤害。
 		被碾压的目标会被定身，且其护甲和闪避减少 %d。
-		#{italic}#压碎他们的骨头 !#{normal}#]], "tformat")
+		#{italic}#压碎他们的骨头！#{normal}#]], "tformat")
 t("Spring Grapple", "弹簧飞爪", "talent name")
 t("Grab the target and pull them towards you, striking for %d%% unarmed melee damage, and if you hit, pinning them for %d turns.", "抓住目标并将其拉向你，造成 %d%% 的徒手伤害，如果命中，目标定身 %d 回合。", "tformat")
 t("Toxic Cannister Launcher", "毒罐发射装置", "talent name")
@@ -36951,7 +37522,7 @@ t([[Allows you to create electrical tinkers of level %d.
 		Each other talent level, you have a 20%% chance to learn one more random schematic, if you have not gained it by level 5 you are guaranteed it (unless all are known).
 		%s]], [[允许你制造 %d 等级的电力配件。
 		你将在 1 级时学会一个新配方。
-		此后每升一级，你有 20%% 的概率再学会一个随机配方；如果到 5 级仍未学会，则必定学会一个（除非已学会全部配方）。
+		之后每提升一个技能等级，你有 20%% 的概率再学会一个随机配方；如果到 5 级仍未学会，则必定学会（除非已学会全部配方）。
 		%s]], "tformat")
 t("Compact Steam Tank", "蒸汽容量强化", "talent name")
 t("Increases the capacity of your steam tank by %d.", "增加你的蒸汽容量 %d。", "tformat")
@@ -36982,7 +37553,7 @@ t([[Hits the target on the arms with one rotating saw doing %d%% damage and tryi
 		#{italic}#Cutting your foes has never been so simple!#{normal}#]], [[用链锯攻击目标手臂，造成 %d%% 武器伤害并尝试致残目标 %d 回合。
 		致残状态的敌人造成的伤害减少 %d%%。
 		致残几率受物理强度影响。
-		#{italic}#杀人如砍瓜切菜 !#{normal}#]], "tformat")
+		#{italic}#杀人如砍瓜切菜！#{normal}#]], "tformat")
 t("Bloodstream", "涌血", "talent name")
 t([[You "gently" slam your saws into the wounds of a creature, dealing %d%% weapon damage and deepening the wounds.
 		All bleeding wounds durations are increased by %d turns and the damage by %d%% (this may be done only once per bleeding effect).
@@ -37034,7 +37605,7 @@ t("furnace", "熔炉", "talent type")
 t("Harness the power of fire.", "掌握火焰的力量。", "_t")
 t("gunner training", "枪支训练", "talent type")
 t("Use steam powered guns to rain bullets of death on your foes!  (Learning these talents allow you to fire two steamguns at once.)", "用蒸汽枪向你的敌人发射致命的子弹！（学习这些技能可以让你同时用两把蒸汽枪开火。）", "_t")
-t("gunslinging", "枪手", "talent type")
+t("gunslinging", "快枪手", "talent type")
 t("Use advanced marksmanship to confound and overwhelm your foes!  (Learning these talents allow you to fire two steamguns at once.)", "使用先进的射击技巧来迷惑和压倒你的敌人！（学习这些技能可以让你同时用两把蒸汽枪开火。）", "_t")
 t("bullets mastery", "子弹掌握", "talent type")
 t("Use various kinds of technology to temporarily enhance your bullets.  (Learning these talents allow you to fire two steamguns at once.)", "使用各种技术暂时强化你的子弹。（学习这些技能可以让你同时用两把蒸汽枪开火。）", "_t")
@@ -37802,7 +38373,7 @@ t("Adding metal spikes to anything makes it more dangerous. (and also unwieldy a
 t("Silver Filigree", "银质花边", "_t")
 t("In addition to making a weapon look more fancy, it also makes it more deadly against undead and other nasties.", "这不仅让武器看起来更加花哨，也能让它更有效地对抗亡灵和其他恐怖的东西。", "_t")
 t("Back Support", "脊椎牵引装置", "_t")
-t("Just what you need to support your back when lifting heavy things; like armour, weapons or Yetis.", "当你手拿着武器、重甲或者一只雪人这类重物时候，这个东西能有效分担你身上的重量。", "_t")
+t("Just what you need to support your back when lifting heavy things; like armour, weapons or Yetis.", "当你举起盔甲、武器甚至雪人这类重物时，它正好能撑住你的后背。", "_t")
 t("Grounding Strap", "接地导线", "_t")
 t("Keeping yourself grounded is very important, especially around lightning mages.  Increases lightning and stun resistance.", "当你面对雷电法师的时候，保持自己的接地状态是很重要的。提高闪电伤害抗性和震慑抗性。", "_t")
 t("Healing Salve", "治疗药剂", "_t")
@@ -38524,7 +39095,7 @@ t("Object held in your tail. It can be a steamgun or steamsaw.", "在你尾巴�
 t("SteamTech", "蒸汽科技", "_t")
 t("Steampower: #00ff00#%s", "蒸汽强度：#00ff00#%s", "tformat")
 t("Steam speed : #00ff00#%s", "蒸汽速度：#00ff00#%s", "tformat")
-t("Powered by ", "装备力量来源 ", "_t")
+t("Powered by ", "力量来源：", "_t")
 t("steamtech", "蒸汽科技", "_t")
 t("Steampower: ", "蒸汽强度：", "_t")
 t("Steam crit. chance: ", "蒸汽暴击几率：", "_t")

@@ -12,8 +12,6 @@ t("Loner. Outcast. You have lost your place in the world, and now you creep thro
         "孤独之物。被抛弃之人。你已然失去了在世间的位置。现在的你，在黑夜中爬行，在仇恨中发酵。","_t")
 t("You have gazed too long into the darkness, and the darkness has gazed also into you.", "你凝视黑暗太久了，而黑暗也凝视着你。", "_t")
 t("Your most important stats are: Dexterity, Willpower and Cunning", "他们最重要的属性是：敏捷、意志和灵巧。", "_t")
-t("#LIGHT_BLUE# * +0 Strength, +3 Dexterity, +0 Constitution","#LIGHT_BLUE# * +0 力量 , +3 敏捷 , +0 体质","_t")
-t("#LIGHT_BLUE# * +0 Magic, +3 Willpower, +3 Cunning", "#LIGHT_BLUE# * +0 魔法 , +3 意志 , +3 灵巧", "_t")
 
 t("Gravitic Infantry", "引力战士", "birth descriptor name")
 t("Not all threats to space-time can be solved at range, so Point Zero maintains an elite force of heavy infantry.",
@@ -23,8 +21,6 @@ t("These knights can move swiftly, but unlike their temporal compatriots, they c
 t("Their training centers on Strength and Magic. Many of their advanced techniques require some skill with Magic, and their talents can boost both their physical and magical prowess.",
         "他们的训练侧重于力量和魔法。大部分高级技能需要魔法才能使用，很多技能可以同时受到物理强度或者法术强度的加成。","_t")
 t("#LIGHT_BLUE# * +4 Strength, +0 Dexterity, +1 Constitution", "#LIGHT_BLUE# * +4 力量 , +0 敏捷 , +1 体质", "_t")
-t("#LIGHT_BLUE# * +4 Magic, +0 Willpower, +0 Cunning","#LIGHT_BLUE# * +4 魔法, +0 意志, +0 灵巧", "_t")
-t("#GOLD#Life per level:#LIGHT_BLUE# +3","#GOLD# 每等级生命加值：#LIGHT_BLUE# +3","_t")
 
 t("Vector", "疫病载体", "birth descriptor name")
 t("The origin of this foul profession was siege warfare during the Age of Pyre.",
@@ -34,7 +30,6 @@ t("They are the magical expression of the ancient practice of catapulting diseas
 t("Their tactics are to weaken and isolate their foes, picking them off one by one.",
         "他们通常会削弱和孤立他们的敌人，把敌人一个一个带走。", "_t")
 t("Their most important stats are: Dexterity and Magic", "他们最重要的属性是：敏捷和魔法。", "_t")
-t("#LIGHT_BLUE# * +0 Strength, +4 Dexterity, +0 Constitution", "#LIGHT_BLUE# * +0 力量 , +4 敏捷 , +0 体质", "_t")
 t("#LIGHT_BLUE# * +4 Magic, +1 Willpower, +0 Cunning","#LIGHT_BLUE# * +4 魔法, +1 意志, +0 灵巧", "_t")
 
 t("Flenser", "屠夫", "birth descriptor name")
@@ -42,8 +37,6 @@ t("Flensers are torturers who delight in bloodshed.", "屠夫是以流血为乐�
 t("They have smaller Vim pools than those formally initiated into the ranks of Corruption.","他们的活力资源比正式加入腐化的职业要少。","_t")
 t("They are terrible foes, stacking debilities on their target until it dies by a thousand cuts.","他们是可怕的敌人，在目标上叠加衰弱，直到它死于千刀万剐。","_t")
 t("Their most important stats are: Dexterity and Magic","他们最重要的属性是：敏捷和魔法。","_t")
-t("#LIGHT_BLUE# * +0 Strength, +4 Dexterity, +1 Constitution", "#LIGHT_BLUE# * +0 力量 , +4 敏捷 , +1 体质", "_t")
-t("#LIGHT_BLUE# * +4 Magic, +0 Willpower, +0 Cunning","#LIGHT_BLUE# * +4 魔法, +0 意志, +0 灵巧", "_t")
 t("#GOLD#Life per level:#LIGHT_BLUE# +4","#GOLD# 每等级生命加值：#LIGHT_BLUE# +4","_t")
 t("#GOLD#Vim per level:#LIGHT_BLUE# +2 #WHITE#(not +4)","#GOLD# 每等级活力加值：#LIGHT_BLUE# +2 #WHITE#(常规职业为 +4)","_t")
 
@@ -59,8 +52,6 @@ t("Ascetics are masters of the esoteric arts of magic and staff-combat.", "苦�
 t("Their use of magic is less direct than that of an Alchemist or Archmage, as they hone their bodies to deliver punishment rather than relying on spells exclusively.",
         "他们对魔法的运用不如炼金术士和元素法师那么直接。他们磨练自己的身体来施加惩罚，而不是完全依靠法术。", "_t")
 t("Their most important stats are: Dexterity, Magic and Cunning", "他们最重要的属性是：敏捷、魔法和灵巧。", "_t")
-t("#LIGHT_BLUE# * +0 Strength, +3 Dexterity, +0 Constitution", "#LIGHT_BLUE# * +0 力量 , +3 敏捷 , +0 体质", "_t")
-t("#LIGHT_BLUE# * +3 Magic, +0 Willpower, +3 Cunning","#LIGHT_BLUE# * +3 魔法, +0 意志, +3 灵巧", "_t")
 t("#GOLD#Life per level:#LIGHT_BLUE# +1","#GOLD# 每等级生命加值：#LIGHT_BLUE# +1","_t")
 
 t("Striker", "先锋", "birth descriptor name")
@@ -68,8 +59,6 @@ t("They strike with the swiftness of the wind, from the shadows of a storm-darke
         "他们以风的迅捷，从风暴结束的天空的阴影中出击。他们以雷电的力量击中，并消失在黑夜中，只留下残影，就像一道闪电。", "_t")
 t("Their spell selection is more tightly focused than most casters, centering around Light, Darkness, and Lightning, which they use to complement their mobility and stealth.",
         "他们的法术选择比大多数施法者限制更多，以光、暗和闪电为中心，他们用这些法术来补充机动和隐蔽。", "_t")
-t("Their most important stats are: Magic and Cunning", "他们最重要的属性是：魔法和灵巧。", "_t")
-t("#LIGHT_BLUE# * +0 Strength, +0 Dexterity, +0 Constitution", "#LIGHT_BLUE# * +0 力量 , +0 敏捷 , +0 体质", "_t")
 t("#LIGHT_BLUE# * +4 Magic, +0 Willpower, +5 Cunning", "#LIGHT_BLUE# * +4 魔法, +0 意志, +5 灵巧", "_t")
 
 t("Storm Warden", "风暴守卫", "birth descriptor name")
@@ -78,7 +67,6 @@ t("Storm Wardens are soldiers who have taken up the arcane arts as a way to augm
 t("They often train with bows and knives.","他们通常训练弓箭和匕首。", "_t")
 t("Their most important stats are: Dexterity and Magic","他们最重要的属性是：敏捷和魔法。", "_t")
 t("#LIGHT_BLUE# * +0 Strength, +5 Dexterity, +0 Constitution","#LIGHT_BLUE# * +0 力量 , +5 敏捷 , +0 体质", "_t")
-t("#LIGHT_BLUE# * +4 Magic, +0 Willpower, +0 Cunning","#LIGHT_BLUE# * +4 魔法, +0 意志, +0 灵巧", "_t")
 
 t("Transcendent Fist", "超凡拳手", "birth descriptor name")
 t("Some martial artists find mental enlightenment through physical training.",
@@ -90,11 +78,9 @@ t("  #LIGHT_BLUE# * +0 Strength, +4 Dexterity, +0 Constitution","#LIGHT_BLUE# * 
 t("  #LIGHT_BLUE# * +0 Magic, +0 Willpower, +5 Cunning","#LIGHT_BLUE# * +0 魔法, +0 意志, +5 灵巧", "_t")
 
 t("Dabbler", "爱好者", "birth descriptor name")
-t("Build, experiment, discover. The path of inventions is never over!", "制造，实验，发现。创造之路永不停歇！", "_t")
 t("You are an expermenter, employing any and every technology at your disposal.", "你是一名实验家，按照自己的意愿尝试发明各种技术。", "_t")
 t("Your most important stats are Dexterity and Cunning.","", "_t")
 t("#LIGHT_BLUE# * +1 Strength, +4 Dexterity, +0 Constitution","#LIGHT_BLUE# * +1 力量 , +4 敏捷 , +0 体质", "_t")
-t("#LIGHT_BLUE# * +0 Magic, +0 Willpower, +4 Cunning","#LIGHT_BLUE# * +0 魔法, +0 意志, +4 灵巧", "_t")
 
 --section 'null/talents/advanced-staff-combat'
 t("ascetic combat", "苦修格斗", "talent type")
@@ -175,7 +161,6 @@ t([[You have learned much about healing from your experience with magical toxins
 
 t("solar alchemy", "太阳炼金", "talent type")
 t("Alchemical studies of stellar phenomena.", "恒星现象的炼金术研究。", "_t")
-t("Solar Infusion", "太阳充能","talent name")
 t([[When you throw your alchemist bombs, you infuse them with blazing sunlight that can blind.
   While sustained, all light damage you do is increased by %d%%.]],[[将致盲的阳光填充至炼金炸弹，造成光明伤害。
 此外，增加 %d%% 光明伤害加成。
@@ -202,7 +187,6 @@ t([[Your experience channeling the light of the sun has improved your health, an
       你可以激活这个技能，粉碎一颗炼金宝石，制造一层吸收 %d 伤害的护盾，持续 %d 回合。吸收量受法术强度加成，并且可以暴击。]], "tformat")
 
 t("war alchemy", "战争炼金", "talent type")
-t("Alchemical spells designed to wage war.", "用于战争的炼金法术")
 
 t("Heat", "加热", "talent name")
 t([[Turn part of your target into fire, burning the rest for %0.2f fire damage over 8 turns.
@@ -255,7 +239,6 @@ t([[You have learned to harness cruel blood-magic. You gain a small Vim pool, an
         增加 %0.1f%% 法术暴击率。
         你的鲜血腐化而扭曲，使你得到强化，增加 %d 体质。
         当你首次学会该技能时，体质给与你的生命上限追加 0.5，这个效果可以追溯之前的属性。]], "tformat")
-t("Twist the Knife", "扭曲刀刃", "talent name")
 t([[You have a talent for causing things pain. When you strike a foe in melee who is already suffering from a disease, a cut, or a poison effect, you may increase its suffering: you have a %d%% chance to inflict slow, stun, blindness or silence on your target for %d turns. You inflict this effect with your Accuracy or your Spellpower, whichever is greater.
   Also, when you score a critical melee attack, you regain %0.2f Vim.
   When you first take this talent, the amount of Life you gain from Constitution increases by +0.5. This bonus is retroactive.]],
@@ -836,11 +819,8 @@ t("Energy cloak", "能量覆盖", "_t")
 t("The target is cloaked in energy, inflicting +%d %s damage on any foe it hits or is hit by, and gains +%d%% %s resistance.",
         "目标被能量覆盖，增加 %d %s 近战附加/反击伤害，增加 %d%% %s 伤害抗性。", "tformat")
 t("#Target# is cloaked in energy!", "#Target#被能量覆盖！", "_t")
-t("+Cloak", "+被覆盖", "_t")
-t("-Cloak", "-被覆盖", "_t")
 t("#Target#'s energy cloak evaporates.", "#Target#周围覆盖的能量消散了。")
 t("TK Cloak", "念力覆盖", "_t")
-t("an ", "", "_t")
 t("The target is cloaked in force, inflicting up to %d extra attack%s on %sadjacent target%s (%d%% chance%s)."
 , "目标被念力覆盖，造成至多 %d 次额外攻击%s，对周围%s目标生效%s（%s%%几率）。", "tformat")
 t("#Target# is cloaked in force!", "#Target#被念力覆盖", "_t")
@@ -853,7 +833,6 @@ t("+Body/Mind", "+本能切断", "_t")
 t("-Body/Mind", "-本能切断", "_t")
 t("#Target#'s instinctual frenzy ends.", "#Target#的本能狂热结束了。", "_t")
 
-t("Scorched", "灼伤", "_t")
 t("Painful lingering shadowflame imposes a %d%% penalty to blight resistance and disease immunity."
 , "残留的暗影烈焰减少 %d%% 疾病免疫和枯萎伤害抗性。", "tformat")
 t("#Target# is scorched!", "#Target#被灼伤！", "_t")
