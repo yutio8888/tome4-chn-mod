@@ -3,6 +3,7 @@
 -- loaded explicitly. They carry a locale header and register into zh_hans.
 local I18N = require("engine.I18N")
 I18N:loadLocale("/data-chn-mod/null_translation.lua")
+I18N:loadLocale("/data-chn-mod/chn_supplement.lua")
 
 -- Keep level-up comparisons focused on the changing numbers even when a
 -- Chinese sentence has no whitespace around them.
@@ -17,6 +18,28 @@ function engine.ui.Dialog:listPopup(title, text, list, ...)
         list[k] = type(v) == "string" and _t(v) or v
     end
     return _popup(self, title, text, list, ...)
+end
+
+-- Some popups pass bare literals (e.g. Player:hotkeyPageTutorial), so
+-- translate string titles and texts here; tstrings are left alone.
+if not engine.ui.Dialog.__chn_simple_popups then
+    engine.ui.Dialog.__chn_simple_popups = true
+    local _simplePopup = engine.ui.Dialog.simplePopup
+    if _simplePopup then
+        function engine.ui.Dialog:simplePopup(title, text, ...)
+            if type(title) == "string" then title = _t(title) end
+            if type(text) == "string" then text = _t(text) end
+            return _simplePopup(self, title, text, ...)
+        end
+    end
+    local _simpleLongPopup = engine.ui.Dialog.simpleLongPopup
+    if _simpleLongPopup then
+        function engine.ui.Dialog:simpleLongPopup(title, text, ...)
+            if type(title) == "string" then title = _t(title) end
+            if type(text) == "string" then text = _t(text) end
+            return _simpleLongPopup(self, title, text, ...)
+        end
+    end
 end
 
 local class = require"engine.class"
@@ -59,6 +82,44 @@ class:bindHook("Chat:invoke", function(self, data)
         if not (self.player:hasStaffWeapon() and self.player:hasStaffWeapon().is_bonestaff
                 and self.player:knowTalent(self.player.T_NECROTIC_AURA) and self.player:knowTalent(self.player.T_CALL_OF_THE_CRYPT)) then
             data.id = "welcome"
+        end
+    end
+end)
+
+-- Fixes that need DLC data, which the DLCs only define in their own
+-- ToME:load hooks; this addon's hooks are bound after theirs (higher weight).
+class:bindHook("ToME:load", function(self, data)
+    -- Resources without a CharacterSheet.status_text (Cults insanity) return
+    -- a string meant to be formatted once more ("%%"), as the uisets do.
+    local ok, ActorResource = pcall(require, "engine.interface.ActorResource")
+    if ok and ActorResource and ActorResource.resources_def then
+        for _, def in ipairs(ActorResource.resources_def) do
+            if type(def.status_text) == "function" and not table.get(def.CharacterSheet, "status_text") then
+                local status_text = def.status_text
+                def.CharacterSheet = def.CharacterSheet or {}
+                def.CharacterSheet.status_text = function(act, ...)
+                    local text = status_text(act, ...)
+                    if type(text) ~= "string" then return text end
+                    local fok, res = pcall(string.format, text)
+                    return fok and res or text
+                end
+            end
+        end
+    end
+
+    -- Orcs replaces class/subclass locked_desc with functions after the
+    -- descriptors were created, so Birther:newBirthDescriptor never saw them.
+    local Birther = require("engine.Birther")
+    for _, kind in ipairs{"class", "subclass"} do
+        for _, d in ipairs(Birther.birth_descriptor_def[kind] or {}) do
+            if type(d.locked_desc) == "function" and not d.__chn_locked_desc then
+                local locked_desc = d.locked_desc
+                d.locked_desc = function(...)
+                    local res = locked_desc(...)
+                    return type(res) == "string" and _t(res) or res
+                end
+                d.__chn_locked_desc = true
+            end
         end
     end
 end)
