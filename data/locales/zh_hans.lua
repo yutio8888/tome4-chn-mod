@@ -46,8 +46,8 @@ t("#LIGHT_GREEN#%d healing #LAST##AQUAMARINE#(%d psi heal)#LAST#", "#LIGHT_GREEN
 t("#LIGHT_GREEN#%d healing#LAST#", "#LIGHT_GREEN#%d 点治疗#LAST#", "tformat")
 t("#DARK_GREEN##Source# shares damage with %s oozes!", "#DARK_GREEN##Source#和%s软泥怪平分伤害！", "delayedLogMessage")
 t("#CRIMSON##Source# teleports some damage to #Target#!", "#CRIMSON##Source#将部分伤害转移给#Target#！", "delayedLogMessage")
-t("#CRIMSON#(%d teleported)#LAST#", "#CRIMSON#(%d 被传送)#LAST#", "tformat")
-t("#CRIMSON#%d teleported#LAST#", "#CRIMSON#%d 被传送#LAST#", "tformat")
+t("#CRIMSON#(%d teleported)#LAST#", "#CRIMSON#(%d 伤害被转移)#LAST#", "tformat")
+t("#CRIMSON#%d teleported#LAST#", "#CRIMSON#%d 伤害被转移#LAST#", "tformat")
 t("#SLATE#%d reflected#LAST#", "#SLATE#%d 反射#LAST#", "tformat")
 t("#CRIMSON##Source# reflects damage back to #Target#!#LAST#", "#CRIMSON##Source#将伤害反射回#Target#！#LAST#", "delayedLogMessage")
 t("%s shatters into pieces!", "%s被打成碎片！", "logSeen")
@@ -198,7 +198,7 @@ t("glistening", "闪闪发光的", "_t")
 t("plated", "覆甲的", "_t")
 t("faceted", "多面的", "_t")
 t("laminated", "层压的", "_t")
-t("Leave the level (to the next level) without killing a single creature. You will get #{italic}#two#{normal}# rewards.", "在不杀死任何怪物的情况下离开这一层（到达下一层）。你将得到#{italic}#两份#{normal}# 奖励。", "_t")
+t("Leave the level (to the next level) without killing a single creature. You will get #{italic}#two#{normal}# rewards.", "在不杀死任何怪物的情况下离开这一层（到达下一层）。你将得到#{italic}#两份#{normal}#奖励。", "_t")
 t("Proceed directly to the next Infinite Dungeon level in less than %d turns (an exit is revealed on your map).", "在%d回合内到达无尽地下城的下一层（出口已标记在地图上）。", "tformat")
 t("Turns left: #LIGHT_GREEN#%d", "剩余回合：#LIGHT_GREEN#%d", "tformat")
 t("\n#ORCHID# Rush Hour: %s turns left!\n", "\n#ORCHID#决胜时刻：剩余%s回合！\n", "log")
@@ -302,9 +302,9 @@ t("Learn shield attack talent or enable 'Always show shield combat' to see comba
 t("Life regen %d%% of max life", "回复 %d%% 最大生命值", "tformat")
 t("Talent level: %+d %s.", "技能等级：%+d %s。", "tformat")
 t("Talent level: %s.", "技能等级：%s。", "tformat")
-t("Talent on hit(spell): %s (%d%% chance level %d).", "技能（法术）命中后释放：%s（%d%% 几率等级 %d）。", "tformat")
-t("Talent on hit(nature): %s (%d%% chance level %d).", "技能（自然）命中后释放：%s（%d%% 几率等级 %d）。", "tformat")
-t("Talent on hit(mindpower): %s (%d%% chance level %d).", "技能（精神）命中后释放：%s（%d%% 几率等级 %d）。", "tformat")
+t("Talent on hit(spell): %s (%d%% chance level %d).", "技能（法术）命中后释放：%s（%d%% 几率，等级 %d）。", "tformat")
+t("Talent on hit(nature): %s (%d%% chance level %d).", "技能（自然）命中后释放：%s（%d%% 几率，等级 %d）。", "tformat")
+t("Talent on hit(mindpower): %s (%d%% chance level %d).", "技能（精神）命中后释放：%s（%d%% 几率，等级 %d）。", "tformat")
 t("It can be used to %s, with %d charges out of %d.", "可以用于 %s，剩余 %d 次充能，共 %d 次。", "tformat")
 t([[It can be used to %s
 
@@ -1155,7 +1155,7 @@ t("Wibbly Wobbly Timey Wimey Stuff", "摇摇晃晃、时时空空的玩意儿", 
 t("Killed the weaver queen and the temporal defiler.", "杀死织网蛛后和时空污秽魔。", "_t")
 t("Finished the whole Abashed Expanse zone without being hit by a single void blast or manaworm. Dodging's fun!", "通关整个次元浮岛，全程未被任何一次虚空爆炸或法力蠕虫命中。闪避真有趣！", "_t")
 t("Did the righteous thing in the ring of blood and disposed of the Blood Master.", "你在鲜血之环做出了正确的选择，并消灭了血之领主。", "_t")
-t("Freed at least 30 enthralled slaves in the slavers' compound.", "在奴隶贩子的营地中解救了至少 30 名受奴役的奴隶。", "_t")
+t("Freed at least 30 enthralled slaves in the slavers' compound.", "在奴隶贩子的营地中解救了至少 30 名被控制心神的奴隶。", "_t")
 t("Destroyed the naga portal in the slazish fens and got caught in the after-effect.", "在斯拉伊什沼泽摧毁娜迦传送门，并被卷入了它的余波。", "_t")
 t("Dreaming my dreams", "做着我的梦", "achievement name")
 t("Experienced and completed all the dreams in the Dogroth Caldera.", "经历并完成达格罗斯火山的全部梦境。", "_t")
@@ -1190,8 +1190,8 @@ t("Worse, any who approach the Cursed can be driven mad by their terrible aura."
 t("#LIGHT_BLUE# * +0 Magic, +4 Willpower, +0 Cunning", "#LIGHT_BLUE# * +0 魔力，+4 意志，+0 灵巧", "_t")
 t("In shaded places in unknown lands thou must overcome thyself and see thy doom.", "在未知之地的阴影之中，你必须战胜自己，直面自己的末日。", "_t")
 t("Stripped of their magic by the dark forces that once served them, they have learned to harness the hatred that burns in their minds.", "曾经侍奉他们的黑暗力量夺去了他们的魔法，他们由此学会了驾驭心头燃烧的憎恨。", "_t")
-t("Only time will tell if they can choose a new path or are doomed forever.", "只有时间会证明他们能否选择一条新的道路，还是永远为厄运所缚。", "_t")
-t("The Doomed strike from behind a veil of darkness or a host of shadows.", "末日使者从黑暗帷幕或阴影群的掩护下发动攻击。", "_t")
+t("Only time will tell if they can choose a new path or are doomed forever.", "他们是能选择一条新的道路，还是永远为厄运所缚，只有时间会给出答案。", "_t")
+t("The Doomed strike from behind a veil of darkness or a host of shadows.", "末日使者在黑暗帷幕或阴影群的掩护下发动攻击。", "_t")
 t("They feed upon their enemies as they unleash their minds on all who confront them.", "他们以敌人为食，并对所有与他们对峙的人释放精神冲击。", "_t")
 t("#LIGHT_BLUE# * +0 Magic, +4 Willpower, +5 Cunning", "#LIGHT_BLUE# * +0 魔力，+4 意志，+5 灵巧", "_t")
 
@@ -1387,7 +1387,7 @@ t("Stairs can not be used for 5 turns after a kill.", "杀死生物后 5 回合�
 t("All zone levels increased by 150% + 2 by the time Player reaches level 10", "所有区域等级提高 150% + 2（随玩家等级逐步生效，10 级时达到全额）。", "_t")
 t("Unique (fixed) bosses advance in bonus classes 170% faster", "独有（固定）Boss 的额外职业等级提升速度快 170%", "_t")
 t("Stairs can not be used for 9 turns after a kill.", "杀死生物后 9 回合内不能使用楼梯。", "_t")
-t("Player is being hunted! Randomly all foes in a radius will get a feeling of where she/he is", "玩家处于被捕猎的状态，随机地，一定半径内的所有敌人都会感知到你所在的位置。", "_t")
+t("Player is being hunted! Randomly all foes in a radius will get a feeling of where she/he is", "玩家正遭到追猎！一定半径内的所有敌人会不定时地感知到其所在位置。", "_t")
 t("Use it if you want normal playing conditions but do not feel ready for just one life.#{normal}#", "如果你想要普通的游戏条件、但还没准备好一条命通关，就选择这个模式。#{normal}#", "_t")
 t("At level 1,2,5,7,14,24,35 get one more 'life' that allows you to resurrect at the start of the level.", "在 1,2,5,7,14,24,35 级时各获得一条额外生命，可在本层起点复活。", "_t")
 t("Only one life, unless ways to self-resurrect are found in-game.", "只有一条命，除非你在游戏内找到自我复活的方法。", "_t")
@@ -1672,7 +1672,7 @@ Yes master.]], [[#LIGHT_GREEN#*傀儡用毫无起伏的声音说道*#WHITE#
 ------------------------------------------------
 section "mod-tome/data/chats/alchemist-hermit.lua"
 
-t("SON OF A RITCH! YOU SHOW UP TEN MINUTES AFTER I GET THE NEWS THAT SOME JACKASS ALREADY FINISHED THE ELIXIRS AND IS GETTING ACCEPTED BY THE BROTHERHOOD. WHAT THE HELL TOOK YOU SO LONG? MIRVENIA'S MAMMARIES, I'LL TAKE THESE AND MAKE YOU YOUR REWARD, BUT ONLY BECAUSE A CURSE WILL KILL ME IF I DON'T. AND IF IT TASTES LIKE PISS, THAT'S YOUR IMAGINATION, I'M SURE.", "见鬼！我刚收到消息说某个蠢货已经制成了药剂、要被兄弟会接纳了，十分钟后你才出现，到底什么该死的事情耽误了你这么久？！把你那些该死的材料给我，要不是不这么做就会被诅咒害死，我才不会帮你做这该死的奖品。要是药水味道尝上去像马尿一样的话那一定是你的错觉，我敢肯定。", "_t")
+t("SON OF A RITCH! YOU SHOW UP TEN MINUTES AFTER I GET THE NEWS THAT SOME JACKASS ALREADY FINISHED THE ELIXIRS AND IS GETTING ACCEPTED BY THE BROTHERHOOD. WHAT THE HELL TOOK YOU SO LONG? MIRVENIA'S MAMMARIES, I'LL TAKE THESE AND MAKE YOU YOUR REWARD, BUT ONLY BECAUSE A CURSE WILL KILL ME IF I DON'T. AND IF IT TASTES LIKE PISS, THAT'S YOUR IMAGINATION, I'M SURE.", "见鬼！我刚收到消息说某个蠢货已经制成了药剂、要被兄弟会接纳了，十分钟后你才出现，到底什么该死的事情耽误了你这么久？！米尔维妮娅的奶子！把你那些该死的材料给我，我会给你做奖品——但这只是因为不做的话诅咒会要了我的命。要是药水味道尝上去像马尿一样的话那一定是你的错觉，我敢肯定。", "_t")
 t([[#LIGHT_GREEN#*The halfling hands you a note that says, 'Heard %s managed to make a %s while you've been loafing. Hurry the hell up next time.*#WHITE#
 		I STILL CAN'T HEAR A DAMNED THING. FORTUNATELY, YOU DON'T LOOK LIKE THE SORT THAT MAKES INTERESTING CONVERSATION.]], [[#LIGHT_GREEN#*那个半身人递给你一张纸条，上面写着：听说 %s 趁你磨洋工的工夫制造了 %s。下次给我快点。*#WHITE#
 		我还是什么都听不见。幸运的是，看你的样子，跟你聊天也没什么意思。]], "tformat")
@@ -1720,7 +1720,7 @@ Say, you interested in dismembering stuff and getting paid?]], [[#LIGHT_GREEN#*�
 t("Always.", "一直都有兴趣。", "_t")
 t("By the corpses of the gods, I love adventurers. Was about to become one myself when it suddenly hit me. And by \"it\" I mean \"my wife.\" Har!", "以诸神的尸骸起誓，我可太喜欢冒险者了。我本来也打算去当一个，结果它突然给了我当头一棒。呃……我说的“它”其实是指我老婆，哈！", "_t")
 t("I propose that I give you a list of monster parts to fetch, then you go and fetch them, then I make some blindingly amazing brews with said monster parts, then I get accepted into the Brotherhood of Alchemists.", "我的提议是：我给你一份怪物部位清单，你去把它们找回来，然后我用这些部位调出一些惊艳绝伦的药剂，之后我就能加入炼金术士兄弟会了。", "_t")
-t("I make excellent plans. And brews, which the Brotherhood will no doubt make me call 'elixirs' once I'm in. And I'll obey, because they have ways of getting what they want. Now, where were we?", "我做计划可是一流的。还有配药——加入兄弟会之后他们肯定会让我改口叫“药剂”的。我会照做，因为他们总有办法达成自己的目的。那么……我们说到哪儿了？", "_t")
+t("I make excellent plans. And brews, which the Brotherhood will no doubt make me call 'elixirs' once I'm in. And I'll obey, because they have ways of getting what they want. Now, where were we?", "我做计划可是一流的。还有我酿的佳酿——加入兄弟会之后他们肯定会让我改口叫“药剂”的。我会照做，因为他们总有办法达成自己的目的。那么……我们说到哪儿了？", "_t")
 t("Oh, easy. You get a swig of each brew, of course. They'll put hair on your chest, and possibly your eyelids and fingernails. And, if your aid proves the deciding factor, then I've got a real treat for you: perhaps the last Taint of Purging left in Maj'Eyal.", "很简单，每份佳酿我都会分你一口。喝下这些佳酿会让你长出胸毛，说不定连眼皮和指甲上都会长。而且，要是你的帮助能起决定性作用的话，我还会额外给你一件真正的宝物：也许是马基·埃亚尔仅存的最后一枚“污印：清除”哦。", "_t")
 t("One last thing. There's a few other fellows angling for the same slot in the Brotherhood that I am. They're not going to be sitting on their hands while we're at work here, so best move quick-like. Now, which of these do you want to help me with first: the Brew of Brawn, the Brew of Stoneskin, or the Brew of Foundations? Or Elixirs, rather. Not Brews. Best get in the habit now, I suppose.", "最后一件事，除我之外还有几个家伙对炼金术士兄弟会的这个会员资格虎视眈眈，他们可不会闲着等我们慢慢来，所以你越快动身越好。现在，你想先帮我做哪一个：蛮牛佳酿？石肤佳酿？还是领悟佳酿？哦，应该说药剂才对。不是佳酿。我看最好现在就开始改口。", "_t")
 t("Right, here's the list. Oh, one more thing. Got me some fellas already out hunting for this stuff, and I'll not play favorites. One of them brings me those ingredients before you do, and you're out of luck. Hurry back.", "好，这是材料清单。哦对了，另外还有一件事，有几个家伙已经出发帮我找这些材料了，我一视同仁，要是他们中有人比你先把材料带来的话，那你就只能自认倒霉了，动作快点吧。", "_t")
@@ -1760,7 +1760,7 @@ section "mod-tome/data/chats/angolwen-leader.lua"
 
 t([[#LIGHT_GREEN#*A tall woman stands before you. Her fair skin radiates incredible power through her white robe.*#WHITE#
 I am Linaniil of the Kar'Krul. Welcome to our city, @playerdescriptor.subclass@. What may I do for thee?]], [[#LIGHT_GREEN#*一名身材高大的女子伫立在你面前。她白皙的肌肤透过白袍散发着惊人的力量。*#WHITE#
-我是卡·克鲁尔的莱娜尼尔。欢迎来到我们的城市，@playerdescriptor.subclass@。我能为你做些什么？]], "_t")
+我是卡库罗尔的莱娜尼尔。欢迎来到我们的城市，@playerdescriptor.subclass@。我能为你做些什么？]], "_t")
 t("I require all the help I can get, not for my sake but for the town of Derth, to the northeast of here.", "我需要能得到的所有帮助，不是为了我自己，而是为了此地东北方的德斯镇。", "_t")
 t("I am ready! Send me to Urkis!", "我准备好了！送我去厄奇斯那里！", "_t")
 t("Urkis has been slain.", "厄奇斯已被诛杀。", "_t")
@@ -2276,7 +2276,7 @@ t("#GOLD#[you are now an Avatar of a Distant Sun]", "#GOLD#[你成为了日耀�
 t("Yes, give me your power!", "是的，赐予我你的力量！", "chat")
 t([[<<<You feel the gentle warmth of your Distant Sun patron. It speaks directly to your mind!>>>
 #YELLOW#I AM HERE. DO YOU DESIRE TO SMITE EVIL, DESTROY THE DARKNESS AND SCOUR THE EARTH? I SHALL AID YOU IN THIS QUEST. TOGETHER, WE WILL BE UNSTOPPABLE. ALL DARKNESS SHALL BE CONSUMED BY OUR LIGHT.
-#LAST#]], [[<<<你感受到了来自遥远太阳宗主的温和暖意。它直接在你的脑海中对你说话！>>>
+#LAST#]], [[<<<你感受到了主上遥远太阳的温和暖意。它直接在你的脑海中对你说话！>>>
 #YELLOW#我在此处。你是否渴望惩治邪恶、诛灭黑暗、荡涤大地？我将在这项使命中助你一臂之力。携起手来，我们将势不可挡。所有的黑暗都将被我们的光芒吞噬殆尽。
 #LAST#]], "chat")
 t("But what are you getting out of this?", "但你能从中得到什么好处？", "chat")
@@ -2619,7 +2619,7 @@ The known bastions of the Pride are:
 - 格鲁希纳克部落，在巅峰的东坡上。]], "_t")
 t([[One more bit of aid I might give you before you go. Your tale has moved me, and the very stars shine with approval of your relentless pursuit. Take their blessing, and let nothing stop you in your quest.
 	#LIGHT_GREEN#*She touches your forehead with one cool hand, and you feel a surge of power*
-	]], [[在你出发之前我还有一样东西可以帮助你，你的故事令我感动，群星也为你“无尽追踪”的执着而闪耀。带上这个祝福，不要让任何事物阻碍你的使命。
+	]], [[在你出发之前我还有一样东西可以帮助你，你的故事令我感动，群星也为你锲而不舍的追猎闪耀着赞许的光芒。带上它们的祝福，不要让任何事物阻碍你的使命。
 	#LIGHT_GREEN#*她用冰凉的手触摸了你的额头，你感觉到身上涌现出一股力量。*
 	]], "_t")
 t("Yes, my lady, they delayed the orcs so that I could get to the heart of the volcano. *#LIGHT_GREEN#Tell her what happened#WHITE#*", "是的，女士。他们拖住了敌人，使我能够前进至火山中心。*#LIGHT_GREEN#告诉她发生的事。#WHITE#*", "_t")
@@ -2831,7 +2831,7 @@ t("I have seen how you fought those corruptors, the way you destroyed their magi
 t([[Or maybe, well I suppose I can trust you with this, I've always secretly dreamed of learning magic. Real magic I mean not alchemist tricks!
 I've learnt about a secret place, Angolwen, where I could learn it.]], [[又或者……好吧，我想可以放心把这件事告诉你，我一直偷偷梦想着能学习魔法。我是指真正的魔法，而不是炼金术士的小把戏！
 我得知了一个叫做安格利文的隐秘之地，在那里我就能学习魔法。]], "_t")
-t("Derth has its up and downs but I think they could do with a smart girl yes.", "德斯镇虽有利有弊，但我想他们确实需要一个像你这样聪明的姑娘。", "_t")
+t("Derth has its up and downs but I think they could do with a smart girl yes.", "德斯镇虽说境况时好时坏，但我想他们确实需要一个像你这样聪明的姑娘。", "_t")
 t("You wish to join our noble crusade against magic? Wonderful! I will talk to them for you.", "你想加入我们对抗魔法的高尚圣战？太棒了！我会替你去和他们说说的。", "_t")
 t("I happen to be welcome among the people of Angolwen, I could say a word for you.", "我恰好在安格利文挺受欢迎，我可以替你美言几句。", "_t")
 t("What?!? Just because you rescued me from a moderately-to-extremely gruesome death, you think that entitles you to take liberties?!", "什么？！就因为你把我从相当乃至极其凄惨的死亡中救了出来，你就觉得有权对我放肆了？！", "_t")
@@ -2942,7 +2942,7 @@ During the dark years of the Spellhunt, many thousands of years ago, Linaniil, t
 So she set a secret plan into action and built a secret place where magic would be kept alive.
 Her plan worked and the group built a town called Angolwen in the western mountains. #LIGHT_GREEN#*He marks it on your map, along with a portal to access it*#WHITE#
 Not many people are accepted there but I will arrange for you to be allowed inside.]], [[啊，太棒了！我终于可以回到安格利……呃……好吧，我想我可以告诉你；你帮了我，理应知道这些。
-几千年前，在魔法狩猎的黑暗年代，卡·克鲁尔的大法师莱娜尼尔担心魔法会随她那一代一同消失，日后凡人再需要时便无从寻觅。
+几千年前，在魔法狩猎的黑暗年代，卡库罗尔的大法师莱娜尼尔担心魔法会随她那一代一同消失，日后凡人再需要时便无从寻觅。
 于是她秘密实施了一项计划，建造了一处隐秘之地，让魔法得以传承。
 她的计划成功了，众人在西部群山中建起了一座名为安格利文的小镇。#LIGHT_GREEN#*他在你的地图上标出小镇及其入口传送门的位置。*#WHITE#
 能获准进入那里的人不多，但我会安排让你进去。]], "_t")
@@ -3915,7 +3915,7 @@ t("%s(%d blocked)#LAST#", "%s（%d 格挡）#LAST#", "tformat")
 t("%s(%d abyssal shield)#LAST#", "%s（%d 深渊护盾）#LAST#", "tformat")
 t("%s(%d antimagic)#LAST#", "%s（%d 反魔盾）#LAST#", "tformat")
 t("%s(%d flat reduction)#LAST#", "%s（%d 点固定减伤）#LAST#", "tformat")
-t("#LIGHT_GREY#(%d resilience)#LAST#", "#LIGHT_GREY#(%d 弹性体质)#LAST#", "tformat")
+t("#LIGHT_GREY#(%d resilience)#LAST#", "#LIGHT_GREY#(%d 伤害上限抵消)#LAST#", "tformat")
 t("#CRIMSON##Source# damages %s through Martyrdom!", "#CRIMSON##Source#通过殉难伤害了%s！", "delayedLogMessage")
 t("#CRIMSON##Source# reflects damage back to #Target#!", "#CRIMSON##Source#将伤害反射回#Target#！", "delayedLogMessage")
 t("cosmeticed", "被‘美化’", "_t")
@@ -4120,7 +4120,7 @@ t("#VIOLET# The ramp crumbles as you climb it, followed by the collapse of the c
 t("Cavern beneath tombstones", "墓碑下的洞穴", "_t")
 t("Undead are rising from the ground! You must hold on!", "亡灵正从地下升起！你必须坚持住！", "_t")
 t("You have survived the onslaught of undead. You notice a way to climb up you had not seen before in a wall nearby.", "你从亡灵的猛攻中存活了下来，你看到旁边的墙上有一条之前没有发现的通路，可以爬上去。", "_t")
-t("As you began digging up the grave, the ground collapsed beneath you. You fall into an eerily lit cavern.", "当你开始挖掘坟墓时，脚下的地面塌陷了。你落入一个阴森地亮着光的洞穴。", "_t")
+t("As you began digging up the grave, the ground collapsed beneath you. You fall into an eerily lit cavern.", "当你开始挖掘坟墓时，脚下的地面塌陷了。你落入一个光线诡异的洞穴。", "_t")
 
 ------------------------------------------------
 section "mod-tome/data/general/events/rat-lich.lua"
@@ -4783,6 +4783,7 @@ t("Black Robe", "黑色长袍", "entity name")
 t("black robe", "黑色长袍", "_t")
 t("A silk robe, darker than the darkest night sky, it radiates power.", "一件比夜色还黑的丝绸长袍，它向外辐射出能量。", "_t")
 t("This jeweled crown shimmers with colors.", "这顶镶嵌宝石的王冠闪烁着斑斓的色彩。", "_t")
+t("Warmaster Gnarg's Murderblade", "战争领主格纳哥的杀戮之刃", "entity name")
 t("blood-etched greatsword", "血蚀纹大剑", "_t")
 t("A blood-etched greatsword, it has seen many foes. From the inside.", "一把镌着血蚀纹路的大剑，它见过许多敌人——从体内。", "_t")
 t("With this unbearably bright whip of flame, the demon master Urh'Rok has become known for never having lost in combat.", "这根由火焰构成、亮得令人无法直视的长鞭，让恶魔领主乌鲁洛克以战无不胜闻名。", "_t")
@@ -4807,7 +4808,7 @@ section "mod-tome/data/general/objects/boss-artifacts-maj-eyal.lua"
 
 t([[The air seems to freeze around the blade of this sword, draining all heat from the area.
 It is said the Conclave created this weapon for their warmaster during the dark times of the first allure war.]], [[这把剑的剑锋周围空气似乎都冻结了，吸走了这片区域的所有热量。
-据说议会在第一次诱惑战争的黑暗时期，为他们的战争领主打造了这件武器。]], "_t")
+据说孔克雷夫在第一次厄流战争的黑暗时期，为他们的战争领主打造了这件武器。]], "_t")
 t("Winter Storm: ", "寒冰风暴： ", "_t")
 t("Create a Winter Storm that gradually expands (from radius %d to radius %d), dealing %0.2f cold damage (based on Strength) to your enemies each turn and slowing their ability to act by 20%%.  Subsequent melee strikes will relocate the storm on top of your target and increase its duration.", "制造不断扩张的寒冰风暴（从半径 %d 到半径 %d），每回合对敌人造成 %0.2f 寒冷伤害（基于力量）并减速 20%%。接下来的近战攻击将把风暴移至目标身上并延长持续时间。", "tformat")
 t("#LIGHT_BLUE#A Winter Storm forms around %s.", "#LIGHT_BLUE#寒冰风暴在%s周围形成。", "logSeen")
@@ -4837,8 +4838,8 @@ t("This crystal is huge, easily the size of your head. It sparkles brilliantly a
 t("(The created item can be activated to recover the Heart.)", "（可激活制成的物品以取回水晶之心）", "_t")
 t("combine with a suit of body armor (makes a non enchanted armour into an artifact)", "安装至一件胸甲（可以将未附魔的护甲变成一件神器）", "_t")
 t("Rod of Annulment", "废除之杖", "entity name")
-t("dark rod", "黑暗的法杖", "_t")
-t("You can feel magic draining out around this rod. Even nature itself seems affected.", "你可以感受到这根法杖周围的魔力流失，甚至自然本身也似乎受到了影响。", "_t")
+t("dark rod", "黑暗的魔杖", "_t")
+t("You can feel magic draining out around this rod. Even nature itself seems affected.", "你可以感受到这根魔杖周围的魔力流失，甚至自然本身也似乎受到了影响。", "_t")
 t("put up to 3 of the target's runes, infusions or talents on cooldown for 3-5 turns (range %d)", "使目标至多3个符文、纹身或技能进入3-5回合的冷却（范围 %d）。", "tformat")
 t("#Source# aims %s %s at #target#!", "#Source#用%s%s瞄准了#target#！", "logCombat")
 t("Tooth of the Mouth", "大嘴怪之牙", "entity name")
@@ -5629,16 +5630,19 @@ t("In the aftermath of the Spellblaze, the Thaloren had to defend their forests 
 t("A lost artifact of the Age of Dusk, the Corpsebow is filled with a lingering essence of that era's terrible plagues. Those struck by arrows fired from its rotten string find themselves afflicted by echoes of ancient sickness.", "一件黄昏纪遗失的武器，腐尸之弓浑身缠绕着那个时代的瘟疫精华。被它腐朽弓弦射出的箭击中的人，会因古老疾病在体内的共鸣而备受折磨。", "_t")
 t("Spellblade", "法术之刃", "entity name")
 t("Mages sometimes have funny ideas. Archmage Varil once learned how to handle a sword and found he preferred wielding it instead of his staff.", "法师时不时会冒出古怪的点子。大法师沃利尔曾学会了怎样擎起一柄剑，并发现自己更喜欢挥剑而不是用法杖。", "_t")
-t("Farian was King Toknor's captain, and fought by his side in the great Battle of Last Hope.  However, when he returned after the battle to find his hometown burnt in an orcish pyre, a madness overtook him.  The desire for vengeance made him quit the army and strike out on his own, lightly armoured and carrying nought but his sword.  Most thought him dead until the reports came back of a fell figure tearing through the orcish encampments, slaughtering all before him and mercilessly butchering the corpses after.  It is said his blade drank the blood of 100 orcs each day until finally all of Maj'Eyal was cleared of their presence.  When the final orc was slain and no more were to be found, Farian at the last turned the blade on himself and stuck it through his chest.  Those nearby said his body shook with convulsions as he did so, though they could not tell whether he was laughing or crying.", "法瑞安曾是图库纳国王的指挥官，在最后希望的伟大战役中跟随国王并肩作战。然而，当他在战役结束后归来时，却发现故乡已被兽人付之一炬，他陷入了疯狂。复仇的欲望使他离开军队，孤身一人踏上了征程，他轻装上阵，除了一柄剑之外别无他物。大多数人都以为他已经死了，直到有消息称有一个毁灭者般的身影正在摧残兽人的营地，他屠杀了所有见到的兽人并残忍地肢解对方的尸体。据说他每天要用100个兽人的鲜血来祭刀，直到杀光马基·埃亚尔的兽人。当最后一个兽人被杀死并且没有发现更多的时候，法瑞安最终把利刃转向了自己——那把剑刺穿了他的胸膛。那些在附近的目击者说，当法瑞安这样做的时候身体伴随着阵阵痉挛，他们说不清他到底是哭是笑。", "_t")
+t("Farian was King Toknor's captain, and fought by his side in the great Battle of Last Hope.  However, when he returned after the battle to find his hometown burnt in an orcish pyre, a madness overtook him.  The desire for vengeance made him quit the army and strike out on his own, lightly armoured and carrying nought but his sword.  Most thought him dead until the reports came back of a fell figure tearing through the orcish encampments, slaughtering all before him and mercilessly butchering the corpses after.  It is said his blade drank the blood of 100 orcs each day until finally all of Maj'Eyal was cleared of their presence.  When the final orc was slain and no more were to be found, Farian at the last turned the blade on himself and stuck it through his chest.  Those nearby said his body shook with convulsions as he did so, though they could not tell whether he was laughing or crying.", "法瑞安曾是图库纳国王的指挥官，在伟大的最后的希望战役中跟随国王并肩作战。然而，当他在战役结束后归来时，却发现故乡已被兽人付之一炬，他陷入了疯狂。复仇的欲望使他离开军队，孤身一人踏上了征程，他轻装上阵，除了一柄剑之外别无他物。大多数人都以为他已经死了，直到有消息称有一个毁灭者般的身影正在摧残兽人的营地，他屠杀了所有见到的兽人并残忍地肢解对方的尸体。据说他每天要用100个兽人的鲜血来祭刀，直到杀光马基·埃亚尔的兽人。当最后一个兽人被杀死并且没有发现更多的时候，法瑞安最终把利刃转向了自己——那把剑刺穿了他的胸膛。那些在附近的目击者说，当法瑞安这样做的时候身体伴随着阵阵痉挛，他们说不清他到底是哭是笑。", "_t")
 t("Bolbum's Big Knocker", "鲍尔本的大敲杖", "entity name")
 t("A thick staff with a heavy knob on the end.  It was said to be used by the grand alchemist Bolbum in the Age of Allure.  Much renowned is the fear of his students for their master, and the high rate of cranial injuries amongst them.  Bolbum died with seven daggers in his back and his much-cursed staff went missing after.", "这是一根末端带着沉重瘤状杖头的粗大法杖。据说是大炼金师鲍尔本在厄流纪使用的法杖。它最为人所知的，是鲍尔本的学生们对他的恐惧，以及他们被打伤脑袋的超高几率。鲍尔本死时后背插着7把匕首，那根被众人诅咒的法杖也从此消失不见。", "_t")
 t([[Said to have once belonged to Inquisitor Marcus Dunn during the Spellhunt this fist sized quartz crystal glows constantly with a soft white light and was rumoured to be a great aid in meditation, helping focus the mind, body, and soul of the owner as well as protecting them from the foulest of magics.
 It seems somebody well versed in antimagic could use it to its fullest potential.]], [[据说曾属于魔法狩猎时期的审判官玛库斯·丹。这个拳头大小的石英晶体不断散发出柔和的白光，据说是冥想的极佳辅助，能帮助持有者凝聚精神、身体和灵魂，还能保护他们免遭最邪恶的魔法侵蚀。
 似乎只有精通反魔法的人才能发挥它的全部潜能。]], "_t")
-t("A sling with an inscription on its handle: 'May the wielder be granted cunning in his fight against the darkness'.", "投石器的把手上有一段铭文：“愿持有者在对抗黑暗之时被赐予机智。”", "_t")
+t("well-made sling", "精良的投石索", "_t")
+t("A sling with an inscription on its handle: 'May the wielder be granted cunning in his fight against the darkness'.", "投石索的把手上有一段铭文：“愿持有者在对抗黑暗之时被赐予机智。”", "_t")
 t("When dropping below 30% max HP, you gain 20% attack speed, lose 100% fatigue, and your shots don't consume ammo for 5 turns. 30 turns cd.", "当你的生命值低于最大生命值的30%时，在5回合内你获得20%攻击速度、100%疲劳减免，且射击不消耗弹药。冷却时间30回合。", "_t")
 t("Orc Feller", "兽人斩杀者", "entity name")
 t("#LIGHT_BLUE#Herah's guile and luck is with you, her successor!", "#LIGHT_BLUE#赫拉的狡诈和幸运与你同在，她的继承人！", "logPlayer")
+t("thick wooden mace", "粗重的木质狼牙棒", "_t")
+t("This thick-set mace was used by the Spellhunter Vorlan, who crafted it from the wood of an ancient oak that was uprooted during the Spellblaze.  Many were the wizards and witches felled by this weapon, brought to justice for the crimes they committed against nature.", "这把粗重的狼牙棒曾属于猎魔人沃尔兰，他从一棵在魔法大爆炸中被连根拔起的古老橡树中取材制造了它。众多法师和女巫倒在了这把武器之下，他们对自然犯下的罪行得到了制裁。", "_t")
 t([[These wickedly spiked gauntlets belonged to an orc captain in the Age of Pyre who conquered the western sands, using them as a base to lay raids on Elvala to the south.  Known as The Scorpion, he seemed unconquerable in battle, able to pull enemies towards him with vicious mental force and lay down lethal blows on them.  Often a flurry of these yellow and black gauntlets would be the last thing great Shaloren mages would see before having the life crushed from them.
 
 Finally The Scorpion was defeated by the alchemist Nessylia, who went to face the fiendish orc alone.  The captain pulled the elf towards him with a brutish cackle, but before he could batter the life from her flesh she tore off her robes, revealing eighty incendiary bombs strapped to her flesh.  With a spark from her fingers she triggered an explosion that could be seen for miles around.  To this day Nessylia is still remembered in song for the sacrifice of her immortal life to protect her people.]], [[这副凶恶的尖刺拳套属于烈火纪的一位兽人队长，他征服了西部沙地，并以此为基地向南方的埃尔瓦拉发动劫掠。他人称“沙蝎”，在战斗中似乎不可战胜，能以凶狠的精神之力将敌人拉向自己，再施以致命打击。永恒精灵的伟大法师们临死之前，最后看到的往往就是这对黄黑相间的拳套化作的一阵连击。
@@ -5675,6 +5679,7 @@ t("mirror lined chain", "镶镜锁链", "_t")
 t("Said to have been created by a powerful mage after his home was destroyed by a mob following the Spellblaze. Though he fled, his possessions were crushed, burned, and smashed. When he returned to the ruins, he made this amulet from the remains of his shattered mirror.", "据说由一位强大的法师制作，当时他的家园在魔法大爆炸后被暴民摧毁。虽然他逃走了，但他的财产被压碎、烧毁、砸烂。当他回到废墟时，他用破碎镜子的残骸制作了这枚护符。", "_t")
 t("create a reflective shield (50%% reflection rate, %d strength, based on Magic) for %d turns", "制造反射护盾（50%%反射率，%d吸收量，基于魔力）持续%d回合。", "tformat")
 t("This cloak is made from the scales of an infamous Venom Drake that terrorized the country side towards the end of the Age of Dusk. It was slain by a party led by Kestin Highfin, who had this cloak fashioned personally.", "这件斗篷由一条恶名昭著的毒龙的鳞片制成，黄昏纪末年，那条毒龙曾肆虐乡间。它被科斯汀·赫菲因率领的小队杀死，而赫菲因亲自让人制作了这件斗篷。", "_t")
+t("Spellblaze Shard", "魔法大爆炸碎片", "entity name")
 t("This dagger was used by a nameless healer during the Age of Dusk. The plagues that ravaged his town were beyond the ability of mortal man to treat, so he took to using his dagger to as an act of mercy when faced with hopeless patients. Despite his good intentions, it is now cursed with dark power, letting it kill in a single stroke against those already weakened.", "这柄匕首曾被黄昏纪一名无名的治疗师使用。瘟疫袭击了城镇，而医者终究是凡人，他便用这柄匕首为那些救治无望的病人结束痛苦，以示慈悲。尽管初衷是好的，这柄匕首现在已经被黑暗力量污染，用它伤害虚弱的敌人威力更大。", "_t")
 t("#DARK_GREEN#The armor molds comfortably to one of its caretakers.", "#DARK_GREEN#这件护甲舒适地贴合在它的一位照料者身上。", "logPlayer")
 
@@ -5740,6 +5745,7 @@ t("expertly-crafted dwarven-steel gauntlets", "精工打造的矮人钢臂铠", 
 t("Fashioned by Grand Smith Dakhtun in the Age of Allure, these dwarven-steel gauntlets have been etched with golden arcane runes and are said to grant the wearer unparalleled physical and magical might.", "这副矮人钢臂铠由大铁匠达克顿于厄流纪打造，镌刻着金色奥术符文，据说能赋予穿戴者无与伦比的体魄与魔法力量。", "_t")
 t("Voratun Hammer of the Deep Bellow", "沃瑞钽深渊咆哮之锤", "entity name")
 t("The legendary hammer of the Dwarven master smiths. For ages it was used to forge powerful weapons with searing heat until it became highly powerful by itself.", "矮人神匠的传奇铁锤。它年复一年地在高温中锻造强大的武器，直到自身也变得相当强大。", "_t")
+t("Snow Giant Wraps", "雪巨人护手", "entity name")
 t("Two large pieces of leather designed to be wrapped about the hands and the forearms.  This particular pair of wraps has been enchanted, imparting the wearer with great strength.", "两大块皮革，专为包裹手和前臂而设计。这副护手经过了附魔，可给予穿戴者巨大的力量。", "_t")
 t("massive, stained girdle", "硕大而肮脏的腰带", "_t")
 t("This girdle is enchanted with mighty wards against expanding girth. Whatever the source of its wondrous strength, it will prove of great aid in the transport of awkward burdens.", "这条腰带附有强大的守护魔法，可以抵御腰围的膨胀。无论它神奇的力量源自何处，它都会在搬运笨重的负担时大有助益。", "_t")
@@ -5850,8 +5856,9 @@ t("venomous gemstone", "剧毒宝石", "_t")
 t("Thick straps encircle this blade. Jagged edges like teeth travel down the blade, bisecting it. It fights to overcome the straps, but lacks the strength.", "厚重的革带紧缚着这把剑。锯齿般的锋刃沿着剑身纵贯而下，将其一分为二。它试图挣脱革带的束缚，但似乎缺乏足够的力量。", "_t")
 t("Corpathus bursts open, unleashing a horrific mass!", "卡帕萨斯爆裂开来，放出了一团恐怖的物质！", "logSeen")
 t("This mass of putrid slime burst from Corpathus, and seems quite hungry.", "这团腐臭的黏液从卡帕萨斯中迸出，看起来十分饥饿。", "_t")
-t("The eye on the hilt of this blade seems to glare at you, piercing your soul and mind. Tentacles surround the hilt, latching onto your hand.", "这柄剑剑柄上的眼睛似乎在怒视着你，洞穿你的灵魂与心智。触须缠绕着剑柄，攀附在你的手上。", "_t")
-t("Anmalice focuses its mind-piercing eye on #Target#!", "扭曲之刃·圣灵之眼将它穿透心智的目光集中在了#Target#身上！", "logCombat")
+t("Anmalice", "扭曲之刃·恶意之眼", "entity name")
+t("The eye on the hilt of this blade seems to glare at you, piercing your soul and mind. Tentacles surround the hilt, latching onto your hand.", "这柄剑剑柄上的眼睛似乎在怒视着你，洞穿你的灵魂与心智。触手缠绕着剑柄，攀附在你的手上。", "_t")
+t("Anmalice focuses its mind-piercing eye on #Target#!", "扭曲之刃·恶意之眼将它穿透心智的目光集中在了#Target#身上！", "logCombat")
 t("#CRIMSON#The tentacles release your arm, sated.", "#CRIMSON#触手餍足地松开了你的手臂。", "logPlayer")
 t("#CRIMSON#As you wield the sword, the tentacles on its hilt wrap around your arm. You feel the sword's will invading your mind!", "#CRIMSON#当你持有这把剑时，剑柄上的触手缠上了你的手臂。你感觉这把剑的意志侵入了你的大脑！", "logPlayer")
 t("jagged, segmented, sword", "锯齿分节的剑", "_t")
@@ -5859,7 +5866,8 @@ t("This heavy, ridged blade emanates magical power, yet as you grasp the handle 
 t("deal %0.2f arcane and %0.2f darkness damage (based on Magic) in a radius 1 around the target", "对目标造成%0.2f奥术和%0.2f暗影伤害（基于魔力）", "tformat")
 t("@Source@ taps the #SALMON#trapped soul#LAST# of %s, xmanifesting %s!", "@Source@汲取了%s的#SALMON#被困灵魂#LAST#，施展%s！", "tformat")
 t("%s's %s #SALMON#CONSUMES THE SOUL#LAST# of %s, gaining the power of %s!", "%s的%s #SALMON#吞噬了%s的灵魂#LAST#，获得了%s的能力！", "logSeen")
-t("This three-headed stralite flail strikes with the power of a hydra. With each attack it lashes out, hitting everyone around you.", "这把三头的斯莱特连枷，使用的是一只三头龙的力量。它的攻击可以伤害到周围的所有敌人。", "_t")
+t("Hydra's Bite", "三头蛇之噬", "entity name")
+t("This three-headed stralite flail strikes with the power of a hydra. With each attack it lashes out, hitting everyone around you.", "这把三头的斯莱特连枷，蕴含着三头蛇的力量。每次命中时，它还会抽打你身边至多两个其他目标。", "_t")
 t("hit up to two adjacent enemies", "攻击你身边最多 2 个相邻敌人", "_t")
 t("#Source#'s three headed flail lashes at #Target#%s!", "#Source#使用三头连枷打击#Target#%s！", "logCombat")
 t("#Source#'s three headed flail lashes at #Target#!", "#Source#的三头连枷扫过了#Target#！", "logCombat")
@@ -5880,11 +5888,13 @@ t("Summertide", "炎华", "entity name")
 t("send out a range %d beam, lighting its path and dealing %0.2f to %0.2f light damage (based on Willpower and Cunning)", "发射长度 %d 的射线，照亮路径，并造成 %0.2f 到 %0.2f 点光系伤害（基于意志和灵巧）", "tformat")
 t("%s's %s flashes!", "%s的%s 闪光了！", "logSeen")
 t("flowing robe", "飘逸的法袍", "_t")
+t("Skeletal Claw", "白骨之爪", "entity name")
 t("bone-link chain", "骨节锁链", "_t")
 t("This whip appears to have been made from a human spine. A handle sits on one end, a sharply honed claw on the other.", "这根鞭子看上去像是人类的脊骨做成，一端有一个柄，另一端是一只磨得锋利的爪子。", "_t")
 t("Creates an arcane explosion dealing %d arcane damage based on magic in a radius of 3 around the user after any teleport.", "使用者传送后，在周围3格范围内引发奥术爆发，造成%d奥术伤害，伤害基于魔力值。", "tformat")
 t("phase door up to range 6, within radius 2 of the target location", "传送到6格范围内的地点，误差在两格范围内。", "_t")
 t("Attack speed improves with your strength and size category.", "攻击速度随力量和体型的提升而加快。", "_t")
+t("Umbraphage", "暗影吞噬者", "entity name")
 t("This lantern of pale white crystal holds a sphere of darkness, that yet emanates light. Everywhere it shines, darkness vanishes entirely.", "这个灰白色水晶制成的灯笼中盛着一颗黑暗之球，却仍放射着光芒。光之所在，黑暗尽除。", "_t")
 t("Absorbs all darkness (power %d, based on Willpower and Cunning) within its light radius, increasing its own brightness. (current charge %d).", "在光照范围内吸收所有黑暗（强度 %d，基于意志和灵巧）并增加亮度（当前蓄能：%d）。", "tformat")
 t("#ORCHID#Umbraphage is fully powered!", "#ORCHID#暗影吞噬者的能量已经充满！", "logPlayer")
@@ -5920,6 +5930,7 @@ t("Casts lasers on spellcast when worn or imbued.", "当装备或镶嵌时，施
 t("This deep black armor absorbs all light that touches it. A dark power sleeps within, primal, yet aware. When you touch the plate, you feel dark thoughts creeping into your mind.", "这件深黑色的胸甲吸收触及它的一切光线。一股原始却有意识的黑暗力量沉睡其中。当你触摸它时，你感到黑暗的思想不断涌入你的脑海。", "_t")
 t("%s merges with %s %s!", "%s与%s%s合并！", "logSeen")
 t("This small wooden ring has a single green stem wrapped around it. Thin leaves still seem to be growing from it.", "这枚小巧的木戒上缠绕着一根绿色的茎，纤薄的叶片似乎仍在从中生长。", "_t")
+t("Wrap of Stone", "坚石斗篷", "entity name")
 t("This thick cloak is incredibly tough, yet bends and flows with ease.", "这件厚重的斗篷坚韧异常，却依然能轻松地弯折垂流。", "_t")
 t("turn yourself invisible (power %d, based on Cunning and Magic) for 10 turns", "隐形10回合（强度%d，基于灵巧和魔力）", "tformat")
 t("%s pulls %s %s around %s like a dark shroud!", "%s将%s%s裹在%s身上，宛如一层黑暗的帷幕！", "logSeen")
@@ -5959,7 +5970,7 @@ t("This green robe is engraved with icons showing clouds and swirling winds. Its
 t("Your Lightning and Chain Lightning spells gain a 24% chance to daze, and your Thunderstorm spell gains a 12% chance to daze.", "你的闪电术和连锁闪电有24%几率使目标眩晕，闪电风暴有12%几率使目标眩晕。", "_t")
 t("This white cap is plain and dull, but as the light reflects off of its surface, you see images of faraway corners of the world in the sheen.\"", "这顶白色的帽子朴素暗淡，但是，当光线在它的表面反射时，你从光泽中看到了世界遥远角落的景象。", "_t")
 t("reveal the surrounding area (range 20)", "展露周围20格的地形", "_t")
-t("This is a string of ancient, hardened clay beads, cracked and faded with age. It was used by Wilders in ancient times, in an attempt to enhance their connection with Nature.", "这是一串古朴而坚硬的陶制串珠，年代久远，已经开裂褪色。远古时代，荒野行者曾佩戴它来加强与自然的联系。", "_t")
+t("This is a string of ancient, hardened clay beads, cracked and faded with age. It was used by Wilders in ancient times, in an attempt to enhance their connection with Nature.", "这是一串古朴而坚硬的陶制串珠，年代久远，已经开裂褪色。远古时代，野性系的人们曾佩戴它来加强与自然的联系。", "_t")
 t("These heavy stone gauntlets make the very ground beneath you bend and warp as they move.", "这双沉重的石质手套移动时，会使你脚下的大地随之扭曲变形。", "_t")
 t("Guise of the Hated", "被憎恨者的伪装", "entity name")
 t("gloomy black cloak", "阴郁的黑色斗篷", "_t")
@@ -6049,7 +6060,7 @@ t("attack everything in a line out to range %d, dealing 100%% weapon damage (as 
 t("#Source# strikes out at #target# with %s %s!", "#Source#用%s%s打击#target#！", "logCombat")
 t("This massive suit of plate boasts an enormous bulk and overbearing weight. Said to belong to a nameless soldier who safeguarded a passage across the bridge to his village, in defiance to the cohorts of invading orcs. After days of assault failed to fell him, the orcs turned back. The man however, fell dead on the spot - from exhaustion. The armor had finally claimed his life.", "这件巨大的板甲体积庞大，重得压人。相传它属于一位无名士兵，他守在通往自己村庄的桥上，抵御入侵的兽人大军。兽人连攻数日也未能将他击倒，只得撤退。然而这名士兵却当场倒地身亡——死于力竭。这件盔甲终究夺去了他的生命。", "_t")
 t([[When your effective movement speed (global speed times movement speed) is less than 100%%, reduces all incoming damage by a percent equal to the speed detriment (up to 70%%).
-Current reduction bonus: %d%%]], [[当你的有效移动速度（全局速度乘移动速度）小于100%%的时候，降低所有伤害，比例相当于当前移动速度和100%%的差距，但最大不超过70%%。
+Current reduction bonus: %d%%]], [[当你的有效移动速度（全局速度乘移动速度）小于100%%的时候，降低你受到的所有伤害，比例相当于当前移动速度和100%%的差距，但最大不超过70%%。
 当前减伤比例：%d%%]], "tformat")
 t("This mask appears to be carved out of the skull of a creature that never should have existed, malformed and distorted. You shiver as you look upon it, and its hollow eye sockets seem to stare back into you.", "这件面具似乎是用某种不明生物的头骨制成的，那是一种本不应该存在于世间的可怕生物，畸形并且扭曲。每当你盯着这个面具时，它那空洞的眼窝似乎也在注视着你，令你感到发自内心的颤栗。", "_t")
 t("flame coated sandals", "一双被火焰覆盖的凉鞋", "_t")
@@ -7657,7 +7668,7 @@ But mine was just one voice, one torment, a single note in the great cacophony t
 
 大军向前开进时，我将斩月剑在鞘中略略拔松。我攥紧缰绳，控住胯下战马，免得它一时亢奋脱缰狂奔；往左看去，我的侍从也正做着同样的动作。空气中紧绷的气氛几乎凝若实质。在我们前方不到一英里处，兽人大军的前锋已然映入眼帘。我们惊动了他们的巢穴，引得他们倾巢出动。他们好似一片吞没地平线的黑影枯疫，又如一场要将整个世界蚕食殆尽的浩大瘟疫。相比之下，我眼前的永恒精灵大军显得颇为渺小，但我深知，我们的实力绝非单靠人数来衡量。
 
-最前方的防线号角齐鸣，严阵以待，准备随时迎战敌军的第一波攻势。北面部署着弓箭手，负责瓦解敌军最初的抵抗；他们侧翼则是一支法术骑兵军团，骑士们端坐于骇人的骏马之上，双掌闪耀着奥术能量的光芒。南面是常规骑兵、巨剑士、重甲骑士以及我方法师的主力，正蓄势准备支援法术。高阶战斗法师零星散布在阵中各处，随时准备疾驰支援交战最激烈的地方，将敌军轰杀殆尽。任何一处都无需配置超过一名高阶战斗法师——仅凭他们一人之力，便能轻而易举地歼灭二十名兽人。
+最前方的防线号角齐鸣，严阵以待，准备随时迎战敌军的第一波攻势。北面部署着弓箭手，负责瓦解敌军最初的抵抗；他们侧翼则是一支法术骑兵军团，骑士们端坐于骇人的骏马之上，双掌闪耀着奥术能量的光芒。南面是常规骑兵、巨剑士、重甲骑士以及我方法师的主力，法师们正蓄势准备施放辅助法术。高阶战斗法师零星散布在阵中各处，随时准备疾驰支援交战最激烈的地方，将敌军轰杀殆尽。任何一处都无需配置超过一名高阶战斗法师——仅凭他们一人之力，便能轻而易举地歼灭二十名兽人。
 
 远处战鼓擂动，震耳欲聋，敌阵中爆发出阵阵喧嚣。他们身边带着驯化的野兽与巨魔，人人披着简陋的护甲，手执刀剑与钉头锤列阵以待。一个兽人率先仰天长嚎，其余兽人纷纷跟进，整片天空仿佛都在他们难听的嗓音中嗡嗡回响。
 
@@ -8559,7 +8570,7 @@ I have my theories, unsettling as they are, as to what's coming over me - what I
 
 埃兰达俯身看着我；我的肋骨伤势让他没法拥抱我。他说我本该已经死了。他找到了一样他认为是传说中生命之血的东西，把它灌进我的喉咙、倒进我的伤口。他说我正在愈合，可是……如果他猜错了，我们就不能回到他们那里。不能回到#{italic}#她#{normal}#身边——上次那件事之后不行。无论他们分析瓶中剩余物时会发现什么，我都不能让他们把我从埃兰达身边夺走，尤其是在他为我做了这一切之后。
 
-疼痛正在一点点消退，肋骨每分钟都在愈合。我现在可以把气吸得稍深一些，才会#FIREBRICK#撞上#LAST#那堵突如其来的#FIREBRICK#剧痛#LAST#之墙。感觉……很健康，甚至充满力量。不管我的爱人找到了什么，他的馈赠无疑能够滋养生灵……但我也感到了别的东西。受困。迷失。孤独。躺在家中，却仍在思乡。
+疼痛正在一点点消退，肋骨每分钟都在愈合。现在我能把气吸得稍深一些，之后才#FIREBRICK#撞上#LAST#那堵突如其来的#FIREBRICK#剧痛#LAST#之墙。感觉……很健康，甚至充满力量。不管我的爱人找到了什么，他的馈赠无疑能够滋养生灵……但我也感到了别的东西。受困。迷失。孤独。躺在家中，却仍在思乡。
 
 [……]
 
@@ -8804,7 +8815,7 @@ yes to diamonds. arm our merchants in the caravan, no extra guards. profits are 
       钻石 - 20颗
 
 今年钻石产量很低——加价50%？伊格兰斯袭击了我们上一支安格利文商队——增派守卫？——D
-钻石同意加价。武装商队里的商人，不增派守卫。利润已经够薄了！——S]], "_t")
+钻石同意加价。给商队里的商人配发武器，不增派守卫。利润已经够薄了！——S]], "_t")
 t("...We are lost. The orcish forces are too great. No matter how many our squad slays, yet more surge from the depths. Where are the cursed creatures coming from?! We have spied their leader, but have had no hope in killing him; he is a beast, a destroyer, burning with fire infernal and ice cruel and chilling. The power these orcs wield now fills me with dread... perhaps they have found new, mighty allies? This news must reach our ruler. My comrades... I am sorry. I will flee once the opportunity arises, but know that your sacrifices will not be in vain. Long may our empire endure.", "……我们完了。兽人大军势不可当。无论我们小队杀死多少，都会有更多兽人从深处涌来。这些该死的生物究竟从哪里来的？！我们已经窥见他们的首领，却根本没有希望杀死他；他是一头野兽，一个毁灭者，身燃炼狱烈火与残酷刺骨的寒冰。这些兽人如今掌握的力量令我恐惧……或许他们找到了新的强大盟友？这消息必须送到统治者手中。战友们……对不起。我会在机会出现时逃走，但要知道，你们的牺牲绝不会白费。愿帝国长存。", "_t")
 t("Deep Bellow excavation report 1", "深渊咆哮挖掘报告 1", "_t")
 t([[10 days into initial site survey, hmm! Recent tremors have opened deep new chasms, but we must work cautiously to ensure they're stable before conducting major operations, oh yes! Proceeding well at start, with supports being put in place and no flammable gases detected, hmm hmm.
@@ -10114,7 +10125,7 @@ In all those centuries I still searched for the woman and found no trace. I know
 
 我感到力量涌入了四肢，声音从喉咙中涌出。我站起来环顾四周，惊叹于周围的世界与头顶的群星，欢喜地放声歌唱。那女人听到我的歌声，便露出笑容，止住了泪水，我便又唱了一会儿，想让她开心。但随后我说，“只有我一个人吗？” 她点了点头，说：“没有其它的人像你一样了。” 听到这句话，我感到很悲伤，而她似乎看穿了我心中的孤寂。女人犹豫了一会，说：“虽然这会让我痛苦，但我无法拒绝你的愿望。你现在将要沉睡，当你醒来时，身边会有和你一样的人，而你将走进这个破碎的世界，尝试修复它。”
 
-她一说完我便立刻再次陷入沉睡，当我醒来时发现世界变了，空中燃起了一道耀眼的光芒——这就是新生的太阳。接着我看到周围许许多多和我一样的人们，还有一些人虽然长相相同却有着迥异的能力与个性。我将他们唤醒并聚集起来，我们都为有同伴而感到高兴，并决定称呼自己为阿洛。但那个女人已经离去，其他人都对她一无所知；我四处寻觅，却始终找不到她的踪迹。
+她一说完我便立刻再次陷入沉睡，当我醒来时发现世界变了，空中燃起了一道耀眼的光芒——这就是新生的太阳。接着我看到周围许许多多和我一样的人们，还有一些人虽然长相相似，却有着迥异的能力与个性。我将他们唤醒并聚集起来，我们都为有同伴而感到高兴，并决定称呼自己为阿洛。但那个女人已经离去，其他人都对她一无所知；我四处寻觅，却始终找不到她的踪迹。
 
 时光如水，岁月如梭，我们发现了其它生物，但它们往往邪恶而凶残，于是我们对其发动了战争。接着我们发现了夏·图尔，他们倾慕于我们的美丽，并传授了我们魔法技艺。随后战争爆发，我们中的一些人帮助他们作战，但很快我们便发现，自己无力与这些大师并肩作战。于是我们退回丛林，而战争仍在激烈进行，最终以灾难告终。
 
@@ -10697,7 +10708,7 @@ Love, #{italic}#Eden#{normal}#]], [[亲爱的盗墓贼，
 爱你的#{italic}#艾登#{normal}#]], "_t")
 t([[Sixth time this week stuck guarding at the stash. And for what? Just a little fun! 
 
-Almost miss being at the farm sometimes. At least there I wasn't able to screw anything up. Wonder if they would take me back knowing what I've been doing with my life...]], [[这已经是这周第六次呆在这里守卫了。为什么？不过是找了点乐子！
+Almost miss being at the farm sometimes. At least there I wasn't able to screw anything up. Wonder if they would take me back knowing what I've been doing with my life...]], [[这周已经是第六次被派来守藏货点了。为什么？不过是找了点乐子！
 
 有时我甚至有点怀念在农场的日子。至少那时候我不会把事情搞砸。真不知道他们要是知道了我如今的所作所为，还会不会让我回去……]], "_t")
 t([[The best haul we ever got, gone. We could have been set for life, the most legendary outlaws in all the lands! Villages would tremble at the thought of us roaming the woods.
@@ -11653,10 +11664,10 @@ It's strange, really.. from the fragments I've been able to find, they seem to a
 Well... that was certainly unexpected. There may be some truth to the rumours that these crystals can move about, or at least that they have some will of their own - I was just about to finish my investigation of the caves, when in the very last part of the cave I hadn't yet explored, I saw what appeared to be two giant... legs, growing from the cavern. I was immediately overcome by feelings of fear and malice, and not my own - that crystal sent them to me, that I was unwelcome here, that it was not yet finished. I dare not tell the council of my cowardice, so I shall... invent a more fitting report in a much safer place. If some wayward adventurer finds these notes, it is my surmise that whomever destroyed the original crystals left such a strong impression of strength and will that the rudimentary intelligence governing them decided the form of its destroyer was stronger than the original, crystalline shapes.]], [[#{italic}#卓越纪122年狂欢月10日#{normal}#
 那个罗兰精灵疯子走上街头大喊大叫，声称有人“玷污”了闪光洞穴，长老会这才认为应该准许我前来调查……我没看出这里有任何所谓的玷污，但也没有见到传闻中会移动的水晶。只有一些位置古怪的水晶碎片，像是从某个更大的东西上断裂下来的，实在称不上惊人。
 
-#{italic}#卓越纪122年炎华2日#{normal}#
+#{italic}#卓越纪122年炎华月2日#{normal}#
 说来确实奇怪……从我找到的碎片判断，它们似乎都遵循魔法那无形的几何结构：以形态来看，红色碎片似乎是火焰魔法的一部分，蓝色则对应水，诸如此类……此外还有一些畸变的水晶碎片，仿佛某种可怕力量扭曲了其中一些水晶原有的颜色，将它们变成了绝不应有的模样——这就是那个疯子叫嚷的“玷污”吗？
 
-#{italic}#卓越纪122年炎华3日#{normal}#
+#{italic}#卓越纪122年炎华月3日#{normal}#
 好吧……这可真是出乎意料。水晶能够移动的传闻或许有几分属实，至少它们似乎拥有自己的意志——我正要结束洞穴调查，却在最后一处尚未探索的角落里，看见两条巨大的……腿，仿佛正从洞穴中生长出来。恐惧与恶意顿时淹没了我，可那不是我的情绪——是水晶把它们送进我心里，告诉我这里不欢迎我，也告诉我它尚未完成。我不敢向长老会坦白自己的怯懦，所以还是……到安全得多的地方，编一份更体面的报告吧。若有哪位四处游荡的冒险者发现这些笔记，我的推测是：摧毁原有水晶的某个存在，以其力量与意志留下了无比深刻的印象，于是支配水晶的原始意识认定，毁灭者的形态比原本的水晶形态更加强大。]], "_t")
 
 ------------------------------------------------
@@ -11933,7 +11944,7 @@ This Thanchir guy really, really needs to find a more urban spot with accessible
 桑切尔这人真的、真的该找个更像城市、公共交通也更方便的地方住下（请别再派冒险者了！）。不过好不容易让他开口后，他知道的东西倒真不少。据他说，他与最早来到这一带的那位精灵有些远亲关系。那位精灵乘船从一个叫“马基·埃亚尔”的传奇之地来到这里。桑切尔坚称那个地方确实存在，却拿不出任何实质证据。此事值得进一步调查。]], "_t")
 t([[However, I have been repeatedly told by the powers that be, that I need to get on with this and turn in another report on how a different race got here. So, I will temporarily pause my researches on whether or not Maj'Eyal is real or just an Elf legend. (Can't trust everything they say despite their long memories.) Instead, I am on to meet the keeper of the Eastern Historical Society who has the best collection of lore about how Humans got here. As such, I will be travelling to northern Vor to use their archives.
 And yes, unfortunately I will be travelling by adventurer again. By all the gods, why don't I get a better budget? This is absolutely terrible. It has been a particularly long walk. Longer than I thought it would be, truthfully, so I have run out of food. Foolish, I know, but I figured I could ask the escort for some of his. The snobby piece of troll-liver says he doesn't eat! Now talk about a terrible lie. Did he really think that would fool me? This Eastern Historical Society had better be good...]], [[然而，上头已经再三吩咐我赶快推进工作，再交一份有关另一个种族如何来到此地的报告。所以，我要暂时搁置对马基·埃亚尔究竟真实存在、还是仅为精灵传说的研究。（尽管他们记忆久远，说的话却不能全信。）接下来我要去拜会东方历史协会的负责人；协会收藏着有关人类如何来到这里的最佳史料。为此，我将前往沃尔北部查阅他们的档案。
-没错，很不幸，我又得靠冒险者护送了。诸神在上，为什么就不能多给我一点预算？简直糟透了。这一趟步行格外漫长。老实说，路比我预想得远，所以我的食物已经吃光了。我知道这很蠢，可我以为能向护卫讨一点。那个自命不凡的巨魔肝竟然说自己不用吃饭！这谎话也太离谱了。他真以为能骗过我？东方历史协会最好值得我受这些罪……]], "_t")
+没错，很不幸，我又得靠冒险者护送了。诸神在上，为什么就不能多给我一点预算？简直糟透了。这一趟步行格外漫长。老实说，路比我预想得远，所以我的食物已经吃光了。我知道这很蠢，可我以为能向护卫讨一点。那块自命不凡的臭巨魔肝竟然说自己不用吃饭！这谎话也太离谱了。他真以为能骗过我？东方历史协会最好值得我受这些罪……]], "_t")
 t([[Finally arrived in Vor safe and mostly sound. (Though I do have some burns on my stomach from mage fire and my coat is a complete wreck. I wonder if I can expense a new coat.) However, the Eastern Historical Society is everything I could have hoped. Who can doubt that Humans are the superior race! You'd never see an Elf or an orc keep neat paper records like this!
 In short: Aethidry was the first Human to map out these shores. EHS has his map preserved in good crackly yellow parchment. However, he travelled on and later died on distant shores, so he was neither the first Human to arrive here, nor the one who organized the first settlement. Some historians guess that the first Human to arrive in the east was one Vaeryn Gorthol. At the least, many of the first explorers mention him as a precursor, so he may well have been. A few of the important first settlers were Oweodry Arandur, Aethor (or perhaps Aethur) the Wronged, and Bloran the Black.]], [[终于平安抵达沃尔，身体也大致无恙。（不过我的肚子被法师之火烧伤了几处，外套也彻底毁了。不知道能不能报销一件新外套。）东方历史协会的一切都如我所愿。谁还能怀疑人类才是优越种族！你绝不会看到精灵或兽人把纸质记录整理得这么井井有条！
 简而言之：埃西德里是第一位绘制这片海岸地图的人类。东方历史协会保存着他的地图，那是一张上好、脆硬泛黄的羊皮纸。不过，他继续远行，后来死在遥远的海岸，所以他既不是第一个抵达这里的人类，也不是首个定居点的组织者。一些历史学家猜测，首位抵达东方的人类是维恩·加索尔。至少，许多早期探险者都把他称作先驱，因此很可能确实如此。第一批重要定居者中有欧文德·安瑞达、蒙冤者埃索尔（也可能是埃萨尔），以及黑者布罗伦。]], "_t")
@@ -12346,7 +12357,7 @@ t("Through an incredible display of willpower you resisted for a few decisive se
 t("Though you succumbed to the fight, your mind was already gone, burnt to ashes by your mad patron sun. But the world was saved.", "虽然你在这场搏斗中倒下了，你的心智却早已被你那疯狂的太阳主上烧成灰烬。但世界得救了。", "_t")
 t("Your sacrifice worked. Your mental energies were imbued with farportal energies. The Way radiated from the High Peak toward the rest of Eyal like a mental tidal wave.", "你的牺牲起作用了，你的精神能量被远行传送门能量所灌注。维网从巅峰向埃亚尔各处辐射出一股精神冲击波。", "_t")
 t("Every sentient being in Eyal is now part of the Way. Peace and happiness are enforced for all.", "所有埃亚尔有知觉的生物都成为了维网的一部分，和平与幸福被强加于所有生物。", "_t")
-t("Only the mages of Angolwen were able to withstand the mental shock and thus are the only unsafe people left. But what can they do against the might of the Way?", "只有安格利文的法师能够抵制住这道精神冲击，从而他们成为了仅存的危险人类，不过他们又能对强大的维网怎么样呢？", "_t")
+t("Only the mages of Angolwen were able to withstand the mental shock and thus are the only unsafe people left. But what can they do against the might of the Way?", "只有安格利文的法师能够抵御住这道精神冲击，从而成为了仅存的不安定分子，不过他们又能对强大的维网怎么样呢？", "_t")
 t("In the aftermath of the battle the Way tried to force you to act as a vessel to bring the Way to every sentient being.", "在战斗结束后，维网试图强迫你充当载体，将维网带给所有知觉生物。", "_t")
 t("You have prevented the portal to the Void from opening and thus stopped the Creator from bringing about the end of the world.", "你阻止了虚空传送门的开启，从而阻止了造物主毁灭世界。", "_t")
 t("In a selfless act, High Sun Paladin Aeryn sacrificed herself to close the portal to the Void and thus stopped the Creator from bringing about the end of the world.", "高阶太阳骑士艾琳无私地牺牲了自己，关闭通往虚空的传送门，从而阻止造物主毁灭世界。", "_t")
@@ -13142,7 +13153,7 @@ t([[Your passion for singing the praises of the Moons reaches its zenith.
 		Your Hymns now fire shadowy beams that will hit up to %d of your foes within radius 5 for %0.2f damage, with a 25%% chance of blinding.
 		This powerful effect will drain %0.1f negative energy each time it fires at at least 1 target; no beam will fire if your negative energy is too low.
 		These values scale with your Spellpower.]], [[你歌颂月亮的热情达到了顶峰。
-		你的圣诗自动产生阴影射线攻击周围 5 格内至多 %d 个敌人，造成 %0.2f 伤害，同时有 25%% 几率触发致盲效果。
+		你的圣诗自动产生暗影射线攻击周围 5 格内至多 %d 个敌人，造成 %0.2f 伤害，同时有 25%% 几率触发致盲效果。
 		这一强力效果每次向至少一个目标发射射线时，消耗 %0.1f 负能量；负能量过低时不会发射射线。
 		效果受法术强度加成。]], "tformat")
 
@@ -13867,8 +13878,8 @@ t("Breach", "破防", "talent name")
 t([[Attack the target with either your ranged or melee weapons for %d%% damage.
 		If the attack hits you'll breach the target's immunities, reducing armor hardiness, stun, pin, blindness, and confusion immunity by 50%% for %d turns.
 		Breach chance scales with your Spellpower.]], [[使用远程或近战武器攻击目标，造成 %d%% 武器伤害。
-		若攻击命中，你会破坏目标的免疫力，使其护甲强度以及震慑、定身、致盲和混乱免疫减半，持续 %d 回合。
-		突破几率随法术强度提高。]], "tformat")
+		若攻击命中，你会破除目标的免疫力，使其护甲强度以及震慑、定身、致盲和混乱免疫减半，持续 %d 回合。
+		破防几率随法术强度提高。]], "tformat")
 
 ------------------------------------------------
 section "mod-tome/data/talents/chronomancy/temporal-hounds.lua"
@@ -14395,7 +14406,7 @@ t("#Source# throws a grappling hook at #target#!", "#Source#朝#target#扔出钩
 t("#Source#'s grappling hook latches onto #target#!", "#Source#的钩爪命中了#target#！", "logCombat")
 t("#Source# is dragged towards #target#!", "#Source#被拉向#target#！", "logCombat")
 t("#Target# is dragged towards #source#!", "#Target#被拉向#source#！", "logCombat")
-t("%s uses a grappling hook to pull %s %s!", "%s使用钩爪来拉动%s向%s！", "logSeen")
+t("%s uses a grappling hook to pull %s %s!", "%s用钩爪将%s拉向%s！", "logSeen")
 t("You must anchor the hook to something solid.", "你需要将钩爪固定在某个坚固的物体上。", "logPlayer")
 t("Throw a grappling hook up to range %d that drags you towards the target or the target towards you. 8 turn cooldown.", "向最远 %d 格处发射钩爪，将你拉向目标，或将目标拉向你。冷却 8 回合。", "tformat")
 t([[Toss out a grappling hook to a target within range %d.  If this strikes either a wall or a creature that is immovable or larger than you, you will pull yourself towards it, otherwise, you will drag the target towards you.  Creatures struck by the hook will be pinned for 2 turns.
@@ -15288,7 +15299,7 @@ t([[Nothing will stop your rampage.
 		可无视的伤害量受力量加成。]], "tformat")
 t("Slam", "猛力重击", "talent name")
 t("#F53CBE#%s slams %s!", "#F53CBE#%s猛击了%s！", "logSeen")
-t("#F53CBE#Your rampage is invigorated by the collosal slam! (+1 duration)", "#F53CBE#巨力猛击激发了你的暴走！（+1 持续时间）", "logPlayer")
+t("#F53CBE#Your rampage is invigorated by the collosal slam! (+1 duration)", "#F53CBE#猛力重击激发了你的暴走！（+1 持续时间）", "logPlayer")
 t([[While rampaging, you slam up to %d adjacent opponents, stunning them for %d turns and damaging them for between %d and %d physical damage. Your first slam of at least two opponents increases the rampage duration by 1.
 		Damage increases with your Physical Power.]], [[暴走状态中，你可以攻击到最多 %d 个邻近目标，震慑他们 %d 回合，并造成 %d ～ %d 物理伤害。首次同时攻击至少两个目标时，暴走效果延长 1 回合。
 		伤害受物理强度加成。]], "tformat")
@@ -15692,8 +15703,7 @@ t([[Your fungus reaches into the primordial ages of the world, granting you anci
 		Each time you receive non-regeneration healing you gain %0.1f%% of a turn per 100 life healed.  This effect can't add energy past 2 stored turns and overhealing is not counted.
 		Also, regeneration effects on you will decrease your equilibrium by %0.1f each turn.
 		The turn gain increases with your Mindpower.]], [[你身上的真菌可追溯至世界的原初时代，赋予你远古本能。
-		每当你受到非回复类治疗时，每实际恢复 100 点生命，你获得 %0.1f%% 个回合。
-		溢出治疗不计入，且这一效果提供的能量最多可储存至 2 个回合。
+		每当你受到非回复类治疗时，每实际恢复 100 点生命，你获得相当于 %0.1f%% 个回合的行动能量。溢出治疗不计入，且这一效果提供的能量最多可储存至 2 个回合。
 		同时，你身上的回复效果会使失衡值每回合减少 %0.1f。
 		获得的回合数受精神强度加成。]], "tformat")
 t("Sudden Growth", "骤然生长", "talent name")
@@ -16092,7 +16102,7 @@ t([[You transform into pure lightning, moving %d%% faster for %d game turns.
 t([[Generate an electrical field around you in a radius of %d. Any creature caught inside will lose up to %0.1f%% of its current life (%0.1f%% if the target is Elite or Rare, %0.1f%% if the target is a Unique or Boss, and %0.1f%% if they are an Elite Boss.). This life drain is irresistable, but can be saved against with physical save.
 		Additionally, it will deal %0.2f lightning damage afterwards, regardless of target rank.
 		Current life loss and lightning damage will increase with your Mindpower, and the lightning damage element can critically hit with mental critical chances.
-		Each point in storm drake talents also increases your lightning resistance by 1%%.]], [[在半径 %d 范围内制造静电力场。范围内所有生物至多损失其当前生命的 %0.1f%% （精英或稀有为 %0.1f%%， 史诗或 Boss 为 %0.1f%%， 精英 Boss 为 %0.1f%%）。 该生命吸取无法抵抗，但可通过物理豁免抵御。
+		Each point in storm drake talents also increases your lightning resistance by 1%%.]], [[在半径 %d 范围内制造静电力场。范围内所有生物至多损失其当前生命的 %0.1f%% （精英或稀有为 %0.1f%%， 史诗或 Boss 为 %0.1f%%， 精英 Boss 为 %0.1f%%）。 该生命吸取无视伤害抗性，但可通过物理豁免抵御。
 		随后，无论目标阶级如何，都会再受到 %0.2f 闪电伤害。
 		当前生命损失和闪电伤害随精神强度提高；闪电伤害可按精神暴击率暴击。
 		每投入 1 点雷龙系技能，还会使你的闪电伤害抗性提高 1%%。]], "tformat")
@@ -16288,7 +16298,7 @@ t([[Summon a Fire Drake for %d turns to burn and crush your foes to death. Fire 
 ------------------------------------------------
 section "mod-tome/data/talents/gifts/summon-melee.lua"
 
-t("@source@ oozes over the ground!!", "@source@在地上散布！！", "_t")
+t("@source@ oozes over the ground!!", "@source@在地上散布粘液！！", "_t")
 t("Ooze over the floor, spreading caustic jelly in a radius of 1 lasting %d turns and dealing %d nature damage per turn to hostile creatures caught within.", "在 1 格范围内的地板上散布腐蚀性的粘液，持续 %d 回合，每回合对范围内所有敌对生物造成 %d 自然伤害。", "tformat")
 t("%d%% chance to split upon taking a single hit dealing at least %d%% of your maximum life.", "有 %d%% 的几率在受到至少相当于最大生命值 %d%% 的单次伤害时分裂。", "tformat")
 t("War Hound", "召唤：战争猎犬", "talent name")
@@ -16526,7 +16536,7 @@ t([[Inflicts %0.2f temporal damage.  If your target survives, it will be sent %d
 		Note that messing with the spacetime continuum may have unforeseen consequences.]], [[造成 %0.2f 时空伤害。如果你的目标存活，则它会被传送到 %d 回合后的未来。
 		它还会使你的紊乱值降低 25（如果你拥有紊乱值）。
 		注意，干扰时空连续体可能产生无法预料的后果。]], "tformat")
-t("Activate the rune to teleport up to %d spaces within line of sight.  Afterwards you stay out of phase for %d turns. In this state all new negative status effects duration is reduced by %d%%, your defense is increased by %d and all your resistances by %d%%.", "激活符文，传送到视野内 %d 格内的指定位置。之后，你会脱离相位 %d 回合。在这种状态下，所有新的负面效果的持续时间减少 %d%%， 你的闪避增加 %d， 你的全体伤害抗性增加 %d%%。", "tformat")
+t("Activate the rune to teleport up to %d spaces within line of sight.  Afterwards you stay out of phase for %d turns. In this state all new negative status effects duration is reduced by %d%%, your defense is increased by %d and all your resistances by %d%%.", "激活符文，传送到视野内 %d 格内的指定位置。之后，你会脱离现实 %d 回合。在这种状态下，所有新的负面效果的持续时间减少 %d%%， 你的闪避增加 %d， 你的全体伤害抗性增加 %d%%。", "tformat")
 t("range %d; phase %d; cd %d", "范围 %d； 相位 %d； 冷却 %d", "tformat")
 t([[Activate the rune to become ethereal for %d turns.
 		While ethereal all damage you deal is reduced by %d%%, you gain %d%% all resistance, you move %d%% faster, and you are invisible (power %d).]], [[启动符文，使你变得虚幻，持续 %d 回合。
@@ -16670,7 +16680,7 @@ t("Hits the target doing %d%% damage. If the attack hits, the target is afflicte
 t("Hits the target doing %d%% damage. If the attack hits, the target is afflicted with a disease, inflicting %0.2f blight damage per turn for %d turns and reducing dexterity by 10%% + 4.  The disease damage increases with your Strength, and the chance to apply it increases with your Physical Power.", "打击目标造成 %d%% 伤害，如果攻击命中可使目标感染疾病，造成每回合 %0.2f 枯萎伤害持续 %d 回合并降低其敏捷 10%%+4。疾病伤害受力量加成，附加几率受物理强度加成。", "tformat")
 t("Hits the target doing %d%% damage. If the attack hits, the target is afflicted with a disease, inflicting %0.2f blight damage per turn for %d turns and reducing strength by 10%% + 4.  The disease damage increases with your Strength, and the chance to apply it increases with your Physical Power.", "打击目标造成 %d%% 伤害，如果攻击命中可使目标感染疾病，造成每回合 %0.2f 枯萎伤害持续 %d 回合并降低其力量 10%%+4。疾病伤害受力量加成，附加几率受物理强度加成。", "tformat")
 t([[Condenses ambient water on a target, inflicting %0.1f cold damage.
-		The damage will increase with your Spellpower.]], [[将周围的水汽凝聚在目标身上，造成 %0.1f 冰冻伤害。
+		The damage will increase with your Spellpower.]], [[将周围的水汽凝聚在目标身上，造成 %0.1f 寒冷伤害。
 		伤害受法术强度加成。]], "tformat")
 t([[Conjures up a bolt of fire, setting the target ablaze and doing %0.2f fire damage over 3 turns.
 		The damage will increase with your Spellpower.]], [[召唤一枚火焰箭，点燃目标，并在 3 回合内造成 %0.2f 火焰伤害。
@@ -16681,7 +16691,7 @@ t([[Projects a bolt of pure blight, doing %0.2f blight damage.
 		此技能的暴击率增加 +%0.2f%%。
 		伤害受法术强度加成。]], "tformat")
 t([[Condenses ambient water on a target, inflicting %0.1f cold damage and stunning it for 4 turns.
-		The damage will increase with your Spellpower]], [[将周围的水汽凝聚在目标身上，造成 %0.1f 冰冻伤害并震慑目标 4 回合。
+		The damage will increase with your Spellpower]], [[将周围的水汽凝聚在目标身上，造成 %0.1f 寒冷伤害并震慑目标 4 回合。
 		伤害受法术强度加成。]], "tformat")
 t([[Fires a blast of void energies that slowly travel to their target, dealing %0.2f arcane damage on impact.
 		The damage will increase with your Spellpower.]], [[发射一团缓慢飞向目标的虚空能量，命中时造成 %0.2f 奥术伤害。
@@ -17341,7 +17351,7 @@ t([[When an attack would deal 15%% or more of your effective total health, you f
 		若你完全格挡一次攻击的全部伤害，攻击者会进入持续 1 回合的致命反击状态（对其发起的下一次普通近战或远程攻击将造成 200%% 伤害）。
 		技能等级 5 时，格挡效果将持续 2 回合。
 		伤害减免受精神强度加成。]], "tformat")
-t("%s's forge barrier", "%s的熔炉壁垒", "tformat")
+t("%s's forge barrier", "%s的熔炉外壁", "tformat")
 t([[Release the bellows of the forge upon your surroundings, inflicting %0.2f mind damage, %0.2f burning damage, and knocking back your enemies in a radius %d cone.
 		Empty terrain may be changed (50%% chance) for %d turns into forge walls, which block movement and inflict %0.2f mind and %0.2f fire damage on nearby enemies.
 		The damage and knockback chance will scale with your Mindpower.]], [[将梦之熔炉的风箱打开，朝向你的四周，对锥形范围内敌人造成 %0.2f 精神伤害， %0.2f 燃烧伤害并造成击退效果。锥型范围的半径为 %d 格。
@@ -18070,7 +18080,7 @@ t([[You activate a special mode of your golem, boosting its regeneration rate by
 		此技能激活时你的傀儡处于激怒状态，可增加 25%% 伤害。]], "tformat")
 t([[Increases your golem's life, mana and stamina regeneration rates by %0.2f.
 		At level 1, 3 and 5, the golem also gains a new rune slot.
-		Even without this talent, Golems start with three rune slots.]], [[增加傀儡 %0.2f 生命、法力和耐力回复。
+		Even without this talent, Golems start with three rune slots.]], [[傀儡的生命、法力和体力值回复速率各提高 %0.2f。
 		在等级 1、3、5 时，傀儡会增加 1 个新的符文孔。
 		即使没有此天赋，傀儡默认也有 3 个符文孔。]], "tformat")
 
@@ -18752,7 +18762,7 @@ t([[Take care of your golem:
 t([[Improves your golem's armour training, damage resistance, and healing efficiency.
 		Increases all damage resistance by %d%%; increases Armour value by %d, Armour hardiness by %d%%, reduces chance to be critically hit by %d%% when wearing heavy mail or massive plate armour, and increases healing factor by %d%%.
 		The golem can always use any kind of armour, including massive armours.]], [[提高傀儡护甲熟练度、伤害抗性和治疗系数。
-		增加 %d%% 所有伤害抗性；当装备 1 件锁甲或板甲时，增加 %d 点护甲和 %d%% 护甲强度，并减少 %d%% 被暴击率；增加 %d%% 治疗效果。
+		增加 %d%% 所有伤害抗性；当装备重甲或板甲时，增加 %d 点护甲和 %d%% 护甲强度，并减少 %d%% 被暴击率；增加 %d%% 治疗效果。
 		傀儡可以使用所有类型的护甲，包括板甲。]], "tformat")
 t("#Target# focuses on #Source#.", "#Target#将注意力集中到#Source#身上。", "logCombat")
 t("Teleport to your golem, while your golem teleports to your location. Your foes will be confused, and those that were attacking you will have a %d%% chance to target your golem instead.", "使用此技能后，你和傀儡将会交换位置。之前以你为目标的敌人有 %d%% 概率转而以傀儡为目标。", "tformat")
@@ -18829,7 +18839,7 @@ t([[Shatter all frozen targets in your line of sight, doing %0.2f cold damage.
 		伤害随法术强度提高。]], "tformat")
 t([[Surround yourself with Uttercold, increasing all your cold damage by %0.1f%% and ignoring %d%% cold resistance of your targets
 		In addition you pierce through iceblocks easily, reducing damage absorbed from your attacks by iceblocks by %d%%.]], [[使你周围的温度骤降，使你的寒冷伤害提高 %0.1f%%， 并无视目标 %d%% 寒冷抗性。
-		同时，你的破冰动作变得更加容易，减少 %d%% 冰层对你的攻击伤害格挡值。]], "tformat")
+		同时，你能轻易穿透冰块：冰块从你的攻击中吸收的伤害减少 %d%%。]], "tformat")
 
 ------------------------------------------------
 section "mod-tome/data/talents/spells/master-necromancer.lua"
@@ -19357,7 +19367,7 @@ t([[Hurl ice shards at the targets in the selected area. Each shard travels slow
 		If the target resists being frozen, it instead get wet.
 		If the target is wet the damage increases by 30%% and the ice freeze chance increases to 50%%.
 		This spell will never hit the caster.
-		The damage will increase with your Spellpower.]], [[朝指定区域内的所有目标发射寒冰箭。每根寒冰箭缓慢飞行，命中时造成 %0.2f 冰系伤害，并有 25%% 几率将其冻结。
+		The damage will increase with your Spellpower.]], [[朝指定区域内的所有目标发射寒冰箭。每根寒冰箭缓慢飞行，命中时造成 %0.2f 寒冰伤害，并有 25%% 几率将其冻结。
 		若命中后目标未处于冰冻状态，则会使其湿润。
 		如果目标处于湿润状态，伤害增加 30%%，同时冰冻率上升至 50%%。
 		此法术不会伤害施法者。
@@ -20033,9 +20043,9 @@ Incendiary - Targets struck by the explosion have their armor and saves reduced 
 Venomous - Shots deal an additional %d%% weapon damage as nature in a radius %d ball, which applies numbing poison as per Exotic Munitions. This cannot occur more than once per turn.
 Piercing - Shots deal %0.2f physical damage and maim the target, bleeding them for a further %0.2f physical damage over 5 turns and reducing all damage dealt by %d%%.
 The physical damage dealt, armor penetration and save reduction will increase with your Physical Power.]], [[混合你的弹药，造成更强力的效果：
-燃烧弹- 受到爆炸袭击的目标护甲和豁免减少 %d 持续 3 回合，你的物理和火焰穿透增加 %d%%.
+燃烧弹- 受到爆炸袭击的目标护甲和豁免减少 %d 持续 3 回合，你的物理和火焰穿透增加 %d%%。
 剧毒弹- 额外造成 %d%% 自然武器伤害，作用于半径 %d 的球形范围，并如同异种弹药一样施加麻木毒素。每回合最多生效一次。
-穿甲弹- 造成 %0.2f 物理伤害并使目标伤残（Maim），在 5 回合内额外流血造成 %0.2f 物理伤害，并使其造成的所有伤害减少 %d%%.
+穿甲弹- 造成 %0.2f 物理伤害并使目标伤残，在 5 回合内额外流血造成 %0.2f 物理伤害，并使其造成的所有伤害减少 %d%%。
 物理伤害、护甲和豁免削减受物理强度加成。]], "tformat")
 
 ------------------------------------------------
@@ -20106,7 +20116,7 @@ t("You fire an average of %0.1f shots at your target, doing %d%% damage with eac
 ------------------------------------------------
 section "mod-tome/data/talents/techniques/sniper.lua"
 
-t("You are being observed too closely to enter Concealment!", "你被近距离观察，不能进入 隐匿 状态！", "logPlayer")
+t("You are being observed too closely to enter Concealment!", "你正被近距离盯着，无法进入隐匿状态！", "logPlayer")
 t([[Enter a concealed sniping stance, increasing your weapon's attack range and vision range by %d, giving all incoming damage a %d%% chance to miss you, and causing your Headshot, Volley and Called Shots to behave as if the target was marked.
 Any non-instant, non-movement action will break concealment, but the increased range and vision and damage avoidance will persist for 3 turns, with the damage avoidance decreasing in power by 33%% each turn.
 This requires a bow to use, and cannot be used if there are foes in sight within range %d.]], [[进入隐匿的狙击状态，增加武器攻击范围和视野 %d 格，所有受到的伤害有 %d%% 几率被完全抵消，爆头、齐射和精准射击视为目标已被标记。
@@ -20470,7 +20480,7 @@ t([[Surround yourself with a malevolent aura that stores damage you deal.
 t("Possess Telos Top Half, Telos Bottom Half, and Telos Staff Crystal", "持有泰勒斯法杖的上半部，下半部和宝石。", "_t")
 t("#VIOLET#%s assembles %s!", "#VIOLET#%s组装出%s！", "logSeen")
 t("You have obtained the three parts of the Staff of Telos and studied them carefully. You believe that you can merge them back into a single highly potent staff.", "你已获得泰勒斯法杖的三个部件并仔细研究过。你相信自己能将它们重新合成为一根威力强大的法杖。", "tformat")
-t("Have dealt over 10000 arcane, fire, cold, lightning, light or nature damage", "曾造成超过 10000 点奥术、火焰、冰冷、闪电、光系或自然伤害", "_t")
+t("Have dealt over 10000 arcane, fire, cold, lightning, light or nature damage", "曾造成超过 10000 点奥术、火焰、寒冷、闪电、光系或自然伤害", "_t")
 t("%s surges with earthen power!", "%s涌起大地能量的狂潮！", "logSeen")
 t("%s surges with #PURPLE#arcane#LAST# power!", "%s涌起#PURPLE#奥术#LAST#能量的狂潮！", "logSeen")
 t("%s surges with #LIGHT_RED#fiery#LAST# power!", "%s涌起#LIGHT_RED#火焰#LAST#能量的狂潮！", "logSeen")
@@ -20502,7 +20512,7 @@ t([[Surround yourself with an elemental aura that stores damage you deal.
 		#YELLOW#光系：#LAST#		技能冷却时间减少 20%%，持续 3 回合。
 		#LIGHT_GREEN#自然：#LAST#		清除 1 个魔法负面特效并给予 2 回合魔法负面状态免疫。
 
-		同种效果最多每 10 回合触发一次。这不是普通的技能冷却。
+		同种效果最多每 10 玩家回合触发一次。这不是普通的技能冷却。
 		伤害和部分效果强度受灵巧值加成，伤害阈值受等级加成。
 		%s]], "tformat")
 t("All physical criticals reduce the remaining cooldown of a random technique or cunning talent by 2.", "每次物理暴击都会使随机 1 个冷却中的格斗或灵巧系技能的剩余冷却时间减少 2 回合。", "_t")
@@ -20578,9 +20588,8 @@ t("Spectral Shield", "幽灵之盾", "talent name")
 t("By infusing your shield with raw magic, your block can now block any damage type.", "向盾牌中灌注魔法力量，使格挡技能能够格挡任何类型的伤害。", "tformat")
 t("Have an effective defense of at least 40", "有效闪避值至少达到 40", "_t")
 t([[You gain 25%% absolute damage resistance and 25%% all damage penetration.  Each time you are struck by a weapon these bonuses are reduced by 5%% but fully recovered after 8 turns.
-			Additionally, you gain 70%% of the highest of your Magic or Dexterity stat as defense (%d)]], [[你获得 25%% 绝对伤害抗性，25%% 全体伤害抗性穿透。
-			每当你被武器攻击的时候，这两项加成各减少 5%%，8 回合后完全恢复。
-			此外，你将获得相当于你魔力和敏捷中最高的一项  70%% 的闪避值 (%d)]], "tformat")
+			Additionally, you gain 70%% of the highest of your Magic or Dexterity stat as defense (%d)]], [[你获得 25%% 绝对伤害抗性，25%% 全体伤害抗性穿透。每当你被武器攻击的时候，这两项加成各减少 5%%，8 回合后完全恢复。
+			此外，你将获得相当于魔力与敏捷中较高一项的 70%% 的闪避值 (%d)]], "tformat")
 t([[You manifest a thin layer of aether all around you. 
 		Any time you are the target of a dispel effect the aether strengthens around you, protecting you from the dispel and any further ones for 6 turns and unsustaining this spell.
 		While undisturbed the layer of aether provides you with 40 raw spellpower.]], [[你在身边形成薄薄的一层以太。
@@ -20658,7 +20667,7 @@ t([[You infuse blighted energies into all of your summons, granting them Bone Sh
 		- 骷髅法师：白骨之矛
 		- 骷髅弓箭手：白骨尖刺
 		- 骷髅战士：毁伤
-		- 骨巨人：白骨尖刺和 毁伤
+		- 骨巨人：白骨尖刺和毁伤
 		- 食尸鬼：剧毒瘟疫
 		- 噩灵：沉睡
 		%s
@@ -23000,7 +23009,7 @@ All mages use mana to cast their spells.
 It slowly replenishes over time.
 ]], [[魔法狩猎之后魔法并没有从马基·埃亚尔消失。
 
-在黄昏纪，当魔法狩猎接近尾声时，卡·克鲁尔的强大法师莱娜尼尔为各种族仅存的少数法师建立了一个避风港。
+在黄昏纪，当魔法狩猎接近尾声时，卡库罗尔的强大法师莱娜尼尔为各种族仅存的少数法师建立了一个避风港。
 这个地方就是安格利文，魔法之城，在这里，两千多年来一直传授魔法，以保存并发扬它。
 
 现在，你已经知道了这个故事，你可以在创建人物时选择新的职业 #LIGHT_GREEN#元素法师#WHITE#。
@@ -23012,7 +23021,7 @@ It slowly replenishes over time.
 - 涉猎幻术和幻象
 - 操控魔法本身的力量#WHITE#
 
-魔法师使用法力值来释放他们的法术。
+所有的法师使用法力值来释放他们的法术。
 法力值会随着时间缓慢恢复。
 ]], "_t")
 
@@ -23230,7 +23239,7 @@ Class evolutions are selected as prodigies and grant new ways to build and expan
 特性：
 - #GOLD#可以同时装备双手武器和盾牌#LAST#
 - 50% 伤害转化为 #GOLD#光系伤害#LAST#
-- #GOLD#光辉引力#LAST#：每当光明之刃命中时，其伤害变为半径2的球形伤害，且将5格范围内的所有敌人拉过来。
+- #GOLD#光辉引力#LAST#：每当光明之刃命中时，其伤害变为半径2的球形伤害，且将被命中目标周围5格内的所有敌人拉向该目标。
 - #GOLD#灼热之视#LAST# 的伤害和触发概率翻倍
 - #GOLD#阳光之怒#LAST# 触发时，裁决的剩余冷却时间减少6回合。
 - 与#GOLD#无御之日#LAST#联动。
@@ -23824,7 +23833,7 @@ t("The target's spellpower has been increased by %d and will continue to increas
 t("+Gather the Threads", "+聚拢时间线", "_t")
 t("-Gather the Threads", "-聚拢时间线", "_t")
 t("The target's resistances have been reduced by %d%%.", "目标的所有抗性降低 %d%%。", "tformat")
-t("Increases the target combat power, spellpower, accuracy by %d, armour penetration by %d and critical chances by %d.", "目标的攻击强度、法术强度和命中提高 %d 点，护甲穿透提高 %d 点，暴击率提高 %d 点。", "tformat")
+t("Increases the target combat power, spellpower, accuracy by %d, armour penetration by %d and critical chances by %d.", "目标的物理强度、法术强度和命中提高 %d 点，护甲穿透提高 %d 点，暴击率提高 %d 点。", "tformat")
 t("#Target# seems less powerful.", "#Target#似乎变弱了。", "_t")
 t("Any attacks doing more than %d%% of your life is reduced to %d%%.", "所有超过你生命值 %d%% 的伤害都会被降低至 %d%%。", "tformat")
 t("Temporal Destabilization", "时空失稳", "_t")
@@ -24207,6 +24216,7 @@ t("Your telekinesis transcends normal limits. +%d Physical damage and +%d%% Phys
 t("A psionic shield forms around #target#.", "#target#周围形成一层灵能护盾。", "_t")
 t("The psionic shield around #target# crumbles.", "#target#周围的灵能护盾破碎了。", "_t")
 t("An unseen force strikes %s targets in a range of %d around this creature every turn, doing %d damage and knocking them back for %d tiles.", "不可见的力量每回合打击该生物周围%d格的%s个目标，造成%d伤害，并将其击退%d格。", "tformat", {2, 1, 3, 4})
+t("Lightning Catcher has caught energy and is empowering you for +%d%% lightning damage and +%d to all stats.", "雷电接收器捕获了能量，增加%d%%闪电伤害与%d点全属性。", "tformat")
 t("The target is doomed to die a bloody death.  Each time it uses an ability it takes %0.2f physical damage, and incoming bleeds are strengthened by %d%%.", "目标注定要流血而死。每次使用技能时受到%0.2f物理伤害。接下来受到的流血效果增强 %d%%。", "tformat")
 
 ------------------------------------------------
@@ -24230,7 +24240,7 @@ t("#Target#'s light is back.", "#Target#的光明回复了。", "_t")
 t("All damage penetration increased by %d%%.", "所有抗性穿透增加 %d%%。", "tformat")
 t("All damage increased by %d%%.", "所有伤害增加 %d%%。", "tformat")
 t("All saves increased by %d.", "所有豁免增加 %d。", "tformat")
-t("Fatigue reduced by %d%%.", "疲劳减少 %d%%。", "tformat")
+t("Fatigue reduced by %d%%.", "疲劳值减少 %d%%。", "tformat")
 t("#LIGHT_BLUE##Target# takes root.", "#LIGHT_BLUE##Target#扎根了。", "_t")
 t("The more you use infusions, the longer they will take to recharge (+%d cooldowns).", "你使用纹身的次数越多，纹身冷却时间越长 (+%d 冷却时间)。", "tformat")
 t("The more you use runes, the longer they will take to recharge (+%d cooldowns).", "你使用符文的次数越多，符文冷却时间越长 (+%d 冷却时间)。", "tformat")
@@ -24439,7 +24449,7 @@ t("died a well-deserved death by exsanguination", "因失血过多而死，罪�
 ------------------------------------------------
 section "mod-tome/data/timed_effects/physical.lua"
 
-t("Scoured by natural acid, reducing their offensive power ratings by %d%%.", "被自然酸液冲刷，降低攻击强度 %d%%。", "tformat")
+t("Scoured by natural acid, reducing their offensive power ratings by %d%%.", "被自然酸液冲刷，降低物理、法术和精神强度 %d%%。", "tformat")
 t("#Target# power has recovered.", "#Target#的强度恢复了。", "_t")
 t([[Attuning to the flow of combat, increasing their combat stats.  
 Defense:  %d
@@ -24720,7 +24730,7 @@ t("A page of a diary.", "日记的一页。", "_t")
 t("A scrap of paper.", "一张纸片。", "_t")
 t("Rod of Spydric Poison", "蜘蛛之毒杖", "entity name")
 t("poison dripping wand", "滴着毒液的魔杖", "_t")
-t("This rod carved out of a giant spider fang continuously drips venom.", "这根法杖由巨大蜘蛛的毒牙雕刻而成，不断往下滴落毒液。", "_t")
+t("This rod carved out of a giant spider fang continuously drips venom.", "这根魔杖由巨大蜘蛛的毒牙雕刻而成，不断往下滴落毒液。", "_t")
 t("shoot a bolt of spydric poison out to range %d, dealing %0.2f nature damage (based on Magic) over %d turns while rendering the target unable to move", "发射蜘蛛毒素，对%d格内的敌人造成%0.2f点自然伤害（基于魔力），该伤害在%d回合内分次造成，期间目标无法移动", "tformat")
 t("%s activates %s %s!", "%s激活了%s%s！", "logSeen")
 
@@ -25189,7 +25199,9 @@ t("#VIOLET#You seem to understand the basic martial pratices. (Combat Training t
 t("#VIOLET#You seem to now know how to properly use a bow or a sling.", "#VIOLET#你似乎学会了如何使用弓和投石索。", "logPlayer")
 t("#VIOLET#Images of yourself beating people with a stick spring into your mind. (Staff Combat category can be bought)", "#VIOLET#你用木棒击打他人的画面浮现在你的脑海中。（能购买法杖格斗系）", "logPlayer")
 t("#VIOLET#It seems you already knew all the elixir could teach you.", "#VIOLET#似乎你已经学会了它能教你的一切。", "logPlayer")
+t("Antimagic Wyrm Bile Extract", "反魔巨龙胆汁药剂", "entity name")
 t("phial filled with slimy liquid", "装满黏糊糊液体的小瓶", "_t")
+t("This potent elixir extracted from a powerful wyrm can grant the power to repel arcane forces.", "这种强大的药剂提取自一头巨龙的胆汁，可以给予你对抗魔法的力量。", "_t")
 t("You cannot use your %s anymore; it is tainted by magic.", "你不能再使用 %s，它已被魔法所污染。", "logPlayer")
 
 ------------------------------------------------
@@ -25365,7 +25377,7 @@ section "mod-tome/data/zones/old-forest/npcs.lua"
 t("This crystalline structure seems to be filled with a malevolent aura. Through the crystal surface you can still see the remains of what once was a huge tree.", "这个水晶一样的生物内部似乎充满了邪恶能量，透过水晶表面，你仍能看到里面一棵巨树的残骸。", "_t")
 t("and integrated into the crystaline structure", "并将其融入了自身的水晶结构", "_t")
 t("Have you heard, the old forest seems to have been claimed by a new evil!", "你有听说过吗，古老森林似乎已经被一股新的邪恶势力占据了！", "_t")
-t("The ancient grey willow tree, ruler of the Old Forest. He despises trespassers in his territory.", "这棵古老的灰色柳树，古老森林的统治者。他蔑视一切擅闯他领地的人。", "_t")
+t("The ancient grey willow tree, ruler of the Old Forest. He despises trespassers in his territory.", "这是一棵古老的灰色柳树，古老森林的统治者。他蔑视一切擅闯他领地的人。", "_t")
 t("and digested by treants", "并让树人们将其化为养分", "_t")
 t("It looks at you with cute little eyes before jumping at you with razor sharp teeth.", "它用无辜的眼神看着你，随即用剃刀般锋利的牙齿扑向你。", "_t")
 t("This ancient Treant's bark is scorched almost black. It sees humanity as a scourge, to be purged.", "这棵远古树人的树皮被烧得几乎焦黑。它视人类为必须清除的祸害。", "_t")
@@ -25443,12 +25455,15 @@ section "mod-tome/data/zones/reknor/npcs.lua"
 t("A huge and muscular orc of unknown breed. He looks both menacing and cunning...", "一只种类不明、肌肉发达的巨大兽人。他看起来既危险又狡猾……", "_t")
 t("They say that after it has been confirmed orcs still inhabited Reknor, they found a mighty demon there.", "据说在确认兽人仍居住在瑞库纳之后，他们在那里发现了一个强大的恶魔。", "_t")
 t("When last you saw it, this cavern was littered with the corpses of orcs that you had slain. Now many, many more corpses carpet the floor, all charred and reeking of sulfur. An orange glow dimly illuminates the far reaches of the cavern to the east.", "你上次过来时，这个洞穴里满是你杀死的兽人尸体。现在，更多的尸体铺在了地上，尽皆焦黑，散发着刺鼻的硫磺味。昏暗的橙色光芒隐约照亮了洞穴东面的深处。", "_t")
+t("Harno, Herald of Last Hope", "最后的希望城的传令官哈诺", "entity name")
+t("This is one of the heralds of Last Hope. He seems to be looking for you.", "他是最后的希望城的传令官之一。他似乎找你有事。", "_t")
 t("A terrible demon of decay and atrophy, drawn to the energy of the farportal. A beast of blight!", "一只缠绕着枯萎和衰竭的可怕恶魔，他被远行传送门的能量吸引而来。这只瘟神！", "_t")
 t("A careful examination of the demon's body turns up a Blood-Runed Athame and a Resonating Diamond, both covered in soot and gore but otherwise in good condition.", "仔细检查恶魔的尸体，你发现了一把血符仪式匕首和一块共鸣钻石。两者都沾满烟尘和血污，但除此之外仍完好无损。", "_t")
 
 ------------------------------------------------
 section "mod-tome/data/zones/reknor/objects.lua"
 
+t("Sealed Scroll of Last Hope", "最后的希望城的密封卷轴", "entity name")
 t("Iron Throne Profits History", "钢铁王座的盈利历史", "entity name")
 t("Last words of a dwarven expedition to secure Reknor.", "前往夺回瑞库纳的矮人远征队留下的最后记录。", "_t")
 
@@ -25555,7 +25570,7 @@ t("The sandworms are gone, devoured by this shrieking, warped horror.", "沙虫�
 ------------------------------------------------
 section "mod-tome/data/zones/sandworm-lair/objects.lua"
 
-t("Some people get the weirdest ideas!", "有些人有最奇怪的想法！", "_t")
+t("Some people get the weirdest ideas!", "有些人的想法可真够怪的！", "_t")
 t([[The heart of the Sandworm Queen, ripped from her dead body.
 You could ... consume it, should you feel mad enough or you could try to corrupt it somewhere.]], [[从沙虫女皇尸体上割下的心脏。
 如果你足够疯狂，可以……吃下它；或者，你也可以试着找个地方腐化它。]], "_t")
@@ -26182,7 +26197,7 @@ t([[Secret place of magic, set apart from the world to protect it.
 Lead by the Supreme Archmage Linaniil.]], [[魔法的隐秘圣地，为了保护它而与世隔绝。
 由超阶魔导师莱娜尼尔统领。]], "_t")
 t("Capital city of Thaloren lands, ruled by Nessilla Tantaelen", "自然精灵领地的首都，由奈希拉·坦泰兰统治", "_t")
-t("Capital city of Shaloren lands, ruled by Aranion Gayaeil", "永恒精灵领地的首都，由阿兰尼恩·葛艾尔统治", "_t")
+t("Capital city of Shaloren lands, ruled by Aranion Gayaeil", "永恒精灵领地的首都，由艾伦尼恩·加威尔统治", "_t")
 t("A massive hole in the Sunwall.", "太阳堡垒群山中的一个巨大洞口。", "_t")
 t("Yeek Wayist main village", "夺心魔维网信徒主村", "_t")
 t("Ziguranth main training ground", "伊格兰斯的主要训练基地", "_t")
@@ -26541,11 +26556,11 @@ t([[Talent category points allow you to either:
 You gain a new point at level 10, 20 and 34.
 Some races or items may increase them as well.]], [[技能树解锁点有以下作用：
 - 解锁职业或通用技能树
-- 提升已解锁技能树的精通度，每点提升 0.2
+- 提升已解锁技能树的掌握度，每点提升 0.2
 - 解锁新的刻印位（最多 5 个，你使用刻印时会自动消耗点数解锁）
 
 你会在人物等级达到 10、20 和 34 级时各获得 1 个点数。
-某些种族和物品可以获得额外的点数。]], "_t")
+某些种族和物品可以增加点数。]], "_t")
 t([[Prodigies are special talents that only the most powerful of characters can attain.
 All of them require at least 50 in a core stat and many also have more special demands. You can learn a new prodigy at level 25 and 42.]], [[觉醒技是角色足够强大时才能获得的特殊技能。
 所有觉醒技都要求某项核心属性达到 50 点，其中许多还有更特殊的额外要求。你可以在人物等级达到 25 级和 42 级时各获得一个觉醒技能点。]], "_t")
@@ -27802,7 +27817,7 @@ t("All enemies in radius 2 take 20 fire damage each turn and healing you for 10%
 t("Plague-Fire Sceptre", "疫火权杖", "entity name")
 t("The flames of Mal'Rok can be more stubborn than most. When they run out of fuel they have been known go out of their way to find more.", "玛·洛克的火焰比一般的火焰更加顽强。燃料耗尽时，它们甚至会特意去寻找更多燃料。", "_t")
 t("Plaguefire detonates when its victim dies, spreading to other enemies up to two times.", "瘟疫之焰感染的生物死亡时，瘟疫之焰会爆炸并传播到附近的敌人，至多传播2次。", "_t")
-t("fire a bolt of plaguefire, dealing damage over time based on your magic stat", "发射一枚疫火弹，造成基于魔力属性的持续伤害。", "_t")
+t("fire a bolt of plaguefire, dealing damage over time based on your magic stat", "发射一道瘟疫之焰箭，造成基于魔力属性的持续伤害。", "_t")
 t("Dethblyd", "死亡之刃", "entity name")
 t("pitch black sword", "黑色的剑", "_t")
 t("Grushgore the Destroyer was as famous for his incredible brutality as he was for his childlike intelligence. He wasn't known for his subtlety of naming, but there's no denying the power of his massive sword.", "毁灭者格鲁什戈尔既以惊人的残暴著称，也以孩童般的智力闻名。他给东西起名向来不讲究含蓄，但他那把巨剑的威力毋庸置疑。", "_t")
@@ -28464,7 +28479,7 @@ t([[Whenever you block an attack with your shield, you randomly hex the attacker
 		这一效果最多每回合触发一次。]], "tformat")
 t("Cursed Arm", "诅咒之手", "talent name")
 t([[Whenever make a melee attack, you have a %d%% chance to randomly curse the target with one of the curses: Defenselessness, Impotence, Death or Vulnerability as if cast at talent level %d.
-		This may only happen once per turn.]], [[每当你进行一次近战攻击，你有 %d%% 几率随机对目标释放一次诅咒：衰竭诅咒、虚弱诅咒、死亡诅咒或弱点诅咒，技能等级为 %d。
+		This may only happen once per turn.]], [[每当你进行一次近战攻击，你有 %d%% 几率随机对目标释放一次诅咒：无防备诅咒、虚弱诅咒、死亡诅咒或弱点诅咒，技能等级为 %d。
 		这一效果最多每回合触发一次。]], "tformat")
 t("Doom Storm", "毁灭风暴", "talent name")
 t("Frostfire Nova", "霜火爆炸", "talent name")
@@ -28964,7 +28979,7 @@ t("-Unable to act", "-无法行动", "_t")
 t("Suffered", "被折磨", "_t")
 t("The target has recently suffered, and cannot do so again yet.", "目标最近被折磨过，暂时不会再次受到折磨。", "_t")
 t("#Target# suffers!", "#Target#被折磨！", "_t")
-t("+Eternal Suffering", "+永恒折磨", "_t")
+t("+Eternal Suffering", "+无尽苦痛", "_t")
 t("Cleansing flames", "净化之焰", "_t")
 t("The target is purified by fire, losing %0.2f%% of their max health per turn.", "目标被火焰净化，每回合损失 %0.2f%% 最大生命值的生命。", "tformat")
 t("#Target# is purified by fire.", "#Target#被火焰净化。", "_t")
@@ -29431,7 +29446,7 @@ User's biological signature indicates dangerous degeneration of genome due to un
 t("Genome?", "基因组？", "_t")
 t([[#YELLOW_GREEN##{bold}#The device beeps again and speaks.#{normal}##LAST#
 No signs of life detected. User appears to be still moving despite absence of living tissue. Sending information for further analysis.]], [[#YELLOW_GREEN##{bold}#这个机器哔哔了几下，又说了起来。#{normal}##LAST#
-没有检测到生命信号。目标看上去在活动，但没有活着的生物组织。正在发送信息以供进一步分析。]], "_t")
+没有检测到生命信号。用户看上去仍在活动，但没有活着的生物组织。正在发送信息以供进一步分析。]], "_t")
 t("Never seen an undead have you?", "你没见过不死生物吗？", "_t")
 t([[#YELLOW_GREEN##{bold}#The device beeps again and speaks.#{normal}##LAST#
 User's biological signature does not match any currently known species in database. Sending information for further analysis.]], [[#YELLOW_GREEN##{bold}#这个机器哔哔了几下，又说了起来。#{normal}##LAST#
@@ -29609,7 +29624,7 @@ t("#{italic}##LIGHT_GREEN#Enabling protective electromagnetic barrier and real t
 t("Fanged Collar", "利牙项环", "entity name")
 t("It's a head... but is it yours?", "这是一个头…但是这是你的头吗？", "_t")
 t("Spinal Cage", "脊笼", "entity name")
-t("gross mass of spinal matter", "一堆脊柱碎片", "_t")
+t("gross mass of spinal matter", "一大团脊柱物质", "_t")
 t("A gross mass of spinal matter hastily assembled into armour.", "一大团令人作呕的、被匆忙拼装成护甲的脊柱物质。", "_t")
 t("Infused Cerebrum", "被灌注的大脑", "entity name")
 t("a disgusting pile of brain-matter", "一团令人厌恶的大脑组织", "_t")
@@ -29746,7 +29761,7 @@ t("Sometimes reveals the hidden truths you'd rather not see.", "有时会揭示�
 t("#YELLOW#Light of Revelation shines on %s revealing its true nature as %s!", "#YELLOW#揭示之光照耀着%s，显露出它的真面目：%s！", "say")
 t("Glowing Core", "光亮之核", "entity name")
 t("burning core", "燃烧的核心", "_t")
-t("This is all that's left of the Searing Horror. Even after its death, the object in your hand glows just as brightly as it did before.", "这是灼热恐魔仅剩的残骸。即使它已经死去，你手中的物体依然如从前一样闪耀着光芒。", "_t")
+t("This is all that's left of the Searing Horror. Even after its death, the object in your hand glows just as brightly as it did before.", "这是灼光恐魔仅剩的残骸。即使它已经死去，你手中的物体依然如从前一样闪耀着光芒。", "_t")
 t("Shoes of Moving Slowly", "缓步之靴", "entity name")
 t("restful shoes", "放松的鞋子", "_t")
 t([[Fast does not always win.
@@ -30104,7 +30119,7 @@ Putting the chest in my pack, I began to make my way towards the road leading to
 
 我能感觉到他的语气变得沉重，他继续说：“然后他们来到埃尔瓦拉，想要对我们做同样的事情。也许你穿过埃尔瓦拉帷幕进来时，已经看到了他们的一些尸体。”他沉默了片刻，我也渐渐体会到了他这番话的分量。紧接着，他又用正常的语气继续说：“当然，让我无法派出特使的，并不只是人们一时的愤怒，还有人在煽动其他地方的人民采取行动。我不知道是谁，也不知道是什么组织在这么做，但是我听到了那些人类高喊着的口号，所以深感忧虑。”
 
-将军的视线和我交汇，他严肃的态度吸引了我。我迫不及待地问：“他们喊了什么？”他用和之前一样严肃的语气说：“他们高喊，‘永恒精灵要为魔法大爆炸付出代价！’”我有些不解地问：“他们对你发怒本就有理由，你为什么要害怕几句表达愤怒的话呢？”对此，我得到了坚定的回答，“因为只有少数人知道，我们把我们的宏伟计划称为‘魔法大爆炸’。对于其他种族的领袖，甚至是你的国王和王后，我们只提到，我们将利用夏·图尔废墟来完成一项伟大的魔法壮举。有人告诉那些人类平民，我们对此负有责任，但他们说漏了嘴。我看得出，有人正在针对我的族人进行某种秘密行动。”
+将军的视线和我交汇，他严肃的态度吸引了我。我迫不及待地问：“他们喊了什么？”他用和之前一样严肃的语气说：“他们高喊，‘永恒精灵要为魔法大爆炸付出代价！’”我有些不解地问：“他们对你发怒本就有理由，你为什么要害怕几句表达愤怒的话呢？”对此，我得到了坚定的回答，“因为只有少数人知道，我们把我们的宏伟计划称为‘魔法大爆炸’。对于其他种族的领袖，甚至是你的国王和王后，我们只提到，我们将利用夏·图尔废墟来完成一项伟大的魔法壮举。有人告诉那些人类平民是我们干的，可那人说漏了嘴，用了这个名字。我看得出，有人正在针对我的族人进行某种秘密行动。”
 
 我沉默了一会儿，最后才从座位上站起来。我做出了最后的决定，坚定地说：“那我就替你运输你的援助物资。你要我怎么办？”将军放松下来，马上回答我说：“想必你也清楚，永恒精灵并不常用纹身或其他任何自然疗法。不过，我们确实储存了不少原料，把它们送去援助其他地方，更能派上用场。我会采购一个特殊的箱子，可以用来储存所有能匀出来的原料，让你把它送到附近的纳格尔王国。现在，许多来自其他种族的难民涌入他们的首都，他们可能没有足够的原料来制造他们需要的所有纹身。”
 
@@ -30244,7 +30259,7 @@ A group of the Nargol Guards would eventual appear and they began to gather them
 
 当我凝视时，声音又响起了。“你们胡乱地把怒火指向不该受责难的人，我说，应当把怒火指向造成所有悲剧的根源。”我开始在人群中挤过去，想知道谁在说话，他们在说什么。声音继续说：“无论魔法存在于何处，它迟早都会失控，带来灾难。今早发生的火灾就是一个例子，一群难民闯进仓库，试图取回他们被没收的魔法物品。因为他们的狂妄，他们借助其中物品蕴含的奥术力量烧毁了这座建筑。”
 
-我朝中间走去，抬头看见一个半身人和一个人正对着人群。他们都戴着面具，隐藏了身份，但我认出了人类穿的深色斗篷。见那个人类举起手臂，我猜是他在说话，但我不能肯定，因为面具遮住了他们的面部表情。声音又响了起来：“这场大火夺去了许多在附近家中熟睡的居民的生命，又有更多人死于魔法。这件事唯一称得上好事的是，他们试图拿走的那些魔法物品，有许多在随后的大火中被焚毁，再也不会玷污这个世界。”
+我朝中间走去，抬头看见一个半身人和一个人类正对着人群。他们都戴着面具，隐藏了身份，但我认出了人类穿的深色斗篷。见那个人类举起手臂，我猜是他在说话，但我不能肯定，因为面具遮住了他们的面部表情。声音又响了起来：“这场大火夺去了许多在附近家中熟睡的居民的生命——又是一批死于魔法的人。这件事唯一称得上好事的是，他们试图拿走的那些魔法物品，有许多在随后的大火中被焚毁，再也不会玷污这个世界。”
 
 那些话刺入我的脑海，随着那人继续说下去，我能感觉到他声音中的愤怒。我看到周围的人也被这些话及其中的情绪所左右。很多人开始高叫着：“魔法就是一切的罪魁祸首”和“消灭所有魔法”这样的话，声音又在继续，“当然，你们早已亲眼见识过那些灾难，何须我再多说。就像刚才那些导致仓库被烧毁的行为一样，是永恒精灵法师发动了魔法大爆炸，摧毁了土地，扭曲了天空。正如我一直在说的，无论魔法存在于何处，它迟早都会失控，带来灾难。”
 
@@ -30282,7 +30297,7 @@ I jostled around attempting to break free of the halfling’s hold, yet somehow 
 
 我重重地摔在帐篷后部。头晕目眩中，我开始起身，抬头想看是谁把我扔进来的，结果与一个蒙面人面对面；我猜他也参与了我刚才目睹的事件。蒙面人慢慢抬手摘下面具，露出人类信使的脸。他笑了起来，最后开口说：“想不到在这里遇见你。我们在客栈交谈时，我就看出了你有些与众不同。”我起身时，信使又笑了几声。想必是刚才那一下把我撞得有些发懵，我的视线一片模糊，帐篷里的东西也混作一团。我质问信使：“你想干什么？为什么把我扔进这里？”
 
-信使不再笑了，脸上露出平静的笑容：“当然是因为我想和你谈谈。你来到这里、来到纳格尔王国时，是来做什么的？”我听到这话僵住了，不知道自己的处境有多危险。信使反常地沉默着站在那里，目光仿佛在读取我脑中飞掠而过的念头。我吓得结结巴巴地说：“我——我来送、送一些医、医疗物资，给纳、纳格尔人用、用的。”信使猛地扇了我一巴掌，沉重的一击把我打得踉跄着跌向帐篷一侧。信使提高嗓门说：“没错。”随后转头朝我吼道：“是从永恒精灵那里来的！”
+信使止住笑声，脸上浮现出平静的微笑：“当然是因为我想和你谈谈。你来到这里、来到纳格尔王国时，是来做什么的？”我听到这话僵住了，不知道自己的处境有多危险。信使反常地沉默着站在那里，目光仿佛在读取我脑中飞掠而过的念头。我吓得结结巴巴地说：“我——我来送、送一些医、医疗物资，给纳、纳格尔人用、用的。”信使猛地扇了我一巴掌，沉重的一击把我打得踉跄着跌向帐篷一侧。信使提高嗓门说：“没错。”随后转头朝我吼道：“是从永恒精灵那里来的！”
 
 信使向前一步，狠狠踢中我的腹部，力道令我喘不过气并摔倒在地。紧接着，他又用脚后跟朝我脸上踢了一脚，鲜血涌了出来。信使弯腰揪住我的头发，把我拉近他的脸，唾沫和话语一起喷到我脸上：“自从你杀了那个艾德瑞尔半身人，我就高看你一眼。我以为你可能也是自然的盟友，但事实并非如此，对吧？你去到了那些永恒精灵那里，越过了他们用来躲避我们的那堵魔法烟墙。你本可以宣泄一小部分自然之怒，但你非但没有降下自然的怒火，反而背弃自然，与那些给我们带来魔法大爆炸的人站到了一边！”
 
@@ -30404,7 +30419,7 @@ Asking him what was wrong the dark blue glow went away from the ogres eyes and I
 
 “简单来说，他的视野符文能让他看到追捕我们的人的大致位置。实际情况更加复杂，但是他可以看清楚那些跟随我们的狂热者在哪里，他们与我们的位置有多接近，这对我们就足够了。”食人魔可以做到这一点令我印象深刻，我想知道符文还能让食人魔做些什么。我想，在我们相对安全的时候，也许我应该多向食人魔打听一下他们的符文。突然，我听到一声咒骂，转头看见那个食人魔双眼泛着深蓝色光芒，似乎正望向我们前方的什么东西。
 
-当我问他出了什么问题时，深蓝的光芒从食人魔的眼睛里消失了，我静静地听到他严肃地回答：“我们面前有一群人，他们当中肯定也有狂热者。”这时，其他食人魔的脸上都露出了彻底绝望的神情。我能听到身后的喊声。有人说：“我们现在该怎么办？”另一个人说：“我不想回去！”每时每刻都有另一个食人魔吐出怯懦的话语，直到整群人似乎都陷入了恐惧之中。这可悲的一幕持续了片刻，直到那个抓住我手臂的食人魔放开了我，对其他人喊道：“你们哭够了！”其他的食人魔迅速沉默了下来，抬起头来，好像在等待下一步的指示。]], "_t")
+当我问他出了什么问题时，深蓝的光芒从食人魔的眼睛里消失了，我只听他严肃地低声答道：“我们面前有一群人，他们当中肯定也有狂热者。”这时，其他食人魔的脸上都露出了彻底绝望的神情。我能听到身后的喊声。有人说：“我们现在该怎么办？”另一个人说：“我不想回去！”每时每刻都有另一个食人魔吐出怯懦的话语，直到整群人似乎都陷入了恐惧之中。这可悲的一幕持续了片刻，直到那个抓住我手臂的食人魔放开了我，对其他人喊道：“你们哭够了！”其他的食人魔迅速沉默了下来，抬起头来，好像在等待下一步的指示。]], "_t")
 t("Escapades of Fay Willows [Book 3, Chapter 3] - Battle Preparations", "菲·维莉欧斯的冒险 [第3卷，第3章] - 准备战斗", "_t")
 t([[[i]I had never seen a battle before in my life, let alone been a part of one. However I do not believe this is necessarily the case for the ogres. They say that they lived as nomadic peddlers but I wonder if perhaps that was just a cover story for themselves. Maybe they hired themselves out as mercenaries or other such adventures of combat? It is hard to know what lies within their past.[/i]
 
@@ -30754,7 +30769,7 @@ Eventually some veteran shaloren soldiers offered to spar with me too. From that
 
 It would also be within the military that I would get to learn a great deal about controlling my emotions. Enrolled in a program for those with unique abilities, I would slowly begin to learn more about the dark condition affecting my body and how I could use it to my advantage. I would learn about how I could effect my surroundings, both inanimate and living, and in some cases I would even be allowed to practice trying to use the dark thoughts inside me against others. I can't say I ever gained full control over the chaotic energies within me, but through concentration I would learn how to at least direct it away from others and prevent it from affecting people in my vicinity.
 
-When I look back at the many events the occurred after the Spellblaze, I wonder what life might have held for me had I not left to travel as I did. Much time has now passed since the time of my initial journey, but I consider whether now is the time that I will leave Elvala to explore distant lands and see what has become of everything in the world. I wonder how the rest of the people in Eyal are faring and whether the lands have shown any signs of healing, as well as wonder what has happened to my fellow thaloren back home. Whatever may lie in my future I know that I am ready to make my way through it. And when I do, my escapades will continue once more!]], [[[i]随着时间的推移，食人魔和永恒精灵慢慢适应了他们与世隔绝的生活。[/i]永恒精灵慢慢地从北方被遗弃的定居点秘密地集结起来，带上各自的物品，然后迅速着手制作永久性的工具，以确保隐藏埃尔瓦拉的帷幕能够维持下去。他们随后努力扩大帷幕，使其覆盖埃尔瓦拉周围的所有森林，将永恒精灵半岛与外界隔绝。在那之后，许多永恒精灵开始研究他们曾经释放出来的混乱能量，希望更多地了解它们造成的破坏，以及这些破坏会给埃亚尔留下什么影响。
+When I look back at the many events the occurred after the Spellblaze, I wonder what life might have held for me had I not left to travel as I did. Much time has now passed since the time of my initial journey, but I consider whether now is the time that I will leave Elvala to explore distant lands and see what has become of everything in the world. I wonder how the rest of the people in Eyal are faring and whether the lands have shown any signs of healing, as well as wonder what has happened to my fellow thaloren back home. Whatever may lie in my future I know that I am ready to make my way through it. And when I do, my escapades will continue once more!]], [[[i]随着时间的推移，食人魔和永恒精灵慢慢适应了他们与世隔绝的生活。[/i]永恒精灵慢慢地从北方被遗弃的定居点秘密地集结起来，带上各自的物品，然后迅速着手打造永久性的装置，以确保隐藏埃尔瓦拉的帷幕能够维持下去。他们随后努力扩大帷幕，使其覆盖埃尔瓦拉周围的所有森林，将永恒精灵半岛与外界隔绝。在那之后，许多永恒精灵开始研究他们曾经释放出来的混乱能量，希望更多地了解它们造成的破坏，以及这些破坏会给埃亚尔留下什么影响。
 
 [i]食人魔在半岛南部定居下来，为自己重建新的生活。[/i]他们帮助种植和收获食物来养活每一个人，并从事永恒精灵不适合从事的更辛苦的工作。许多人生下了孩子，大批年幼的食人魔让他们原本有限的人口得以增长。一些食人魔也从事与符文和纹身有关的职业，虽然我对符文的知识还相当有限，但我可以从他们的手艺中看出，他们的纹身知识和技能与我在家乡认识的许多自然精灵一样好。尽管食人魔也有过一些分歧，但他们还是设法与永恒精灵建立了良好的关系，我希望这种关系能长久持续下去。
 
@@ -31210,7 +31225,7 @@ t([[Azorol was the great marksman. She was an instructor in the use of weapons a
 
 For her, the spear Thoral was made, a throwing weapon of unparalleled might. She seemed to care little for the reasons behind the Godhunt, for the spear alone was a great enough prize for her. With this new weapon, there were tales of Azorol striking targets in the darkness beyond our world while standing on the flat plains of Eyal. She proved to be one of the mightiest of the Godslayers, for there was nowhere on Eyal which was safe from Thoral and its user.
 
-Judging by surviving records, she was one of the Godslayers who was killed during the climax of the Godhunt. The fate of the spear Thoral is unknown.]], [[阿茨萝尔是一位神射手。她指导如何使用兵器，并且看起来十分青睐使用古老的武器。许多夏·图尔人认为她这样是愚蠢的，因为他们无法理解她为何在一个有着更具毁灭性的杀器的时代，还要使用这些原始的投射武器。但不管批评多么苛刻，她都从不放弃自己的道路，因为她相信保留古老的作战方式自有其价值。许多故事都讲述了她百发百中的本领，不管目标多么渺小，又不管距离多么遥远，她掷出的重矛从不失手。
+Judging by surviving records, she was one of the Godslayers who was killed during the climax of the Godhunt. The fate of the spear Thoral is unknown.]], [[阿茨萝尔是一位神射手。她是一名兵器教官，并且看起来十分青睐古老的武器用法。许多夏·图尔人认为她这样是愚蠢的，因为他们无法理解她为何在一个有着更具毁灭性的杀器的时代，还要使用这些原始的投射武器。但不管批评多么苛刻，她都从不放弃自己的道路，因为她相信保留古老的作战方式自有其价值。许多故事都讲述了她百发百中的本领，不管目标多么渺小，又不管距离多么遥远，她掷出的重矛从不失手。
 
 长矛索拉尔为她而铸造，这是一把有着无上力量的投掷武器。她看起来丝毫不关心弑神之战背后的原因，因为这柄长矛对她而言已经是足够的奖赏了。传说中阿茨萝尔就是用这柄长矛，站在埃亚尔的旷野之上就能命中我们世界之外黑暗深空中的敌人。她被证明是弑神者中的最强者之一，因为只要她手中握着索拉尔，整个埃亚尔就没有任何藏身之处。
 
@@ -31397,7 +31412,7 @@ When we return to the Sanctuary triumphant, we shall be hailed as saviours and t
 当我们得胜回到避难所的时候，我们一定会被视为救世主。那些人将会知道，小看我们的力量是一种多么大的错误。]], "_t")
 t("arrrrrrghhhhhh", "啊啊啊啊啊啊啊", "_t")
 t("All of a sudden the floor starts to shake and opens up!", "突然间地动山摇，地面裂开了！", "_t")
-t("between a rock and a soft place", "在岩石和柔软的地方之间", "_t")
+t("between a rock and a soft place", "进退两难：岩石与软肉之间", "_t")
 t([[You ever gotten yourself into a mess that you didn't know how to get out of? Well, that's kind of where I'm at right now. This thing, whatever it is, just burst out of the ground and swallowed me whole. Normally a girl has to get offered on an altar to monsters to get eaten like this, but it looks like this one just took a fancy to me.
 
 I've seen a lot of things. Undead, horrors, sometimes a bear with psychic powers, but whatever this thing is, it's in a league of its own. It's like I'm inside a snake with the way it winds and how long it is. Sometimes these meaty bits of something come after me and have acid pouring out of them... I get the impression that it's trying to digest me. I've managed to make a little hideout in one of the folds of its belly, but I don't know how long these protective runes are going to last.
@@ -32071,7 +32086,7 @@ t([[Spin around, extending your weapon and damaging all targets around you for %
 
 		#YELLOW_GREEN#当触手处于缠绕状态：#WHITE#你的触手攻击改为以被缠绕目标为中心展开（武器攻击除外），并使范围内的敌人眩晕 5 回合。]], "tformat")
 t("Tendrils Eruption", "触手地狱", "talent name")
-t("%s resists the slimy tendril!", "%s抵挡了黏液触手！", "logSeen")
+t("%s resists the slimy tendril!", "%s抵挡了黏稠触须！", "logSeen")
 t([[You plant your tentacle hand in the ground where it splits up and extends to a target zone of radius %d.
 		The zone will erupt with many black tendrils to hit all foes caught inside dealing %d%% tentacle damage.
 		Any creature hit by the tentacle must save against spell or be numbed by the attack, reducing its damage by %d%% for 5 turns.
@@ -32307,7 +32322,7 @@ t([[Without the distraction of #{bold}#thoughts#{normal}# or #{bold}#self#{norma
 t("Corrupting Influence", "堕落影响", "talent name")
 t([[The parasite corruption seeps into your body, strengthening it.
 		Increases blight, darkness, temporal and acid resistances by %d%% but decreases nature and light resistances by %d%%.]], [[寄生体的堕落力量渗入你的身体，使之更加强健。
-		增加 %d%% 枯萎、黑暗、时空和酸性伤害抗性，同时减少 %d%% 自然和光系伤害抗性。]], "tformat")
+		增加 %d%% 枯萎、暗影、时空和酸性伤害抗性，同时减少 %d%% 自然和光系伤害抗性。]], "tformat")
 t("Horror Shell", "恐惧外壳", "talent name")
 t([[Creates a shell around you, absorbing %d damage. Lasts for 10 turns.
 		The total damage the shield can absorb increases with your Constitution.]], [[在你身边制造一层外壳，吸收 %d 伤害，持续 10 回合。
@@ -32376,7 +32391,7 @@ t("The victim in your stomach finally dies from the painful agony.", "你体内�
 t("torture", "折磨", "effect subtype")
 t("tentacles", "触手", "effect subtype")
 t("leech", "吸血", "effect subtype")
-t("Inner Tentacles", "内部触手", "_t")
+t("Inner Tentacles", "内生触手", "_t")
 t("Life leech %d%% chance, %d%% power.", "%d%% 吸血几率，%d%% 强度。", "tformat")
 t("#Target# is empowered by the pain of its victim.", "#Target#被牺牲者的痛苦强化。", "_t")
 t("#Target# is less powerfull.", "#Target#的力量减弱了。", "_t")
@@ -32389,7 +32404,7 @@ t("Dissolved Face", "溶解之脸", "_t")
 t("Blood and gore cover the target, dealing %0.2f darkness damage and %0.2f blight damage per disease.", "目标被血肉覆盖，每回合受到 %0.2f 暗影伤害，并且身上每有一种疾病额外受到 %0.2f 枯萎伤害。", "tformat")
 t("#Target# is covered in gore.", "#Target#被血肉覆盖。", "_t")
 t("#Target# is no longer covered in gore.", "#Target#不再被血肉覆盖。", "_t")
-t("Glimpse of True Horror", "一瞥真惧", "_t")
+t("Glimpse of True Horror", "恐怖无边", "_t")
 t("Target briefly saw what True Horror means, deeply scaring it. %d%% chances to fail using a talent.", "目标被真正的恐惧吓倒，%d%% 几率使用技能失败。", "tformat")
 t("#Target# saw true horror.", "#Target#看到了真正的恐怖。", "_t")
 t("#Target# is less afraid.", "#Target#不再那么恐惧了。", "_t")
@@ -32447,7 +32462,7 @@ t("#Target# is doomed to madness!", "#Target#被预言逼疯！", "_t")
 t("+Prophecy of Madness", "+疯狂预言", "_t")
 t("#Target# is free from the prophecy.", "#Target#脱离预言的影响。", "_t")
 t("-Prophecy of Madness", "-疯狂预言", "_t")
-t("%s talent '%s%s' is energized by the revelation!", "启示使%s技能'%s%s'的冷却时间缩短了！", "logSeen")
+t("%s talent '%s%s' is energized by the revelation!", "天启使%s的技能'%s%s'的冷却时间缩短了！", "logSeen")
 t("Prophecy of Ruin", "毁灭预言", "_t")
 t("The target is doomed to ruin.  On falling below 75%%, 50%% or 25%% life all enemies in radius %d will take %0.2f darkness damage", "目标被诅咒进入毁灭状态。当生命值降低至 75%%, 50%% 或 25%% 时，%d 格内敌人将受到 %0.2f 暗影伤害。", "tformat")
 t("#Target# is doomed to ruin!", "#Target#被预言毁灭！", "_t")
@@ -32496,14 +32511,14 @@ t("The target is removed from the normal time stream, unable to act but unable t
 t("+Suspend", "+暂停", "_t")
 t("-Suspend", "-暂停", "_t")
 t("The target is removed from the normal time stream, unable to act but unable to take any damage. Each turn, negative effects and cooldowns will decrease in duration.", "目标从常规时间流中移除，无法行动，免疫伤害。暂停结束时，非“其他”类且不会在无时间状态下自行衰减的负面效果，以及技能冷却时间会缩短。", "_t")
-t("Jinxed", "不幸", "_t")
+t("Jinxed", "厄运", "_t")
 t([[The target has %d reduced saves and defense, and %d%% reduced critical chance.
 This effect will fade in 2 turns if the source is not in line of sight.]], [[目标豁免和闪避降低 %d，暴击率降低 %d%%。
 若效果来源不在视野内，则该效果会在 2 回合后消失。]], "_t")
 t([[The target has %d reduced saves and defense, %d%% reduced critical chance, and %d%% chance to fail talent use.
 This effect will fade in 2 turns if the source is not in line of sight.]], [[目标豁免和闪避降低 %d，暴击率降低 %d%%，使用技能有 %d%% 几率失败。
 若效果来源不在视野内，则该效果会在 2 回合后消失。]], "_t")
-t("%d Jinx", "%d 不幸", "tformat")
+t("%d Jinx", "%d 厄运", "tformat")
 t("Fortune", "幸运", "_t")
 t("The target has %d increased saves and defense, and %d%% increased critical chance.", "目标的豁免和闪避提高 %d，暴击率提高 %d%%。", "_t")
 t("The target has %d increased saves and defense, %d%% increased critical chance, and %d%% chance to avoid all damage.", "目标豁免和闪避增加 %d，暴击率增加 %d%%，有 %d%% 几率闪避所有伤害。", "_t")
@@ -32512,7 +32527,7 @@ t("The target is being erased from reality. Each time a magical effect is applie
 t("#Target# is being erased from reality!", "#Target#被从现实中移除！", "_t")
 t("#Target# has survived the unraveling.", "#Target#从解构效果中存活。", "_t")
 t("Fatebreaker", "打破宿命", "_t")
-t("The target has tied itself to the fate of another. If it dies, it's chosen target will die in it's place and it will be healed by %d for each stack of Fortune and Jinx.", "目标将自身的命运和另一个人相连，当它死亡时，选择的目标将代替它死亡。此时，自身的幸运层数和所选目标身上的不幸层数会被消耗；若所选目标有不幸，则按其层数治疗，否则按自身的幸运层数治疗，每层恢复 %d 点生命。", "tformat")
+t("The target has tied itself to the fate of another. If it dies, it's chosen target will die in it's place and it will be healed by %d for each stack of Fortune and Jinx.", "目标将自身的命运和另一个人相连。当它即将受到致命伤害时，这次伤害会以时空和暗影伤害的形式转移给所选目标，自身不受伤害。此时，自身的幸运层数和所选目标身上的厄运层数会被消耗；若所选目标有厄运，则按其层数治疗，否则按自身的幸运层数治疗，每层恢复 %d 点生命。", "tformat")
 t("#Target# intertwines it's fate!", "#Target#的命运被联结！", "_t")
 t("#Target#'s fate is no longer linked to another.", "#Target#的命运不再被联结。", "_t")
 t("Redirecting all damage as temporal and darkness to %s.", "所有伤害转为时空和暗影类型，转移至 %s。", "tformat")
@@ -33460,7 +33475,7 @@ t("REGRET!", "悔恨！", "_t")
 t("My love...", "我的爱人…", "_t")
 t("I feel so lost.", "我迷失了。", "_t")
 t("Please let me die!", "让我去死吧！", "_t")
-t("RAAAAARGGGG!", "额啊啊啊啊啊阿！", "_t")
+t("RAAAAARGGGG!", "呃啊啊啊啊啊啊！", "_t")
 t("Someday you will pay!", "总有一天你会付出代价的！", "_t")
 t("DEATH!", "去死吧！", "_t")
 t("*Sobs*", "*哭泣*", "_t")
@@ -33871,7 +33886,7 @@ t("implant", "植入物", "_t")
 t("Steamtech implants can be grafted on the users skin..", "蒸汽科技的植入物可以移植到使用者皮肤上……", "_t")
 t("implant on your skin.", "植入到皮肤上", "_t")
 t("steam generator implant", "蒸汽发生器植入物", "entity name")
-t("medical injector implant", "医疗注射器植入体", "entity name")
+t("medical injector implant", "医疗注射器植入物", "entity name")
 t("A hat made of leather. Very stylish.", "一顶皮帽。非常时髦。", "_t")
 t("rough leather hat", "粗制皮帽", "entity name")
 t("hardened leather hat", "硬化皮帽", "entity name")
@@ -33939,7 +33954,7 @@ t("mastercraft", "大师级", "_t")
 t("perfect", "完美", "_t")
 t("%s poison groove", "%s淬毒凹槽", "tformat")
 t("Deals stacking poison damage.", "造成可叠加的毒素伤害。", "_t")
-t("applies a stacking poison dealing %d damage per turn", "造成可叠加的毒素，每回合造成%d伤害。", "tformat")
+t("applies a stacking poison dealing %d damage per turn", "施加可叠加的毒素，每回合造成%d伤害。", "tformat")
 t("%s viral injector", "%s病毒注射器", "tformat")
 t("Infects targets with a stat reducing disease.", "使目标感染削减属性的疾病。", "_t")
 t("injects a simple virus dealing %d blight damage on hit and lowering the victims highest stat", "注入病毒，命中时造成%d枯萎伤害，并降低目标最高的属性", "tformat")
@@ -34033,7 +34048,7 @@ t("%s grapple", "%s弹簧飞爪", "tformat")
 t("Steam Powered Armour", "蒸汽动力装甲", "entity name")
 t("Using small steam engines and the miracles of the latest automation discoveries you are able to create Steam Powered Armour. A full plate armour that helps your movement and has intrinsic protection mechanisms.", "借助小型蒸汽机与最新自动化技术的奇迹，你可以制造出蒸汽动力装甲。这是一套能辅助你行动并配有内置防护机构的全身板甲。", "_t")
 t("The more steam the better!", "蒸汽越多越好！", "_t")
-t("#GOLD#Your steam-powered boots, helm and gauntlets automatically connect to your steam-powered armour, enabling new functions.", "#GOLD#你的蒸汽动力靴、头盔和手套自动连接到你的蒸汽动力装甲，获得新的功能。", "logSeen")
+t("#GOLD#Your steam-powered boots, helm and gauntlets automatically connect to your steam-powered armour, enabling new functions.", "#GOLD#你的蒸汽动力鞋、头盔和手套自动连接到你的蒸汽动力装甲，获得新的功能。", "logSeen")
 t("#GOLD#Your steam-powered armor disconnects from the other pieces.", "#GOLD#你的蒸汽动力装甲与其他组件断线了。", "logPlayer")
 t("%s saw projector", "%s链锯发射装置", "tformat")
 t("%s kinetic stabiliser", "%s动能稳定装置", "tformat")
@@ -34343,7 +34358,7 @@ Some people just can't let go until they've bled dry.']], [[上面附有一张�
 t([[All damage dealt by or to you (that is over 1% of max life) bleeds for an additional 20% of the damage as physical damage (ignores most status resistances).
 While you are bleeding, Heartrend's damage increases and it gains lifesteal.]], [[你受到与造成的所有超过1%总生命的伤害将触发流血效果，无视大部分状态免疫，造成额外20%物理伤害。
 当你处于流血状态时，心脏切割伤害增加并具有吸血效果。]], "_t")
-t("If bleed damage per turn is greater than 5% of max life, attacks cleave.", "若每回合流血伤害达到最大生命值的 5 倍，攻击将变为劈击。", "_t")
+t("If bleed damage per turn is greater than 5% of max life, attacks cleave.", "若每回合流血伤害超过最大生命值的 5%，攻击将变为劈击。", "_t")
 t("Dethzaw", "死亡链锯", "entity name")
 t("fiery steamsaw", "火焰蒸汽链锯", "_t")
 t([[Grushgore the Destroyer was absolutely enthralled when he discovered steamsaws. He immediately kidnapped several tinkerers and forced them to create this for him.
@@ -35445,7 +35460,7 @@ TANTALOS: "As I thought.  Nashal, prepare the G.E.M. and a retinue of guards and
 
 帕拉奎：“克鲁克兽人在%s的带领下，看来已经攻到太阳堡垒军的最后一处据点了……我的预见中，没有一个结局对任何非兽人血统的人有利。太阳堡垒陷落后，就再也没有什么能分散克鲁克兽人的注意力了。简而言之，太阳堡垒气数已尽————而我们是下一个。”
 
-坦塔洛斯：“帕拉奎，有志者事竟成。“迁徙的利维坦”怎么样了？纳沙尔，你知不知道它在————”
+坦塔洛斯：“帕拉奎，有志者事竟成。‘迁徙的利维坦’怎么样了？纳沙尔，你知不知道它在————”
 
 纳沙尔：“那个啊……在事态变得糟糕的时候，卡西罗斯偷走了它。我们想要把它夺回来，但是他正在用它撤离平民。如果那样做，我们就会把太多本该射向克鲁克兽人的子弹打在自己人身上。”
 
@@ -35467,7 +35482,7 @@ TANTALOS: "As I thought.  Nashal, prepare the G.E.M. and a retinue of guards and
 
 纳沙尔：“我不能同意这样做，坦塔洛斯议员，您的前任的观点确实有道理————”
 
-坦塔洛斯：一拳砸下，砸坏了讲台。“那个走不稳路的老懦夫什么也不知道！”停顿；叹气。“我们也都不知道。我们知道的是，这只眼睛几乎肯定还有别的用途，不只是用它的泪水来做清淤药水，而想要它的人，能随手挖出通向埃亚尔地心的洞。我们已经试过了所有方案；是时候动用最后的手段了，我们急需一个奇迹。这个……“忠诚者”是我们身边唯一可能创造奇迹的人，如果他能提供无限能源、在星球上打出贯穿的洞，那么处理掉那群野蛮人应该非常简单。”
+坦塔洛斯：一拳砸下，砸坏了讲台。“那个走不稳路的老懦夫什么也不知道！”停顿；叹气。“我们也都不知道。我们知道的是，这只眼睛几乎肯定还有别的用途，不只是用它的泪水来做清淤药水，而想要它的人，能随手挖出通向埃亚尔地心的洞。我们已经试过了所有方案；是时候动用最后的手段了，我们急需一个奇迹。这个……‘忠诚者’是我们身边唯一可能创造奇迹的人，如果他能提供无限能源、在星球上打出贯穿的洞，那么处理掉那群野蛮人应该非常简单。”
 
 帕拉奎：“如果我们的祖先可信的话，这可能比我们自身的毁灭更糟糕————”
 
@@ -36126,7 +36141,7 @@ t("#CRIMSON#You feel as if your Rod of Recall is working again in this area.", "
 t("Orc Warrior", "兽人战士", "_t")
 t("#GOLD#Well done! You have won the Tales of Maj'Eyal: Embers of Rage!#WHITE#", "#GOLD#干得不错！你通关了马基·埃亚尔的传说：余烬怒火#WHITE#", "_t")
 t("You have thwarted the Steam Giants' genocidal plans, and avenged those killed in the attack on Kruk Pride.  Their desperate pact with the High Priest did nothing to stop you; the priest and his god lay dead at your feet, and you have ensured they will #{italic}#stay#{normal}# dead for the foreseeable future.", "你挫败了蒸汽巨人灭绝你们的计划，并为在克鲁克部落遇袭时丧生的同胞复仇。他们绝望中与夏·图尔高阶祭司订立的契约也未能阻止你，祭司和他的神倒在你的脚下，你已经确保他们在可预见的将来会#{italic}#一直#{normal}#长眠下去。", "_t")
-t("The humans, elves, and halflings will not be able to hurt your people again.  By destroying the farportal and denying King Tolak's army its glorious battle, you have ensured the safety of your people from the Allied Kingdoms, and by storming the Gates of Morning you have eliminated the last bearers of the West's hateful aggression in Var'Eyal.", "无论是人类、精灵还是半身人，都再也无法伤害你的族人。你摧毁了远行传送门，使托拉克国王的军队失去了这场光荣的战斗，从而确保族人免受联合王国侵害。你攻下晨曦之门，也消灭了西方在瓦·埃亚尔施行可恨侵略的最后一批爪牙。", "_t")
+t("The humans, elves, and halflings will not be able to hurt your people again.  By destroying the farportal and denying King Tolak's army its glorious battle, you have ensured the safety of your people from the Allied Kingdoms, and by storming the Gates of Morning you have eliminated the last bearers of the West's hateful aggression in Var'Eyal.", "无论是人类、精灵还是半身人，都再也无法伤害你的族人。你摧毁了远行传送门，让托拉克国王的军队无从打响他们期盼的光荣之战，从而确保族人免受联合王国侵害。你攻下晨曦之门，也消灭了西方在瓦·埃亚尔施行可恨侵略的最后一批爪牙。", "_t")
 t("For now, peace reigns.  You know that this will not last forever.  You may have repelled its vanguard, but the Kar'Haïb Dominion bides its time waiting for a weakness it can exploit; the smugglers' portals from Maj'Eyal remain undiscovered, and while neither you nor King Tolak has any remaining desire to take the other's continent, the fear of invasion will linger in the backs of your minds.", "眼下，和平降临了。但你知道这不会永远持续下去。虽然你击退了卡尔·亥巴巨魔帝国的先锋，它却仍在等待可乘之机；走私者们从马基·埃亚尔通往这里的传送门依然没有被发现。即使你和托拉克国王都已无意夺取对方的大陆，对入侵的恐惧仍会萦绕在你们心底。", "_t")
 t("  The messages of the Lost City give you cause to remain ever vigilant for the threats they warned of, including their authors, and you wonder what your people will do now that their struggle to escape eradication, one that has defined them for their entire recorded history, has ceased to be a concern.", "  来自失落之城的消息让你时刻警惕他们所警告的种种威胁，包括他们自己。你的人民为摆脱灭亡而进行的抗争贯穿了你们有记载以来的全部历史，如今这已不再需要担忧，你不禁思索他们将何去何从。", "_t")
 t("Regardless...  You just killed a god and gave your people the first chance to relax in thousands of years.  It's been a pretty good day.", "不管怎样…你杀死了一个神，而你的人民在数千年的征战中终于有了放松的机会。多么愉快的一天。", "_t")
@@ -36266,7 +36281,7 @@ t("#LIGHT_GREEN#* You have helped the strange psionic machines and got rewards o
 t("Yeti Reinforcements", "雪人援军", "_t")
 t("You found a yeti mind control tinker. If you can tame 8 wild yetis and send them back to Kruk Pride they can be trained and sent back to you at your request using a psychoportation beacon.", "你找到了一个雪人精神控制仪配件。如果你能驯服 8 只野生雪人并将它们送回克鲁克部落，它们便可接受训练；之后你可以通过精神传送信标，随时将它们召回身边。", "_t")
 t("Wild yetis are mostly found in yeti's caves.", "野生雪人主要出现在雪人洞穴。", "_t")
-t("#LIGHT_GREEN#* Captured eight yetis (will be available to summon at level 20).#WHITE#", "#LIGHT_GREEN#* 抓住了八只雪人（你至少需要20级才能召唤他们）#WHITE#", "_t")
+t("#LIGHT_GREEN#* Captured eight yetis (will be available to summon at level 20).#WHITE#", "#LIGHT_GREEN#* 抓住了八只雪人（你至少需要20级才能召唤它们）#WHITE#", "_t")
 t("#LIGHT_GREY#* Captured %d/8 yetis.#WHITE#", "#LIGHT_GREY#* 捕获了 %d/8 个雪人。#WHITE#", "tformat")
 t("Yeti's Psychoportation Beacon", "雪人精神传送信标", "_t")
 t("Call a trained yeti to your side.", "召唤受训练的雪人来协助你。", "_t")
@@ -36336,7 +36351,7 @@ t("While sustained, this ability speeds up outgoing projectiles by %d%% while sl
 t("Lucent Wrath", "光之愤怒", "talent name")
 t("After %d turns, the target area in (radius %d) is blasted with a beam of light, dealing %0.2f damage and lighting the area", "%d 回合后，一道光束轰击半径 %d 的目标区域，造成 %0.2f 点伤害并照亮该区域。", "tformat")
 t("Lightspeed", "光速", "talent name")
-t("%s moves at light speed!", "%s光速移动！", "logSeen")
+t("%s moves at light speed!", "%s以光速移动！", "logSeen")
 t("Instantly gain %d%% percent of a turn.", "立刻获得 %d%% 的回合进度。", "tformat")
 t("Nebula Spear", "星云之矛", "talent name")
 t("Fire out a spear of cosmic energies. If it hits an enemy it deals %0.2f damage, otherwise it explodes in a thin cone of radius %d at the end of its range, blocked by enemies, which deals %0.2f to %0.2f damage depending on how much the enemies block.", "发射一支宇宙能量长矛。若击中敌人，造成 %0.2f 点伤害；否则会在射程终点爆炸，形成半径 %d 的狭窄锥形区域。该效果会被敌人阻挡，并根据阻挡程度造成 %0.2f 到 %0.2f 点伤害。", "tformat")
@@ -37474,7 +37489,7 @@ t([[You rush to the target and strike with your tailsaw, dealing %d%% damage and
 		You now also use your Dexterity in place of Strength when equipping Steamsaws as well as when calculating weapon damage, and have your Steamsaw damage increased by %d%% and Physical Power by %d.]], [[你冲向敌人，用尾部蒸汽链锯进行攻击，造成 %d%% 伤害，并嘲讽该目标（标示的嘲讽半径为 %d 格，但实际只对所攻击的目标生效，无论是否命中）。
 		装备蒸汽链锯的时候，你以敏捷代替力量来计算装备需求和武器伤害，并使你的蒸汽链锯伤害提高 %d%%， 物理强度提高 %d。]], "tformat")
 t("Defensive Protocol", "防御协议", "talent name")
-t("Enhancements to your mecharachnid combat skill increases your melee and ranged evasion by %d%%, and causes you to automatically strike adjacent enemies with your tailsaw for %d%% damage each turn.", "强化机械蜘蛛的近身战斗能力，增加 %d%% 概率躲闪近战和远程攻击，你每回合会自动用尾部的蒸汽链锯打击临近的敌人，造成 %d%% 伤害。", "tformat")
+t("Enhancements to your mecharachnid combat skill increases your melee and ranged evasion by %d%%, and causes you to automatically strike adjacent enemies with your tailsaw for %d%% damage each turn.", "强化机械蜘蛛的近身战斗能力，增加 %d%% 概率躲闪近战和远程攻击，你每回合会自动用尾部的蒸汽链锯打击相邻的敌人，造成 %d%% 伤害。", "tformat")
 t("Pincer Strike", "钢爪钳制", "talent name")
 t("#Target# resists the pincer strike from #Source#!", "#Target#抵抗了#Source#的钢爪钳制！", "logCombat")
 t("You strike the target with your tailsaw for %d%% damage. If this hits, you attempt to clamp them with your pincers for %d turns. This pins, reduces their attack, spell and mind speed by %d%%, and lets you make a free, unavoidable strike with your tailsaw against them each turn for %d%% damage. This ends if you move more than 1 tile from the target.", "你用尾部蒸汽链锯攻击目标，造成 %d%% 伤害。若命中，你会尝试用钳爪将目标钳制 %d 回合，使其定身，并使其攻击、法术和精神速度降低 %d%%。 在此期间，你每回合都会用尾部蒸汽链锯对其发动一次额外且无法闪避的攻击，造成 %d%% 伤害。若你与目标的距离超过 1 格，该效果结束。", "tformat")
@@ -37643,8 +37658,8 @@ t("%s resists the itching powder!", "%s抵抗了痒痒粉！", "logSeen")
 t([[Throw a handful of dust that is very itchy to touch.
 		Creatures in a cone of radius %d are itchy for %d turns, causing them to fail talents %d%% of the time.
 		The itchiness effect is applied with your Steampower.]], [[释放一把痒痒粉。
-		锥形半径 %d 格内的生物 将瘙痒 %d 回合，使其使用技能时有 %d%% 几率失败。
-		致痒强度受蒸汽强度加成。]], "tformat")
+		锥形半径 %d 格内的生物将瘙痒 %d 回合，使其使用技能时有 %d%% 几率失败。
+		瘙痒效果的命中判定受蒸汽强度加成。]], "tformat")
 t("Thunder Grenade", "雷鸣榴弹", "talent name")
 t("%s resists the explosion!", "%s抵抗了爆炸！", "logSeen")
 t([[Throw a grenade at your foes, dealing %0.2f physical damage in radius %d.
@@ -37728,7 +37743,7 @@ t([[You fire a special magnetic shot with your steamgun(s) at a target for norma
 		The shot will magnetise the target for %d turns. This lowers their defense and increases fatigue by %d.
 		This talent does not use ammo as it is the ammo.
 		Effect strength scales with Steampower.]], [[你用蒸汽枪向目标发射特殊磁化弹，造成正常武器伤害。
-子弹会使目标磁化 %d 回合，闪避降低、疲劳增加，变化量均为 %d 点。
+子弹会使目标磁化 %d 回合，闪避降低、疲劳值增加，变化量均为 %d 点。
 这个技能本身就是弹药，因此不消耗弹药。
 效果强度随蒸汽强度提高。]], "tformat")
 t("Voltaic Shell", "伏特弹", "talent name")
@@ -37878,7 +37893,7 @@ t([[When you kill a foe you place small explosives with shrapnels inside its bod
 		#{italic}#使用战争技术的精华——弹片。为了鲜血与混乱！#{normal}#]], "tformat")
 t("Steam Pool", "蒸汽能量池", "talent name")
 t("Allows you to have a steam pool. Steam is used to use most steamtech equipments and powers.", "让你有一个蒸汽池。蒸汽用于大多数蒸汽技术装备和能力。", "_t")
-t("implants", "植入体", "talent type")
+t("implants", "植入物", "talent type")
 t("Steamtech directly embedded on the skin.", "直接嵌入皮肤的蒸汽技术。", "_t")
 t("Tinkers with stuff.", "制造东西。", "_t")
 t("physics", "物理", "talent type")
@@ -38126,7 +38141,7 @@ t("Range Amplification Device", "射程增幅装置", "talent name")
 t("Have a light radius of 10 or more", "光照范围为10或以上", "_t")
 t([[Activate a special focusing device that extends all your ranged spells and psionic powers range by 3 (only works on those with range 2 or more and up to 10 max).
 		The use of this device is very strenuous, increasing fatigue by 20%% while active.]], [[启动一个特殊的聚焦装置来使你的所有远程法术和灵能技能射程延长 3 （仅对射程至少为 2 的技能生效，且上限为 10）。
-		使用这个装置非常的费力，开启期间会增加 20%% 疲劳。]], "tformat")
+		使用这个装置非常费力，开启期间会增加 20%% 疲劳值。]], "tformat")
 t("a steamtech power", "蒸汽科技", "_t")
 t("a technomancy spell", "科技法术", "_t")
 t("Warm", "温暖", "_t")
@@ -38293,7 +38308,7 @@ t([[#LIGHT_RED#- Rod (%d): %d turns
 ]], "tformat")
 t("cunning", "灵巧", "effect subtype")
 t("Incoming Disasters", "灾祸临近", "_t")
-t("Vulnerable to more cross tier effects.", "会受到更多跨层效果影响。", "tformat")
+t("Vulnerable to more cross tier effects.", "会受到更多越层效果影响。", "tformat")
 t("technique", "技巧", "effect subtype")
 t("Strafing", "扫射中", "_t")
 t("The target is moving while shooting, and will reload %sammo when finished strafing.", "目标在移动中射击，效果结束后恢复 %s 弹药。", "tformat")
@@ -38371,8 +38386,8 @@ t("-Overcharge Saws", "-链锯过载", "_t")
 t("Algid Rage", "寒冰之怒", "_t")
 t("You have %d%% chances to encase your foes in iceblocks.", "你有 %d%% 几率将敌人封入冰块。", "tformat")
 t("Larvae Infestation", "里奇幼虫寄生", "_t")
-t("The target has been impregnated with %d developing ritch larvae which are feeding on it%s.  After a %d turn gestation period, each will burst out violently, dealing %0.2f physical and %0.2f fire damage to its host.", "目标被 %d 个里奇幼虫寄生%s。在%d回合的发育期结束后，每个幼虫都会从寄主体内猛烈破体而出，对宿主造成 %0.2f 物理和 %0.2f 火焰伤害。", "tformat")
-t(" for %0.2f physical damage (increasing) each turn", " ，每回合受到 %0.2f 物理伤害（随回合递增）", "tformat")
+t("The target has been impregnated with %d developing ritch larvae which are feeding on it%s.  After a %d turn gestation period, each will burst out violently, dealing %0.2f physical and %0.2f fire damage to its host.", "目标被 %d 个里奇幼虫寄生%s。在%d回合的发育期结束后，每个幼虫都会从宿主体内猛烈破体而出，对宿主造成 %0.2f 物理和 %0.2f 火焰伤害。", "tformat")
+t(" for %0.2f physical damage (increasing) each turn", "，每回合受到 %0.2f 物理伤害（随回合递增）", "tformat")
 t("#Target# is #ORANGE#INFESTED#LAST# with ritch larvae!", "#Target#被里奇幼虫#ORANGE#寄生#LAST#！", "_t")
 t("+Larvae Infestation", "+里奇幼虫寄生", "_t")
 t("developing ", "正在生长的", "_t")
@@ -38440,7 +38455,7 @@ t("+Smoke Cover", "+烟雾覆盖", "_t")
 t("#Target# is no longer hiding in smoke.", "#Target#不再隐藏于烟雾中。", "_t")
 t("-Smoke Cover", "-烟雾覆盖", "_t")
 t("Magnetised", "磁化", "_t")
-t("The target has been magnetised, reducing defense by %d and increasing fatigue by %d.", "目标被磁化，闪避下降 %d，疲劳增加 %d。", "tformat")
+t("The target has been magnetised, reducing defense by %d and increasing fatigue by %d.", "目标被磁化，闪避下降 %d，疲劳值增加 %d。", "tformat")
 t("#Target# is magnetised.", "#Target#被磁化了。", "_t")
 t("+Magnetised", "+磁化", "_t")
 t("#Target# is free from the magnetism.", "#Target#从磁化中解脱。", "_t")
@@ -38505,7 +38520,7 @@ t("Fire resistance decreased by %d%%.", "火焰伤害抗性降低%d%%。", "tfor
 t("#Target# is scorched.", "#Target#被火焰灼烧。", "_t")
 t("#Target# is no longer scorched.", "#Target#不再被灼烧。", "_t")
 t("Pincer Strike", "钢爪钳制", "_t")
-t("The target is grappled by %s, pinning them, reducing attack, spell and mind speed by %d%% and subjecting them to an automatic tailsaw strike each turn for %d%% damage.", "目标被 %s 抓取，被定身，降低战斗、法术和精神速度 %d%%，并每回合受到一次自动的尾部链锯打击，造成 %d%% 伤害。", "tformat")
+t("The target is grappled by %s, pinning them, reducing attack, spell and mind speed by %d%% and subjecting them to an automatic tailsaw strike each turn for %d%% damage.", "目标被 %s 抓取，被定身，降低攻击、法术和精神速度 %d%%，并每回合受到一次自动的尾部蒸汽链锯打击，造成 %d%% 伤害。", "tformat")
 t("%s clamps its pincers down on #Target#!", "%s使用钢爪钳制#Target#！", "tformat")
 t("+Pincer Strike", "+钢爪钳制", "_t")
 t("#Target# is free from %s's pincers.", "#Target#脱离%s的钢爪。", "tformat")
@@ -38554,7 +38569,7 @@ t("pearl", "珍珠", "_t")
 t("diamond", "钻石", "_t")
 t("bloodstone", "血滴石", "_t")
 t("Rustproof Coating", "防锈涂层", "_t")
-t("Protects your armour from nasty corrosives like swamp, sea spray, acids, orc sweat, drake saliva...", "保护你的装甲免受各种讨厌的腐蚀物侵袭，包括沼泽、浪花、酸、兽人的汗液、龙涎…", "_t")
+t("Protects your armour from nasty corrosives like swamp, sea spray, acids, orc sweat, drake saliva...", "保护你的装甲免受各种讨厌的腐蚀物侵袭，包括沼泽、浪花、酸、兽人的汗液、龙的唾液…", "_t")
 t("Alchemist's Helper", "炼金助手", "_t")
 t("An ingenius collection of tough no-spill pockets allows you to keep all those dangerous reagents close at hand. (increases acid, fire, nature and blight damage.)", "一套精巧的防洒漏坚韧口袋，让你能把那些危险试剂随时带在手边。（提高酸性、火焰、自然和枯萎伤害）", "_t")
 t("Black Light Emitter", "黑光发射装置", "_t")
@@ -38677,22 +38692,22 @@ t("Keeping yourself grounded is very important, especially around lightning mage
 t("Healing Salve", "治疗药剂", "_t")
 t([[A powerful healing salve.
 To be used with the medical injector implant.]], [[一个强大的治疗药剂。
-需通过医疗注射器植入体使用。]], "_t")
+需通过医疗注射器植入物使用。]], "_t")
 t([[A powerful salve that steels your body for a while, letting you survive below 0 life while increasing resistances.
 To be used with the medical injector implant.]], [[一种能暂时强化你身体的强力药剂，它可以让你在 0 生命值以下时仍然存活，并提升你的伤害抗性。
-需通过医疗注射器植入体使用。]], "_t")
+需通过医疗注射器植入物使用。]], "_t")
 t([[A powerful salve that can clean physical detrimental effects from your body and grant a frost aura (cold, darkness and nature affinity).
-To be used with the medical injector implant.]], [[一个可以清除你身上的负面物理效果并获得一个寒霜光环（增加寒冷、暗影和自然伤害亲和）的强大药剂。
-需通过医疗注射器植入体使用。]], "_t")
+To be used with the medical injector implant.]], [[一种强大的药剂，可以清除你身上的负面物理效果，并使你获得寒霜光环（增加寒冷、暗影和自然伤害亲和）。
+需通过医疗注射器植入物使用。]], "_t")
 t([[A powerful salve that can clean magical detrimental effects from your body and grant a fiery aura (fire, light and lightning affinity).
-To be used with the medical injector implant.]], [[一个可以清除你身上的负面魔法效果并获得一个烈火光环（火焰、光系、闪电伤害亲和）的强大药剂。
-需通过医疗注射器植入体使用。]], "_t")
+To be used with the medical injector implant.]], [[一种强大的药剂，可以清除你身上的负面魔法效果，并使你获得烈火光环（增加火焰、光系和闪电伤害亲和）。
+需通过医疗注射器植入物使用。]], "_t")
 t([[A powerful salve that can clean mental detrimental effects from your body and grant a water aura (blight, mind and acid affinity).
-To be used with the medical injector implant.]], [[一个可以清除你身上的负面精神效果并获得一个静水光环（枯萎、精神、酸性伤害亲和）的强大药剂。
-需通过医疗注射器植入体使用。]], "_t")
+To be used with the medical injector implant.]], [[一种强大的药剂，可以清除你身上的负面精神效果，并使你获得静水光环（增加枯萎、精神和酸性伤害亲和）。
+需通过医疗注射器植入物使用。]], "_t")
 t([[A powerful salve that makes you more resilient to physical, mental and magic effects and grants increased healing.
 To be used with the medical injector implant.]], [[一种强大的药剂，能增强你对物理、精神和魔法效果的抵抗能力，并增加你的治疗效果。
-需通过医疗注射器植入体使用。]], "_t")
+需通过医疗注射器植入物使用。]], "_t")
 t("frost salve", "寒霜药剂", "_t")
 t("fiery salve", "烈火药剂", "_t")
 t("water salve", "静水药剂", "_t")
@@ -39446,7 +39461,7 @@ t("When you close the inventory window, all items in the APE will be melted.", "
 t("melt down", "融解", "_t")
 t("Race: Yeti", "种族：雪人", "_t")
 t("Race: Whitehooves", "种族：白蹄", "_t")
-t("Class tree: Undead drake", "职业技能树：死灵龙", "_t")
+t("Class tree: Undead drake", "职业技能树：亡灵龙", "_t")
 t("Cosmetic: orcs", "外观选项：兽人", "_t")
 t("Build Option: Tinkers in Maj'Eyal Campaign", "游戏选项：马基·埃亚尔战役允许工匠系职业", "_t")
 t("Build Option: Mages in Orcs Campaign", "游戏选项：兽人战役允许法师系职业", "_t")
@@ -39510,13 +39525,14 @@ At this point, it should go without saying that reckless use of magic is a dire 
 Fortunately, there is an alternative available!  With the proper respect, care, and concentration given to Nature, one can be rewarded with powers rivaling or besting the popular uses of magic.  On the civilian level, summoned fireflies can replace magical lighting, regeneration salves can replace healing spells, and accelerated crop growth makes for a far more nutritious diet than conjured foodstuffs.  For martial purposes, there's very little that can stand up to the powers of Nature.  An experienced disciple of Eyal can summon loyal beasts faster than any mage can blast them, crush spellswords of all types with draconic might, or dissolve a necromancer's army in a tide of corrosive ooze.  And if the disciple in question is familiar with the practices of the Ziguranth...  We do not condone their approach to defending nature, but their techniques speak for themselves when facing a hostile mage.  The best part about these abilities, though, is that they are self-limiting!  There is no potential for a runaway chain reaction, or a lone megalomaniac destroying much of Eyal.  The planet willingly gives us its power, and is conscious enough to take it away if we start abusing its gifts.  Even the most powerful of Wilders cannot abuse their power to the perverse degree that a necromancer can.
 
 Thus, we're putting our efforts into two areas.  The first is advocacy of Natural alternatives to magic, talking to spellcasters to determine what they use magic for and figuring out ways to use Nature's abilities to do the same task just as well (if not more so).  We've continued the Ziguranth efforts to make all-natural replacements for Ogric runes (we predict that life expectancy is now only reduced by 40% with our newest mixtures), developed fertilizing recipes that outperform arcane methods of producing food, created wells near desert settlements otherwise dependent on water magic, and developed so many other techniques and applications that make magic just as obsolete as it is hazardous.  The second is minimizing the harm done by the arcane, by educating spellcasters on the safe, responsible, and Nature-conscious use of magic.  Not every spellcaster is evil, and in fact, some may enrich the lives of those around them!  Runic magic is at least somewhat self-limiting, and we are working with the Living Fossils guild in hopes of developing a new type of magic, one inherently linked to and limited by Nature.  Their stone-wardens have maintained perfect harmony with Nature despite constant use of the arcane; if this is truly the way forward, then we shall welcome it with open arms.
-]], [[我们必须承认，现在世道变了。在不到一年的时间里，在东方重新发现的那些盟友的影响之下，联合王国已经开始从不情愿地容忍魔法，迅速转变为公开接受魔法的使用。此外，如果那些报导确认属实的话，尽管那里的人们持续使用魔法长达几千年，瓦·埃亚尔的生态系统仍然健康而完整。因此，我们绝不能对新知识一无所知，我们的观点和方法必须随着时代而改变。
+]], [[我们承认，时代正在改变。在一年之内，在我们重新发现的东方盟友的影响下，联合王国已经从勉强容忍魔法，转变为公开接受魔法。此外，如果那些报告可信的话，尽管经历了数千年持续不断的魔法使用，瓦·埃亚尔的生态系统依然健康而完整。因此，我们的观点和方法必须与时俱进；我们并不排斥新知识。
 
-说到这里，鲁莽地使用魔法是对……世间一切的可怕威胁，这一点本应不言自明。埃亚尔至今还没有从黄昏纪死灵魔法的猖獗使用中完全恢复过来，更不用说魔法大爆炸了。消除所有魔法的使用，看起来是避免这种状况重演的唯一方法……但是，从太阳骑士和星月术士的情况来看，少量使用奥术魔法，本身并不会对世界带来任何腐蚀和有害的影响。与我们长期以来的信念相反，他们成功地、安全而负责任地控制了魔法的使用。我们不会盲目到否认这是一个令人难以置信的保证。同时，魔法仍然可能造成极其可怕的后果。可以说，太阳骑士和星月术士，远远没有堕落到黄昏纪法师那样邪恶，也并不像那些引发魔法大爆炸的法师一样，鲁莽到可悲。但是这并不能证明，他们的魔法不会被滥用。
+事到如今，鲁莽地使用魔法对……差不多世间一切都是严重的威胁，这一点本应不言自明。埃亚尔甚至还没有从黄昏纪猖獗的死灵魔法中完全恢复过来，更不用说魔法大爆炸本身了。杜绝一切魔法的使用，是确保这种局面不再重演的唯一方法……但是，从太阳骑士和星月术士的情况来看，较低阶的奥术魔法用法，本身可能并不具有任何腐化或有害的效果。与我们长期以来的信念相反，他们做到了负责而安全地使用魔法。我们并没有盲目到否认这一点，它确实令人大为安心。话虽如此，对于魔法最可怕的潜在危害，这证明不了任何事情。或许还没有哪位太阳骑士或星月术士堕落到黄昏纪术士那般邪恶的深渊，或像那些造成魔法大爆炸的法师那般鲁莽得可悲，但这并不能说明他们的魔法不存在被滥用的可能。
 
-幸运的是，我们还有另一种选择！只要给予大自然足够的尊重，关心和专注，人们就可以获得和普遍应用的魔法匹敌，乃至更强的力量。在民用领域，召唤萤火虫可以替代魔法灯笼，治疗药剂可以替代治疗魔法，而加速谷物成熟的技术做出来的菜肴，可比法师制作的魔法食品对身体健康多了。在军用领域，很少有人能够抵挡自然强大的力量。那些埃亚尔忠实的学徒，可以比法师的火球速度更快地召唤忠诚的兽群，用巨龙的力量粉碎各种类型的魔法剑，或是用一股腐蚀性的粘液，瞬间融解死灵法师的军团。另外，如果那些学徒还了解那些伊格兰斯曾经使用过的力量的话……我们不能容忍他们为了保卫自然做出的一系列举措，但他们的技术在面对敌对法师的时候，总是能够脱颖而出。有关这些自然能力，最重要的一点是，它们是会进行自我约束的！他们绝对不会像奥术魔法一样，引发一场失控的连锁反应，在妄自尊大的狂妄中给埃亚尔大部分的地方带来毁灭。这颗星球自愿给予了我们力量，当我们开始滥用它们的时候，它就会有意识地从我们身边收回。即使是最强大的野性系能力者，也不会像死灵法师一样，把他们的力量滥用到如此反常的程度。
+幸运的是，我们还有另一种选择！只要给予自然应有的尊重、关怀与专注，人们就能获得足以媲美乃至胜过魔法常见用途的力量。在民用层面，召唤出的萤火虫可以取代魔法照明，再生药膏可以取代治疗法术，而加速作物生长带来的饮食，也比魔法变出来的食物营养丰富得多。在军事用途上，几乎没有什么能够抵挡自然的力量。经验丰富的埃亚尔信徒召唤忠诚野兽的速度，比任何法师轰杀它们的速度都要快；他们能以巨龙之力粉碎各种类型的魔剑士，或是用腐蚀性软泥的浪潮溶解死灵法师的军队。而如果这位信徒还熟悉伊格兰斯的做法的话……我们并不赞同他们保卫自然的方式，但他们的技艺在面对敌对法师时的效果有目共睹。不过，这些能力最棒的一点在于，它们会自我限制！它们不可能引发失控的连锁反应，也不可能让某个妄自尊大的狂人独自毁掉埃亚尔的大片土地。这颗星球自愿将力量赐予我们，而且有足够的意识，一旦我们开始滥用它的馈赠，就会将力量收回。即使是最强大的野性系能力者，也无法把力量滥用到死灵法师那般反常的程度。
 
-因此，我们目前的事业有两个主要的目标。第一个目标是推广使用自然力量代替法术的方法。我们要和那些法师交谈，知道他们用魔法来做什么，然后想办法用自然的力量来达成同样的目标，乃至做的更好。我们继续伊格兰斯把食人魔的符文替换成纯天然产品的努力（现在，使用我们的新技术，预计只会减少40%的寿命），发展新的肥料技术，让它们远远超出使用奥术力量生产食物的方法，还有在沙漠地区创造水井，让那些地方不再只能依靠水魔法。我们创造了各种各样其他使用自然力量的技术与应用，让过去那些使用魔法的方法看上去既落后又危险。第二个目标是最大限度地减少奥术魔法造成的危害，我们会教育法师，如何安全地、负责任地、有保护自然的意识地去使用魔法。并不是每个法师都是邪恶的，他们中的许多人，都可以给他们身边人的生活带来好处！符文魔法就是某种意义上有自我限制能力的魔法，我们也在和那个活化石组织合作，希望能够开发出一种新的魔法，一种和自然联结，受自然约束的魔法。那些岩石守卫就是这样的例子，他们经常使用奥术力量，却仍然和自然之间保持着完美的和谐。如果这就是我们前进的道路，我们将张开双臂欢迎它。]], "_t")
+因此，我们正把精力投入两个方面。第一是倡导以自然之道替代魔法：与施法者交谈，弄清他们用魔法来做什么，再想办法用自然的能力把同样的事情做得一样好（甚至更好）。我们延续了伊格兰斯的努力，为食人魔符文研制纯天然的替代品（据我们预测，使用最新的配方后，预期寿命现在只会缩短40%），研发出了胜过奥术粮食生产方法的施肥配方，在原本只能依赖水魔法的沙漠聚居地附近开凿了水井，还开发了许许多多其他技术与应用，让魔法变得既危险又过时。第二是通过教导施法者以安全、负责且顾及自然的方式使用魔法，把奥术造成的危害降到最低。并非每个施法者都是邪恶的，事实上，有些人还可能让身边人的生活更加丰富！符文魔法至少在一定程度上能够自我限制；我们也在和活化石公会合作，希望开发出一种新型魔法，一种与自然有着内在联系、并受自然约束的魔法。他们的岩石守卫虽然不断使用奥术，却始终与自然保持着完美的和谐；如果这真的是前进的方向，我们将张开双臂欢迎它。
+]], "_t")
 t([[The Steam Council has been called to order, with Chief Councilor Tantalos presiding.
 
 TANTALOS: "Greetings, my fellow- heh, now [i]lesser[/i] Councilors!  It is my pleasure to finally lead the proceedings.  The agenda for today..." Ruffles through papers. "Is irrelevant, for I have a solution to every malady mentioned therein.  The first order--"
@@ -39543,26 +39559,26 @@ TANTALOS: "Such undignified conduct!  All because you can't accept that the publ
 
 [At this time, Councilor Kasyros gave a lengthy speech before officially resigning from the Council.  It has been recorded in a separate document.] ]], [[在坦塔洛斯议长的主持下，蒸汽议会正式开会。
 
-坦塔洛斯：“你们好啊，我的同……哈，现在是[i]下级[/i]议员们！这是我的荣幸，能够终于主事。今日的议程……”翻动手中的文件。“无关紧要，因为我已经为所有要解决的问题有了一个对应的方案。首先————”
+坦塔洛斯：“你们好啊，我的同……哈，现在是[i]下级[/i]议员们！终于能由我主持会议，真是荣幸。今日的议程……”翻动手中的文件。“无关紧要，因为议程中提到的每个问题，我都有解决方案。首先————”
 
 卡西罗斯：“尊敬的议长，议程————”
 
-坦塔洛斯：“这是[i]无关紧要[/i] 的。托马克？你一直在占卜潜在的地热能源，你能告诉大家哪里最有潜力吗？”
+坦塔洛斯：“就是[i]无关紧要[/i]。托马克？你一直在占卜潜在的地热能源，你能告诉大家哪里最有潜力吗？”
 
-托马克：叹气。“不幸的是，就在克鲁克兽人的地盘底下。那确实是个有潜力的源头，提供能源的岩浆也不像我们地盘底下的那样已经枯竭，但是在那里挖掘会……好吧，我们都知道他们能多快的把建筑工具变成能威胁我们的武器。如果我们把能用来开采的最新式采矿工具带过去————”
+托马克：叹气。“不幸的是，就在克鲁克兽人的地盘底下。那确实是个有潜力的源头，为它提供能量的岩浆也不像我们地底下的那样已经枯竭，但是在那里挖掘会……好吧，我们都知道他们能多快地把建筑工具变成足以匹敌我们武器的兵器。如果我们把能用来开采的最新式采矿工具带过去————”
 
-坦塔洛斯：大笑。“采矿工具！你把我当成是怎样的傻瓜？帕拉奎，告诉我那些在大陆上到处搜寻兽人反叛者的齐腰高的小傻战士们在想什么。”举起手打断荣誉终身议员卡西罗斯。“我向你保证，这确实相关。”
+坦塔洛斯：大笑。“采矿工具！你把我当成是怎样的傻瓜？帕拉奎，告诉我那些只有齐腰高、在大陆上到处搜寻兽人反叛者的可笑小个子战士们在想什么。”举起手示意荣誉终身议员卡西罗斯安静。“我向你保证，这确实相关。”
 
-帕拉奎：“不满……以及隐藏的，长期发酵的怒火。有些人想消灭克鲁克兽人，也有人想监禁他们。两派都无力直接介入，不过确实可以提供某种支持。”
+帕拉奎：“不满……根源是深藏已久、不断发酵的怨恨。有些人想消灭克鲁克兽人，也有人想监禁他们。两派都无力直接介入，但肯定能提供某种形式的支持。”
 
-坦塔洛斯：“那么，在恰当的协商后，我们可以让那些有[i]无数[/i]兽人作战经验的小东西，来协助我们，让在克鲁克兽人境内的一切行动更易掌控。最少，我们可以取得那些已被长期证明能割断兽人喉咙的武器装备……自然，我们确实得想法子改成我们的尺寸。”
+坦塔洛斯：“那么，只要谈判得当，我们就能让这些与兽人作战经验[i]无穷无尽[/i]的小家伙来协助我们，让在克鲁克兽人境内的一切行动更易掌控。至少，我们能取得那些早已证明足以割断兽人喉咙的武器……当然，我们还得把它们改成适合我们身材的尺寸。”
 
 帕拉奎：“他们有个种族，护甲可以给我们用。穿起来有点紧，但是足够了。”
 
-坦塔洛斯：“那就更好了！还有……卡西罗斯，我想让[i]你[/i]告诉我人民最在意什么。我敢肯定，你身上的伤痕一定能提醒你，公民们的意志是什么，对吧？”
+坦塔洛斯：“那就更好了！还有……卡西罗斯，我想让[i]你[/i]告诉我人民最在意什么。我相信你身上的淤青足以提醒你公民们的意志是什么，对吧？”
 
 卡西罗斯：[这一发言因言辞过于粗鄙，经4比2投票决定从记录中删除。]
 
-坦塔洛斯：“真是不成体统的发言啊！只是你不能接受群众想要回他们的蒸汽。比起想要那些肮脏的小绿人们在身边，比起他们害怕把自己的手弄脏，比起想要以[i]你[/i]的方法做事，更想要蒸汽。所以！兹认定我们能从中获益良多，认定我们拥有或能够取得执行此事的手段，也认定这正是选民之所愿。我看不需要进一步讨论了。纳沙尔，之后我想跟你讨论一个魔杖的事情。散会。”
+坦塔洛斯：“真是不成体统！这一切只因为你接受不了群众想要回他们的蒸汽。他们想要蒸汽，胜过想让那些肮脏的小绿皮留在身边，胜过对弄脏双手的恐惧，也胜过想按[i]你[/i]的方式行事。所以！兹认定我们能从中获益良多，认定我们拥有或能够取得执行此事的手段，也认定这正是选民之所愿。我看不需要进一步讨论了。纳沙尔，之后我想跟你讨论一个魔杖的事情。散会。”
 
-[同时，卡西罗斯议员也在从议会正式辞职时做了一个不短的演讲。演讲被另一个文件记载。] ]], "_t")
+[此时，卡西罗斯议员发表了一篇冗长的演说，随后正式辞去议员职务。演说内容另有文件记录。] ]], "_t")
