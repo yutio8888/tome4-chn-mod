@@ -642,6 +642,13 @@ A simple regeneration infusion is the most common type of infusion, and the use 
 刻印给被刻印者提供一些可以无限使用的特殊能力。
 最常见的一种纹身是简单的回复纹身，而各类符文在奥术施法者之中也同样常见。
 ]], "_t")
+t([[#GOLD#Prodigies#LAST#
+Prodigies are special talents that only the most powerful of characters can acquire.
+All of them require at least 50 in a core stat and many also have other, very specific and/or demanding requirements to learn.
+Players can learn new prodigies at levels 30 and 42.]], [[#GOLD#觉醒技#LAST#
+觉醒技是那些只有非常强的角色才能得到的特殊能力。
+每项觉醒技都需要对应核心属性至少达到 50 点，并且许多觉醒技还需要一些特殊的解锁条件才能学习。
+玩家可以在 30 级和 42 级得到一个觉醒点。]], "_t")
 t([[#GOLD#Activated Talents#LAST#
 Most talents require activation (i.e. time) to use, and create a specific effect when called upon.
 Specific information on each talent appears its tooltip.]], [[#GOLD#主动技能#LAST#
@@ -1101,6 +1108,7 @@ t("Killed Bill in the Trollmire without leveling beyond your starting level.", "
 t("Atamathoned!", "阿塔玛森！", "achievement name")
 t("Ate 20 bosses.", "吃掉20个BOSS。", "_t")
 t("Headbanged 20 bosses to death.", "用头槌撞死了20个BOSS。", "_t")
+t("Are you out of your mind?!", "你疯了吗？！", "achievement name")
 t("Caught the attention of overpowered greater multi-hued wyrms in Vor Armoury. Perhaps fleeing is in order.", "在沃尔军械库引起了超强的七彩龙精英的注意。也许，离开是最好的主意。", "_t")
 t("Killed the seven overpowered wyrms in the \"Room of Death\" in Vor Armoury.", "在沃尔军械库的“死亡之屋”杀死7只超强的七彩龙精英。", "_t")
 t("Kickin' it old-school", "复古风格", "achievement name")
@@ -1806,7 +1814,6 @@ t("I see the storm is calmed.  Take this rune as a token of my appreciation.", "
 section "mod-tome/data/chats/angolwen-staves-store.lua"
 
 t("I am looking for staff training.", "我想寻求法杖战斗训练。", "_t")
-t("Sorry, I have to go!", "抱歉，我得走了！", "chat_angolwen-staves-store")
 t("I can teach you staff combat (talent category Spell/Staff combat).  Learning the basics costs 100 gold, while more intensive tutelage to gain proficiency costs 500 gold.  Once you're proficient, I can teach you more refined techniques for an additional 750 gold.", "我可以传授你法杖格斗技巧（技能类别：法术/法杖格斗）。学习基础需要 100 金币，而要接受更深入的指导、达到熟练掌握，则需 500 金币。一旦你达到熟练，再额外支付 750 金币，我便能传授你更精湛的技巧。", "_t")
 t("The staff carver spends some time with you, teaching you the basics of staff combat.", "制杖师花了一些时间指导你，向你传授法杖格斗的基础技巧。", "logPlayer")
 t("He is surprised at how quickly you are able to follow his tutelage.", "他对你能如此迅速领会他的指导感到惊讶。", "logPlayer")
@@ -5015,6 +5022,7 @@ section "mod-tome/data/general/objects/egos/boots.lua"
 
 t(" of tirelessness", "不倦之", "entity name")
 t("tireless", "不倦", "entity keyword")
+t("blightbringer's ", "枯萎使者的", "entity name")
 t("undeterred ", "不屈的", "entity name")
 t("undeterred", "不屈", "entity keyword")
 t(" of force", "威能之", "entity name")
@@ -5831,7 +5839,7 @@ t("What would happen if more of Ureslak's remains were reunited?", "当乌瑞斯
 t("Ureslak's Molted Scales", "乌瑞斯拉克的蜕鳞", "entity name")
 t("scaly multi-hued cloak", "多彩鳞片斗篷", "_t")
 t("This cloak is fashioned from the scales of some large reptilian creature.  It appears to reflect every color of the rainbow.", "这件斗篷用某些大型爬行动物的鳞片制成。它看上去可以反射出彩虹的每种颜色。", "_t")
-t(", or ", "或 ", "_t")
+t(", or ", "或", "_t")
 t("%s empowers %s %s!", "%s充能了%s%s！", "logSeen")
 t("It would go well with another part of Ureslak.", "另一件乌瑞斯拉克的遗物会增强它的能力。", "_t")
 t("#YELLOW_GREEN#An ironic harmony surrounds Ureslak's remains as they reunite.", "#YELLOW_GREEN#乌瑞斯拉克的遗物重聚时，一种讽刺的和谐笼罩四周。", "logSeen")
@@ -10952,7 +10960,6 @@ that drowned her at last.]], [[纳鲁精灵的挽歌
 ------------------------------------------------
 section "mod-tome/data/lore/noxious-caldera.lua"
 
-t("tattered paper scrap", "破烂纸片", "_t")
 t([[What wending path brought me to this place? I know not. The mists have obscured all passage, all trail. I see but the enclosing dominance of the caldera ahead. The ashen cauldron of steam lures me, yet repels me. I feel there is a force here trying to sway my thoughts.
 
 Where are the rest of my party? Have my friends abandoned me?]], [[是哪条曲折的小路把我带到了这里？我不知道。浓雾遮断了所有道路，也抹去了所有踪迹；眼前只剩火山口合围而来的庞然威势。那口盛满灰白蒸汽的巨釜既引诱着我，又令我退缩。我感觉这里有某种力量正试图左右我的思想。
@@ -13609,7 +13616,7 @@ t([[Improves your capacity to see invisible foes by +%d and to see through steal
 t("Warden's Focus", "守卫者专注", "talent name")
 t("You must pick a focus target.", "你必须选择一个集中目标。", "logPlayer")
 t([[Attack the target with either your ranged or melee weapons for %d%% weapon damage.  For the next %d turns random targeting, such as from Blink Blade and Warden's Call, will focus on this target.
-		Attacks against this target gain %d%% critical chance and critical strike power while you take %d%% less damage from all enemies whose rank is lower then that of your focus target.]], [[使用你的远程或者近战武器对目标造成 %d%% 武器伤害。  在接下来的 %d 回合中，你的随机目标技能，比如闪烁灵刃和守卫召唤，都会锁定这个目标。
+		Attacks against this target gain %d%% critical chance and critical strike power while you take %d%% less damage from all enemies whose rank is lower then that of your focus target.]], [[使用你的远程或者近战武器对目标造成 %d%% 武器伤害。  在接下来的 %d 回合中，你的随机目标技能，比如闪烁灵刃和守卫呼唤，都会锁定这个目标。
 		对这个目标的攻击获得 %d%% 额外的暴击几率和暴击加成，同时其他分级低于目标的单位对你造成的伤害减少 %d%%。]], "tformat")
 
 ------------------------------------------------
@@ -14317,7 +14324,7 @@ t("#RED#The powerful blow energizes %s reducing their cooldowns!#LAST#", "#RED#�
 t([[When you are dealt a blow that reduces your life by at least %d%%, you have a %d%% chance to reduce the remaining cooldown of all your talents by 1.
 		Temporary life from Sanguine Infusion will not count against the damage threshold.
 		The chance will increase with your Spellpower.]], [[当你受到的单次打击造成至少 %d%% 最大生命值的伤害时，每个冷却中的技能各有 %d%% 概率减少 1 回合冷却时间。
-		鲜血灌注带来的额外生命值，不会影响该技能的伤害阈值。
+		鲜血充能带来的额外生命值，不会影响该技能的伤害阈值。
 		概率受法术强度加成。]], "tformat")
 
 ------------------------------------------------
@@ -14373,7 +14380,7 @@ t([[You veil yourself in shadows and let them control you.
 		If a target isn't found this effect ends.
 		The movement is not considered a teleport.
 		The resistance will increase with your Spellpower stat.]], [[你融入阴影，并被其支配。
-		使用该技能时以及接下来的 %d 个回合内，你将会自动闪烁到一个附近的敌人身边（离第一个击中的目标的位置在 %d 格之内），攻击并造成 %d%% 暗影武器伤害。
+		使用该技能时立即触发，且在接下来的 %d 个回合中每回合触发：你将会自动闪烁到一个附近的敌人身边（离第一个击中的目标的位置在 %d 格之内），攻击并造成 %d%% 暗影武器伤害。
 		融入阴影时，你免疫所有异常状态，并获得 %d%% 全体伤害抗性。
 		在此期间，除非被杀死，否则你不会被阻止，你也无法控制你的角色。
 		如果找不到目标，此效果结束。
@@ -15975,7 +15982,7 @@ t([[Instantly grow a moss circle of radius %d at your feet.
 		Moss talents are instant but place all other moss talents on cooldown for 3 turns.
 		The damage will increase with your Mindpower.]], [[在你的脚下，半径 %d 的范围内生长出苔藓。
 		每回合苔藓对半径内的敌人会造成 %0.2f 点自然伤害。
-		这种苔藓上沾满了奇怪的液体，有 %d%% 概率使经过的敌人混乱 2 个回合（混乱强度 %d%%）。
+		这种苔藓上沾满了奇怪的液体，每回合有 %d%% 概率使范围内的敌人混乱 2 个回合（混乱强度 %d%%）。
 		苔藓持续 %d 个回合。
 		苔藓系技能无需使用时间，但会让同系其他技能进入 3 回合的冷却。
 		伤害受精神强度加成。]], "tformat")
@@ -16008,9 +16015,10 @@ t([[Your mucus is brought to near sentience.
 		Mucus Oozes last %d turns and will attack any of your foes by spitting slime at them.
 		You may have up to %d Mucus Oozes active at any time (based on your Cunning).
 		Any time you deal a mental critical, the remaining time on all of your Mucus Oozes will increase by 2.
-		The spawn chance increases with your Mindpower.]], [[你的粘液有了自己的感知。每回合有 %d%% 几率，随机一个滴有你的粘液的格子会产生一只粘液软泥怪。
-		粘液软泥怪会存在 %d 回合，会向任何附近的敌人释放史莱姆喷吐。
-		同时场上可存在 %d 只粘液软泥怪。（基于你的灵巧值）
+		The spawn chance increases with your Mindpower.]], [[你的粘液有了自己的感知。
+		每回合有 %d%% 几率，随机一个滴有你的粘液的格子会产生一只粘液软泥怪。
+		粘液软泥怪会存在 %d 回合，会向你的任何敌人释放史莱姆喷吐。
+		同时场上最多可存在 %d 只粘液软泥怪（基于你的灵巧值）。
 		每当你造成一次精神暴击，你的所有粘液软泥怪的存在时间会延长 2 回合。
 		生成概率受精神强度加成。]], "tformat")
 t([[You temporarily merge with your mucus, cleansing yourself of %d physical or magical detrimental effects.
@@ -16849,7 +16857,7 @@ t([[Calls forth a powerful beam of lightning doing %0.2f to %0.2f lightning dama
 		The damage will increase with your Mindpower.]], [[召唤一股强烈的闪电束造成 %0.2f 至 %0.2f 闪电伤害（平均 %0.2f）。
 		伤害受精神强度加成。]], "tformat")
 t("Teleports you randomly within range 10.", "在 10 格范围内随机传送你。", "tformat")
-t("With blinding speed you suddenly appear next to a target up to %d spaces away and attack for %d%% damage.", "你以难以置信的速度闪现至附近 %d 格的一个目标身边并造成 %d%% 伤害。", "tformat")
+t("With blinding speed you suddenly appear next to a target up to %d spaces away and attack for %d%% damage.", "你以难以置信的速度闪现至最远 %d 格内的一个目标身边并造成 %d%% 伤害。", "tformat")
 t([[Grab a target and pull it next to you, covering it with frost while reducing its movement speed by 50%% for %d turns.
 		The ice will also deal %0.2f cold damage.
 		The damage and chance to slow will increase with your Spellpower.]], [[抓住一个目标并将其拉到你身边，以寒霜覆盖它，使其移动速度降低 50%%，持续 %d 回合。
@@ -16937,7 +16945,7 @@ t("Whilst wearing leather or lighter armour, you gain %d%% Defense and %d%% Armo
 t([[You are light on your feet, handling your armour better. Each step you take regenerates %0.2f stamina, and your fatigue is permanently reduced by %0.1f%%.
 		At level 3 you are able to walk so lightly that you never trigger traps that require pressure.]], [[你的步伐很轻快，使你能更好的适应盔甲的重量。每移动一步你可以回复 %0.2f 体力，并且你的疲劳值永久减少 %0.1f%%。
 		在等级3时你的脚步非常轻快，以至于你不会触发压力式陷阱。]], "tformat")
-t("You literally dance around your foes, increasing your movement speed by %d%% and reducing the cooldown of Hack'n'Back, Rush, Disengage and Evasion by %d turns.", "你在敌人周围跳起华丽的舞蹈，增加 %d%% 移动速度并减少燕回斩、冲锋、逃脱和回避的冷却时间 %d 回合。", "tformat")
+t("You literally dance around your foes, increasing your movement speed by %d%% and reducing the cooldown of Hack'n'Back, Rush, Disengage and Evasion by %d turns.", "你在敌人周围跳起华丽的舞蹈，增加 %d%% 移动速度并减少燕回斩、冲锋、后跳和躲闪的冷却时间 %d 回合。", "tformat")
 t("Your cunning manipulations allow you to use charms (wands, totems and torques) more efficiently, reducing their cooldowns by %d%%.", "你灵活的头脑使你可以更有效地使用护符（魔杖、图腾和项圈），使其冷却时间减少 %d%%。", "tformat")
 t([[You look at your surroundings with more intensity than most people, allowing you to see stealthed or invisible creatures.
 		Increases stealth detection by %d and invisibility detection by %d.
@@ -17802,6 +17810,7 @@ section "mod-tome/data/talents/psionic/psi-archery.lua"
 
 t("Fire and guide an arrow to its target with precise telekinetic nudges. Does normal damage, but accuracy and crit chance are increased by %d.", "射出一支箭，以念力精确地微调箭矢，导引它射向目标。造成普通伤害，但命中和暴击率提高 %d。", "tformat")
 t("Use telekinetic forces to greatly augment the durability and tension of your bow in order to fire an arrow with velocity unmatched by even the mightiest mundane archers. Increases armor penetration by %d, and deals %d%% damage.", "使用精神灵能以增强弓的耐久和张力，使射出的箭矢拥有连最强大的普通弓手都无法企及的飞行速度。增加 %d 点护甲穿透并造成 %d%% 伤害。", "tformat")
+t("Masterful Telekinetic Archery", "念力射击掌握", "talent name")
 t([[You temporarily set aside a part of you mind to direct your telekinetically-wielded bow. It will automatically attack the nearest target each turn for %d turns.
 			The telekinetically-wielded bow uses Willpower in place of Strength and Cunning in place of Dexterity to determine attack and damage.
 			You are not telekinetically wielding anything right now.]], [[你暂时分出一部分精神来控制念动之弓。它会在 %d 回合内每回合自动攻击一个随机目标。
@@ -18488,7 +18497,7 @@ t([[Summon a Dread of level %d that will annoyingly blink around, hexing your fo
 		]], [[召唤一个等级 %d 的噩灵。噩灵会四处传送，并对敌人释放邪术。
 		它会使用以下技能：
 		- 燃烧邪术等级 %d
-		- 移情邪术等级 %d
+		- 转移邪术等级 %d
 		- 宁神邪术等级 %d
 		- 模糊视觉等级 %d
 		- 相位之门等级 %d
@@ -20055,6 +20064,7 @@ t([[Jump back up to %d grids from your target, springing over any creatures in y
 		你必须选择可见目标，必须以近乎直线的轨迹后跳。
 		落地后，你获得 3 回合 %d%% 移动速度加成，采取除移动外的行动会提前终止，并可以重新装填弹药（若有）。
 		疲劳值会降低额外移动速度和最大跳跃距离。]], "tformat")
+t("Evasion", "躲闪", "talent name")
 t([[Your quick wit and reflexes allow you to anticipate attacks against you, granting you a %d%% chance to evade melee and ranged attacks and %d increased defense for %d turns.
 		The chance to evade and defense bonus increase with your Dexterity.]], [[你的战斗技巧和反射神经让你能迅速躲闪攻击，获得 %d%% 几率躲闪近战与远程攻击，闪避值增加 %d， 持续 %d 回合。
 		躲闪几率和闪避加成受敏捷加成。]], "tformat")
@@ -20733,14 +20743,14 @@ t([[You infuse blighted energies into all of your summons, granting them Bone Sh
 		- Dread: Slumber
 		%s
 		]], [[你把枯萎能量灌注进你的召唤生物中，让他们获得白骨护盾（等级 3），并获得相当于你魔力值的法术强度加成。
-		你的自然召唤和死灵随从将会得到特殊的枯萎技能（等级 3），其他的召唤物将会获得 10%% 枯萎伤害转换，并获得剧毒瘟疫（等级 3）。
+		你的自然召唤和死灵随从将会得到特殊的腐化技能（等级 3），其他的召唤物将会获得 10%% 枯萎伤害转换，并获得剧毒瘟疫（等级 3）。
 		#GREEN#自然召唤：#LAST#
 		- 战争猎犬：啃噬
 		- 果冻怪：无防备诅咒
 		- 米诺陶：毁伤
 		- 岩石傀儡：酸性血液
 		- 喷火里奇：生命分流
-		- 九头蛇：鲜血喷射
+		- 三头蛇：鲜血喷射
 		- 雾凇：剧毒风暴
 		- 火龙：乌鲁洛克之焰
 		- 乌龟：元素狂乱
@@ -20788,7 +20798,7 @@ t([[This is your true goal and the purpose of all necromancy - to become a power
 		]], [[这是你学习死灵法术的最终目标——成为强大而不死的巫妖！
 		当你学习这一技能后，在你下一次被杀死的时候，你体内强大的奥术力量会重建你的身体，让你成为你梦寐以求的巫妖。
 		巫妖免疫毒素、疾病、恐惧、流血、震慑，不需要呼吸，并获得 20%% 寒冷和黑暗抗性。
-		巫妖同时获得 +12 魔力，意志和灵巧，60%% 暴击无视，+4 生命成长（不追加前面等级的生命值），+35 法术和精神豁免，获得 7 法力值恢复。
+		巫妖同时获得 +12 魔力，意志和灵巧，受到的直接暴击额外伤害降低 60%%，+4 生命成长（不追加前面等级的生命值），+35 法术和精神豁免，获得 7 法力值恢复。
 
 		巫妖会获得新的种族技能树，包含以下技能：
 		- 不死之躯：巫妖的身体极其难以摧毁，其生命值可以降到负数，且即使被杀死之后仍然可以复活。
@@ -20849,7 +20859,7 @@ t("Slasul will be happy to know your faith in his cause. You should return to sp
 t([[You have sided with Slasul and helped him vanquish Ukllmswwik. You are now able to breathe underwater with ease.
 		You have also learned to use tridents and other exotic weapons easily (talent level %d of Exotic Weapon Mastery), and can Spit Poison (talent level %d) as nagas do. These are bonus talent levels that increase with your character level.
 		In addition, should Slasul still live, he may have a further reward for you as thanks...]], [[你站在萨拉苏尔一方并帮助他解决了乌克勒姆斯维奇。你现在可以轻松地在水下呼吸。
-		同时，你已学会轻松使用三叉戟和其他特殊武器（获得 %d 级特殊武器掌握），并且可以像娜迦一样喷吐毒素（等级 %d）。 这些是额外的技能等级，随人物等级增长。
+		同时，你已学会轻松使用三叉戟和其他特殊武器（获得 %d 级特殊武器掌握），并且可以像娜迦一样使用毒性喷吐（技能等级 %d）。 这些是额外的技能等级，随人物等级增长。
 		此外，若萨拉苏尔仍然存活，他或许还会送你一份谢礼…]], "tformat")
 t([[A strong body is key to a strong mind, and a strong mind can be powerful enough to make a strong body.
 		This prodigy grants a Mindpower bonus equal to 60%% of your Strength.
@@ -24131,6 +24141,7 @@ t("Physical resistance reduced by %d%% and talents cooldowns increased by %d%%."
 t("Spellpower and physical power increased by %d.", "法术强度和物理强度提升 %d。", "tformat")
 t("flat", "固定伤害减免", "effect subtype")
 t("Reduces all damage by %d.", "降低所有伤害 %d。", "tformat")
+t("Black Ice", "黑冰", "_t")
 t("Damage from necrotic minions increased by %d%%.", "来自死灵随从的伤害增加 %d%%。", "tformat")
 t("Sustains a corpselight of radius %d that deals %0.2f cold damage per turn.", "维持一个半径 %d 格的鬼火，每回合造成 %0.2f 寒冷伤害。", "tformat")
 t("#Target# summons a corpselight!", "#Target#召唤阴燃鬼火！", "_t")
@@ -24347,9 +24358,14 @@ t([[Residual power from the surge is emanating from the circles.
 t("The Sun has granted a brief immunity to all damage.", "太阳赋予了对所有伤害的短暂免疫。", "_t")
 t("The target's light has been drained, reducing light resistance by %d%% and damage by %d%%.", "目标的光明被吸收了，减少光系抗性 %d%% 和伤害 %d%%。", "tformat")
 t("#Target#'s light is back.", "#Target#的光明回复了。", "_t")
+t("Charm:  Piercing", "护符：穿透", "_t")
 t("All damage penetration increased by %d%%.", "所有抗性穿透增加 %d%%。", "tformat")
+t("Charm:  Damage", "护符：伤害", "_t")
 t("All damage increased by %d%%.", "所有伤害增加 %d%%。", "tformat")
+t("Charm:  Saves", "护符：豁免", "_t")
 t("All saves increased by %d.", "所有豁免增加 %d。", "tformat")
+t("Charm:  Evasion", "护符：躲闪", "_t")
+t("Charm:  Innervating", "护符：激励", "_t")
 t("Fatigue reduced by %d%%.", "疲劳值减少 %d%%。", "tformat")
 t("#LIGHT_BLUE##Target# takes root.", "#LIGHT_BLUE##Target#扎根了。", "_t")
 t("The more you use infusions, the longer they will take to recharge (+%d cooldowns).", "你使用纹身的次数越多，纹身冷却时间越长 (+%d 冷却时间)。", "tformat")
@@ -24612,6 +24628,8 @@ t("Improves senses, allowing the detection of unseen things.", "强化感知，�
 t("sunder", "破击", "effect subtype")
 t("The target's combat ability is reduced, reducing its attack by %d.", "目标的战斗能力下降，命中降低 %d。", "tformat")
 t("#Target# is pinned by a bone spike.", "#Target#被骨刺定身。", "_t")
+t("+Bone Grab", "+白骨之握", "_t")
+t("-Bone Grab", "-白骨之握", "_t")
 t("#Target# looks less menacing.", "#Target#看上去不再那么有威胁了。", "_t")
 t("The smoke around #target# dissipates.", "#target#周围的浓烟消失了。", "_t")
 t("Resolve", "坚定意志", "_t")
@@ -25462,6 +25480,11 @@ t("Have you hard about the patrol that disappeared in the maze in the west?", "�
 t("A fearsome bull-headed monster, he swings a mighty axe as he curses all who defy him.", "一只可怕的牛头怪物，他挥舞着巨斧，诅咒所有胆敢违抗他的人。", "_t")
 t("and hung on a wall-spike", "并将其挂在墙上的长钉上", "_t")
 t("Covered by eerie luminescent growths and protuberances, this spider now haunts the maze's silent passageways.", "这只蜘蛛覆盖着诡异的发光增生和瘤状突起，如今出没于迷宫寂静的通道中。", "_t")
+
+------------------------------------------------
+section "mod-tome/data/zones/maze/objects.lua"
+
+t("the perfect killing device", "完美猎杀装置", "entity name")
 
 ------------------------------------------------
 section "mod-tome/data/zones/murgol-lair/npcs.lua"
@@ -27301,6 +27324,7 @@ t("Ungrol of Last Hope", "最后的希望城的温格洛", "_t")
 t("Vargh Republic", "瓦尔弗共和国", "_t")
 t("Water lair", "水下巢穴", "_t")
 t("lone alchemist", "落单的炼金术士", "_t")
+t("lost defiler", "迷路的堕落术士", "_t")
 t("standby", "待命", "_t")
 t("unseen", "未探索区域", "_t")
 t("sunwell", "太阳井", "entity name")
@@ -27378,6 +27402,7 @@ When activated you will have access to special commands:
 ]], "_t")
 t("Enter a quantity.", "输入数量。", "_t")
 t("Must be between %i and %i characters.", "必须介于 %i 和 %i 个字符之间。", "tformat")
+t("Key bindings", "按键绑定", "_t")
 t("      Press a key (escape to cancel, backspace to remove) for: %s", "      请按键（Esc 键取消，退格键删除）以绑定 %s 的键位", "tformat")
 t("Make gesture (using right mouse button) or type it (or escape) for: %s", "请用鼠标右键画出鼠标手势，或直接输入手势（按ESC取消），为 %s 绑定鼠标手势", "tformat")
 t([[#GOLD#Achieved on:#LAST# %s
@@ -28030,7 +28055,7 @@ t("A strange orb of demonic origins. It glows with a surreal red light.", "一�
 t("Jaw of Rogroth", "罗格洛斯的下颚", "entity name")
 t("tooth lined belt", "布满尖齿的腰带", "_t")
 t("Rogroth's mouth happened to be about the same size as your waist. Interesting.", "罗格洛斯的嘴巴恰好和你的腰差不多大。真有趣。", "_t")
-t("deal darkness damage equal to your 350%% of your spellpower to a target, and, if it kills the target, restores 15% of max hp and all resources (except paradox and equilibrium)", "对目标造成相当于你法术强度350%%的暗影伤害，若击杀目标，则按各自上限的15%恢复生命值和所有资源（紊乱值和失衡值除外）", "_t")
+t("deal darkness damage equal to your 350%% of your spellpower to a target, and, if it kills the target, restores 15% of max hp and all resources (except paradox and equilibrium)", "对目标造成相当于你法术强度 350% 的暗影伤害，若击杀目标，则按各自上限的 15% 恢复生命值和所有资源（紊乱值和失衡值除外）。", "_t")
 t("Ashes of Urh'Rok", "乌鲁洛克之烬", "newLore category")
 t("history of Mal'Rok (mistranslated)", "玛·洛克的历史（误译）", "_t")
 t([[(You see here a pile of strange tablets, all piled up in a nice, orderly stack.  You remove the top one, and study it; your finger slips across a square in one corner, and strange sentences start playing through your mind. You struggle to make sense of the unfamiliar words and concepts in your thoughts.)
@@ -28593,7 +28618,7 @@ t([[Whenever you block an attack with your shield, you release a cloud of acidic
 		伤害受法术强度加成。]], "tformat")
 t("Corrosive Cone", "锥形酸液", "talent name")
 t([[When you deal a critical strike in melee, you send out a cone of acid, dealing %d damage to all enemies and melting walls you hit.
-		The damage will increase with your Spellpower.]], [[每次近战暴击时，将释放一股锥形酸液，造成 %d 伤害并融化墙壁。
+		The damage will increase with your Spellpower.]], [[每次近战暴击时，将释放一股锥形酸液，对范围内所有敌人造成 %d 点酸性伤害，并融化被击中的墙壁。
 		伤害受法术强度加成。]], "tformat")
 t("Armoured Leviathan", "铁甲利维坦", "talent name")
 t([[You enchant your shield to grant you power for %d turns.
@@ -31465,9 +31490,9 @@ t([[No, no! Your minds aren't focused enough! I told you that you must have a cl
 t("Lessons of Inevitability - Epilogue", "有关必然性的课程——尾声", "_t")
 t([[Only one person escaped alive from the summoning of the Unspeakable Thing. She believed that, despite the failure of her fellow students and the horror of what she saw, The Teacher's wisdom still had value in the apocalyptic world created by the Spellblaze. After all, is it not better to know about the horrors out there than it is to be ignorant of their existence? She began to pass on the power of entropy onto others, and they too passed it on. The ones who learned this forbidden lore became known as the Cultists of Entropy.
 
-What became of The Teacher is unknown. Perhaps it didn't survive the encounter with the Unspeakable Thing, or perhaps it returned to its home somewhere far beyond Eyal.]], [[不可名状的恐怖降临之时，只有一个人幸存逃离。她相信，尽管同学们遭遇了失败，她也目睹了恐怖景象，但在魔法大爆炸造成的末日世界中，导师的智慧仍有价值。毕竟，了解外界的恐怖，不是比对它们的存在一无所知更好吗？她开始将熵的力量传授给其他人，他们又继续传授给更多人。那些掌握了这些禁忌知识的人，现在被称为熵教徒。
+What became of The Teacher is unknown. Perhaps it didn't survive the encounter with the Unspeakable Thing, or perhaps it returned to its home somewhere far beyond Eyal.]], [[不可名状之物降临之时，只有一个人幸存逃离。她相信，尽管同学们遭遇了失败，她也目睹了恐怖景象，但在魔法大爆炸造成的末日世界中，导师的智慧仍有价值。毕竟，了解外界的恐怖，不是比对它们的存在一无所知更好吗？她开始将熵的力量传授给其他人，他们又继续传授给更多人。那些掌握了这些禁忌知识的人，现在被称为熵教徒。
 
-没有人知道“导师”去了哪里。也许，他没能在不可名状的恐怖之下幸存；也许，他回到了远在埃亚尔之外某处的家园。]], "_t")
+没有人知道导师去了哪里。也许，它没能在与不可名状之物的遭遇中幸存；也许，它回到了远在埃亚尔之外某处的家园。]], "_t")
 t("Loremaster Greynot's Analysis of the Races - Chapter 12 - Krogs", "博学者格雷诺特关于人种的调查——第十二章——克罗格", "_t")
 t([[The krog are perhaps the youngest of the intelligent races of Maj'Eyal, only coming into existence recently. They claim that they were formerly ogres that have had their runes removed, somehow surviving having their runes replaced by a combination of natural infusions and drakes blood. The removal of their runes was orchestrated by the Ziguranth, who apparently decided action needed to be taken to prevent all ogres from being horribly and brutally killed as a result of the Spellhunt, leading to the creation of the krog. The official reasons given by the Ziguranth for this action was that the ogres were unfortunate victims of magic rather then perpetrators of it, and the Ziguranth were just looking to help to free them from the taint of the arcane.
 
@@ -31735,7 +31760,7 @@ The decaying horror cannot move and will attack all hostile creatures in range o
 All its primary stats will be set to %d (based on your Magic stat), life rating increased by %d, and all talent levels set to %d.  Many other stats will scale with level.
 Your increased damage, damage penetration, critical strike chance, and critical strike multiplier stats will all be inherited.
 		]], [[你利用和恐魔的联系召唤一个持续 %d 回合的腐败的浮肿恐魔。
-腐败的恐魔不能移动，能攻击范围内的所有敌对生物。它拥有精神干扰和精神光束技能。
+腐败的恐魔不能移动，能攻击范围内的所有敌对生物。它拥有精神干扰和心灵灼烧技能。
 它的所有主属性将设为 %d （基于你的魔力属性），生命成长增加 %d， 所有技能等级设为 %d。 许多其他属性随等级成长。
 它将继承你的伤害加成、伤害抗性穿透、暴击几率和暴击伤害系数。
 		]], "tformat")
@@ -32055,7 +32080,7 @@ t([[Your Nihil unravels the existence of the target, tearing them apart with ent
 		The Herald will have a bonus to all attributes equal to your Magic.  Many other stats will scale with level.
 		Your increased damage, damage penetration, critical strike chance, and critical strike multiplier stats will all be inherited.]], [[你的空无会解构目标的存在，并以熵能将其撕裂。
 		在空无效果结束之前，如果目标身上被施加了 6 个负面魔法效果，将召唤出持续 %d 回合的破灭之兆。
-		之前已有的负面效果、法术冲击、被奥术之眼观察不会计入总数。刷新同一个效果会计入总数。
+		之前已有的负面效果、法术冲击、被奥术之眼发现不会计入总数。刷新同一个效果会计入总数。
 		破灭之兆的所有属性获得等同于你魔力属性的加成。其他属性根据本身等级提升。
 		破灭之兆会继承你的伤害加成、伤害穿透、暴击几率和暴击倍率加成。]], "tformat")
 t("Erase", "抹除", "talent name")
@@ -32226,7 +32251,7 @@ t([[Spin around, extending your weapon and damaging all targets around you for %
 		如果武器击中敌人，你获得 %d 疯狂值。
 		如果触手击中敌人，你获得 %d 疯狂值。
 
-		#YELLOW_GREEN#当触手处于缠绕状态：#WHITE#你的触手攻击改为以被缠绕目标为中心展开（武器攻击除外），并使范围内的敌人眩晕 5 回合。]], "tformat")
+		#YELLOW_GREEN#当触手处于缠绕状态：#WHITE#你的触手攻击改为以被缠绕目标为中心展开（武器攻击除外），且范围缩小为半径 1，但会使命中的敌人眩晕 5 回合。]], "tformat")
 t("Tendrils Eruption", "触手地狱", "talent name")
 t("%s resists the slimy tendril!", "%s抵挡了黏稠触须！", "logSeen")
 t([[You plant your tentacle hand in the ground where it splits up and extends to a target zone of radius %d.
@@ -34486,7 +34511,7 @@ t([[Faced with the petty quandaries of 'conventional physics', some mad tinker m
 There were ...side effects.]], [[面对“传统物理学”的小小难题，某位疯狂的工匠一定给这片锯刃覆上了一层细薄的膨胀时间，以将速度提升到极致。
 
 不过……它产生了一些副作用。]], "_t")
-t("Attack speed increases with paradox, up to 250% at 1000 paradox.", "攻击速度随紊乱值增加，1000紊乱时为250%。", "_t")
+t("Attack speed increases with paradox, up to 250% at 1000 paradox.", "攻击速度随紊乱值增加，1000紊乱时达到上限250%。", "_t")
 t("increase paradox by a random amount", "随机增加紊乱值", "_t")
 t("increase paradox by a drastic amount with a chance to do an anomaly (%d%% chance). If anomaly triggers, halve paradox.", "大量增加紊乱值，并有一定几率触发异常(%d%% 几率)。如果触发了异常，紊乱值减半。", "tformat")
 t("Heartrend", "心脏切割", "entity name")
@@ -37410,7 +37435,7 @@ t([[You fire a special, electrically charged shot with your steamgun(s) at a spo
 		When each shot reaches its target, it bursts into electrified shrapnel within radius %d, which shocks each target hit and deals %d%% weapon damage as lightning.
 		Shocked targets lose up to %d non-magical effects (for the first shot that hits).
 		This talent does not use ammo.]], [[你用蒸汽枪向射程内的一处位置进行一次特殊的带电射击。
-		每发子弹抵达目标位置时，都会爆裂成电化弹片，波及半径 %d 格，电击命中的每个目标，并造成 %d%% 武器伤害的闪电伤害。
+		每发子弹抵达目标位置时，都会爆裂成电化弹片，波及半径 %d 格，电击命中的每个目标，并对其造成 %d%% 武器伤害的闪电伤害。
 		被电击的目标失去至多 %d 个物理或精神增益效果（仅第一发命中时生效）。
 		本技能不消耗弹药。]], "tformat")
 t("Strafe", "扫射", "talent name")
@@ -37950,9 +37975,9 @@ t([[Allows the use of Technomancy spells.
 		Grants a magical steam reserve that regenerates %d steam per 10 mana spent.
 		Grants Spellpower based on current steam level (currently %d; %d%% steam filled).
 		Outside of combat, you relax and let your steam reserve slowly wither away.
-		#{italic}#Metal Arcane Power!#{normal}#]], [[允许使用科技法术，
+		#{italic}#Metal Arcane Power!#{normal}#]], [[允许使用科技法术。
 		获得一个魔法蒸汽储备，施放消耗法力且不消耗蒸汽的主动法术时，每消耗10点法力值获得 %d 蒸汽。
-		根据当前蒸汽值获得法术强度（目前 %d； 蒸汽储量 %d%%）
+		根据当前蒸汽值获得法术强度（目前 %d； 蒸汽储量 %d%%）。
 		在战斗外，你放松了控制，蒸汽储备会逐渐消退。
 		#{italic}#金属奥术力量！#{normal}#]], "tformat")
 t("Smith", "铁匠", "talent name")
@@ -38181,7 +38206,7 @@ t("Hunker Down", "炮台守卫", "talent name")
 t("guardian turret", "守卫炮台", "_t")
 t("An advanced turret equipped with dual steamguns.", "一个装备双蒸汽枪的高级炮台。", "_t")
 t([[Deploy a defensive emplacement around you, summoning 2 guardian turrets in adjacent tiles for %d turns. Guardian turrets redirect %d%% of all damage taken by other adjacent allies (other than fellow guardian turrets) to themselves, and each is armed with a powerful turret capable of firing piercing bullets.
-			Guardian Turrets gain %0.2f ranks in Steamgun Mastery based on your Hunker Down talent level.]], [[在身边部署防御阵地，召唤 2 个守卫炮台，持续 %d 回合。守卫炮台会将身边其他盟友所受全部伤害的 %d%% 转移到自己身上，并且它们装备有能发射贯穿子弹的强力炮塔。
+			Guardian Turrets gain %0.2f ranks in Steamgun Mastery based on your Hunker Down talent level.]], [[在身边部署防御阵地，在相邻格召唤 2 个守卫炮台，持续 %d 回合。守卫炮台会将身边其他盟友（不含其他守卫炮台）所受全部伤害的 %d%% 转移到自己身上，并且各自装备有能发射贯穿子弹的强力炮台。
 			守卫炮台获得 %0.2f 级蒸汽枪掌握，等级取决于你的炮台守卫技能等级。]], "tformat")
 t("Fire your twin-linked gauss cannons, dealing 100%% steamgun damage as lightning in a piercing beam that bypasses all armor. This does not harm friendly targets.", "发射你的双联电磁炮，在一条贯穿直线上造成 100%% 闪电蒸汽枪伤害，无视护甲。这一效果不会伤害友好目标。", "tformat")
 t("Subcutaneous Metallisation", "金属内皮", "talent name")
@@ -39594,7 +39619,7 @@ t("Example Item:", "样品：", "_t")
 t("body", "躯体", "_t")
 t("create tier( %s )", "可制作材质等级(%s)", "tformat")
 t("missing reqs", "条件不足", "_t")
-t("#FFD700#St. power#FFFFFF#: ", "#FFD700#蒸汽强度#FFFFFF#: ", "_t")
+t("#FFD700#St. power#FFFFFF#: ", "#FFD700#蒸汽强度#FFFFFF#：", "_t")
 t("Kruk Invasion", "克鲁克入侵", "_t")
 t("You can not recall until you have placed the bomb at the tunnel's end!", "你只有在隧道尽头放置炸弹之后，才能启用回归之杖！", "_t")
 t("#LIGHT_BLUE#Spacetime shudders for an instant as a note falls out from a different timeline!", "#LIGHT_BLUE#时空发生了一瞬间的震动，一张纸条从另一个时间线掉了出来！", "saySimple")
