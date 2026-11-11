@@ -44,6 +44,11 @@ end
 
 local class = require"engine.class"
 local i18nhelper = require"engine.i18nhelper"
+local creature_subtype = dofile("/hooks/chn-mod/creature_subtype.lua")
+class:bindHook("Actor:tooltip", function(self, data)
+    creature_subtype.fixTooltip(self, data.ts)
+end)
+
 class:bindHook("Entity:loadList", function(self, data)
     if data.file == "/data-nullpackreloaded/general/special-artifacts.lua" then
         data.res["NULL_TIMEKEEPER"].desc = _t(data.res["NULL_TIMEKEEPER"].desc)
@@ -89,6 +94,9 @@ end)
 -- Fixes that need DLC data, which the DLCs only define in their own
 -- ToME:load hooks; this addon's hooks are bound after theirs (higher weight).
 class:bindHook("ToME:load", function(self, data)
+    local ActorTemporaryEffects = require("engine.interface.ActorTemporaryEffects")
+    creature_subtype.installPredator(ActorTemporaryEffects.tempeffect_def.EFF_PREDATOR)
+
     -- Resources without a CharacterSheet.status_text (Cults insanity) return
     -- a string meant to be formatted once more ("%%"), as the uisets do.
     local ok, ActorResource = pcall(require, "engine.interface.ActorResource")

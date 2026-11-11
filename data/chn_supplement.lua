@@ -47,6 +47,10 @@ t("H.Key %d", "快捷键 %d", "tformat")
 t("LeftClick", "左键", "_t")
 t("MiddleClick", "中键", "_t")
 
+--section "actors"
+-- Only for creature tooltips and the PREDATOR effect's prey subtypes.
+t("light##creature_subtype", "光", "_t")
+
 --section "objects"
 -- Shield add_name (data/general/objects/shields.lua); the attribute parts
 -- already use a full-width comma.
