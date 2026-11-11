@@ -82,6 +82,16 @@ class:bindHook("Entity:loadList", function(self, data)
     end
 end)
 
+-- engine/Chat.lua addChat builds quick-reply nodes with a bare "[leave]"
+-- answer; the nested addChat call passes them through this hook.
+class:bindHook("Chat:add", function(self, data)
+    local c = data.c
+    if type(c) == "table" and type(c.id) == "string" and c.id:find("^quick_reply")
+        and type(c.answers) == "table" and type(c.answers[1]) == "table" and c.answers[1][1] == "[leave]" then
+        c.answers[1][1] = _t"[leave]"
+    end
+end)
+
 class:bindHook("Chat:invoke", function(self, data)
     if self.name == "command-staff" and self.player.is_first_time_souls then
         if not (self.player:hasStaffWeapon() and self.player:hasStaffWeapon().is_bonestaff
@@ -96,6 +106,36 @@ end)
 class:bindHook("ToME:load", function(self, data)
     local ActorTemporaryEffects = require("engine.interface.ActorTemporaryEffects")
     creature_subtype.installPredator(ActorTemporaryEffects.tempeffect_def.EFF_PREDATOR)
+
+    -- BEAR_TRAP (timed_effects/physical.lua) lists a bare "pinned"; the rest
+    -- of its long_desc is already translated.
+    local bear = ActorTemporaryEffects.tempeffect_def.EFF_BEAR_TRAP
+    if bear and type(bear.long_desc) == "function" and not bear.__chn_long_desc then
+        local long_desc = bear.long_desc
+        bear.long_desc = function(self, eff, ...)
+            local res = long_desc(self, eff, ...)
+            if type(res) ~= "string" or not (eff and eff.pinid) then return res end
+            local prefix = _t"Caught in a bear trap: "
+            local pinned = _t"pinned##bear_trap"
+            if pinned == "pinned##bear_trap" then return res end
+            if res:sub(1, #prefix + 6) == prefix.."pinned" then
+                res = prefix..pinned..res:sub(#prefix + 7)
+            end
+            return res
+        end
+        bear.__chn_long_desc = true
+    end
+
+    -- Embers PRESSURE_SUIT returns a plain English literal.
+    local suit = ActorTemporaryEffects.tempeffect_def.EFF_PRESSURE_SUIT
+    if suit and type(suit.long_desc) == "function" and not suit.__chn_long_desc then
+        local long_desc = suit.long_desc
+        suit.long_desc = function(...)
+            local res = long_desc(...)
+            return type(res) == "string" and _t(res) or res
+        end
+        suit.__chn_long_desc = true
+    end
 
     -- Resources without a CharacterSheet.status_text (Cults insanity) return
     -- a string meant to be formatted once more ("%%"), as the uisets do.

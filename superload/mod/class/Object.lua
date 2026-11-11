@@ -53,12 +53,15 @@ if not rawget(_M, "__chn_getTextualDesc") then
     _M.__chn_getTextualDesc = true
     local _getTextualDesc = _M.getTextualDesc
     function _M:getTextualDesc(...)
-        local all_key = "all##item_property"
-        local all = _t(all_key)
-        if all == all_key then return _getTextualDesc(self, ...) end
+        local all_key, living_key = "all##item_property", "living##item_property"
+        local all, living = _t(all_key), _t(living_key)
+        if all == all_key and living == living_key then return _getTextualDesc(self, ...) end
         local old_t = _G._t
         _G._t = function(s, tag, ...)
-            if s == "all" and (tag == nil or tag == "_t") then return all end
+            if tag == nil or tag == "_t" then
+                if s == "all" and all ~= all_key then return all end
+                if s == "living" and living ~= living_key then return living end
+            end
             return old_t(s, tag, ...)
         end
         local res = pack(pcall(_getTextualDesc, self, ...))

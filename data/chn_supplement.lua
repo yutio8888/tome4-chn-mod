@@ -48,6 +48,17 @@ t("LeftClick", "左键", "_t")
 t("MiddleClick", "中键", "_t")
 
 --section "actors"
+-- Quick-reply chat nodes get a bare "[leave]" answer (engine/Chat.lua addChat).
+-- The mod-tome locale already has _t"[leave]"; hooks/load.lua looks it up.
+-- Effect type typo of DOZING (timed_effects/other.lua, type = "otber"), shown
+-- through _t(e.type) in the effect tooltip header.
+t("otber", "其他", "_t")
+-- RIME_WRAITH subtype (timed_effects/magical.lua), shown with tag "effect subtype".
+t("parasitic", "寄生", "effect subtype")
+-- BEAR_TRAP long_desc pushes a bare "pinned" (timed_effects/physical.lua).
+t("pinned##bear_trap", "定身", "_t")
+-- Embers PRESSURE_SUIT long_desc returns a plain literal without _t.
+t("When hit the suit's motors displace you quickly, ignoring the blow.", "受到攻击时，战服的马达会迅速将你移开，使你避开这次打击。", "_t")
 -- Only for creature tooltips and the PREDATOR effect's prey subtypes.
 t("light##creature_subtype", "光", "_t")
 
@@ -57,5 +68,8 @@ t("light##creature_subtype", "光", "_t")
 t(" (#ARMOR#, #SHIELD#)", " (#ARMOR#，#SHIELD#)", "entity add_name")
 -- "all" in item property lines only (Object:getTextualDesc).
 t("all##item_property", "全部", "_t")
+-- "Damage against" lines show actor types through _t(type); "living" is
+-- shared with the entity keyword 生命, so items use 活物 (cf. unliving 非活物).
+t("living##item_property", "活物", "_t")
 -- Keyword separator of Object:getShortName (equipment doll labels).
 t(", ##short_name", "、", "_t")
