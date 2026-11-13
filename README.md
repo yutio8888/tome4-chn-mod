@@ -8,7 +8,7 @@
 
 | 部分 | 说明 |
 |---|---|
-| 核心 tome 译文 | 8,152 条覆盖/新增条目（相对官方中文 locale） |
+| 核心 tome 译文 | 8,169 条覆盖/新增条目（相对官方中文 locale） |
 | 引擎译文 | 189 条与官方中文 engine locale 不同的条目（游戏内对话框、日志、日期等；启动菜单仍为官方译文） |
 | 官方 DLC 译文 | Ashes of Urh'Rok 743、Cults of Entropy 1,569、Embers of Rage 3,149，共 5,461 条 |
 | Nullpackreloaded 支持 | 443 条译文 + 特殊物品运行时挂钩 |
