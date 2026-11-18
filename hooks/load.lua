@@ -8,6 +8,7 @@ I18N:loadLocale("/data-chn-mod/chn_supplement.lua")
 -- Keep level-up comparisons focused on the changing numbers even when a
 -- Chinese sentence has no whitespace around them.
 local talent_description_diff = dofile("/hooks/chn-mod/talent_description_diff.lua")
+local dynamic_desc_fixes = dofile("/hooks/chn-mod/dynamic_desc_fixes.lua")
 talent_description_diff.install()
 
 local _popup = engine.ui.Dialog.listPopup
@@ -105,6 +106,9 @@ end)
 -- ToME:load hooks; this addon's hooks are bound after theirs (higher weight).
 class:bindHook("ToME:load", function(self, data)
     local ActorTemporaryEffects = require("engine.interface.ActorTemporaryEffects")
+    -- Embers Bloodstream / Automated Repair System: show the values the code
+    -- actually applies (Chinese only; see hooks/dynamic_desc_fixes.lua).
+    dynamic_desc_fixes.install()
     creature_subtype.installPredator(ActorTemporaryEffects.tempeffect_def.EFF_PREDATOR)
 
     -- BEAR_TRAP (timed_effects/physical.lua) lists a bare "pinned"; the rest
