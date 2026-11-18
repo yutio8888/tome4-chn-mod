@@ -6,6 +6,9 @@
 --   CHN_TEST_ORCS_ROOT   tome-orcs addon source root (data/talents/steam/sawmaiming.lua,
 --                        data/timed_effects/other.lua)
 --   CHN_TEST_LOCALE      Chinese translation file containing the Embers strings
+--                        (new locale; data/chn_supplement.lua of this tree is added)
+--   CHN_TEST_OLD_LOCALE  optional: data/locales/zh_hans.lua of the previous release
+--                        (old locale, used for the code/locale pairing matrix)
 --
 -- Run: luajit tests/test_dynamic_desc_fixes.lua   (from the addon root)
 
@@ -46,17 +49,32 @@ local function same(a, b)
 end
 
 -- ---------------------------------------------------------------- locale
-local tr = {}
-do
-    local lenv = setmetatable({
-        locale = function() end, section = function() end,
-        setFlag = function() end, forceFontPackage = function() end,
-        t = function(src, dst) if tr[src] == nil then tr[src] = dst end end,
-    }, {__index = _G})
-    local chunk = assert(loadstring(read(env("CHN_TEST_LOCALE")), "locale"))
-    setfenv(chunk, lenv)
-    chunk()
+local function load_locale(paths)
+    local out = {}
+    for _, path in ipairs(paths) do
+        local lenv = setmetatable({
+            locale = function() end, section = function() end,
+            setFlag = function() end, forceFontPackage = function() end,
+            t = function(src, dst) if out[src] == nil then out[src] = dst end end,
+        }, {__index = _G})
+        local chunk = assert(loadstring(read(path), "locale"))
+        setfenv(chunk, lenv)
+        chunk()
+    end
+    return out
 end
+
+local SUPPLEMENT = "data/chn_supplement.lua"
+local locales = {
+    new = load_locale({env("CHN_TEST_LOCALE"), SUPPLEMENT}),
+    new_nosupp = load_locale({env("CHN_TEST_LOCALE")}),
+}
+local old_path = os.getenv("CHN_TEST_OLD_LOCALE")
+if old_path and old_path ~= "" then
+    locales.old = load_locale({old_path, SUPPLEMENT})
+    locales.old_nosupp = load_locale({old_path})
+end
+local tr = locales.new
 
 config = {settings = {locale = "zh_hans"}}
 local raw_format = string.format
@@ -126,7 +144,26 @@ local M = dofile("hooks/dynamic_desc_fixes.lua")
 -- format literals must equal the upstream keys byte for byte
 check(read(sawmaiming):find(M.BLOODSTREAM_FMT, 1, true) ~= nil, "Bloodstream format literal equals upstream")
 check(read(other):find(M.REPAIR_FMT, 1, true) ~= nil, "Automated repair format literal equals upstream")
-check(tr[M.BLOODSTREAM_FMT] ~= nil, "Bloodstream has a Chinese translation")
+check(tr[M.BLOODSTREAM_FMT] ~= nil, "Bloodstream upstream key has a Chinese translation")
+check(read(sawmaiming):find(M.BLOODSTREAM_ZH_KEY, 1, true) == nil, "Bloodstream dedicated key is not an upstream string")
+check(locales.new[M.BLOODSTREAM_ZH_KEY] ~= nil, "Bloodstream dedicated key translated by data/chn_supplement.lua")
+check(locales.new_nosupp[M.BLOODSTREAM_ZH_KEY] == nil, "Bloodstream dedicated key absent from the generated translation")
+do
+    local function tokens(str)
+        local r = {}
+        for tok in str:gmatch("%%[%-%d%.]*[%a%%]") do r[#r + 1] = tok end
+        return table.concat(r, " ")
+    end
+    check(tokens(M.BLOODSTREAM_ZH_KEY) == tokens(M.BLOODSTREAM_FMT), "Bloodstream dedicated key keeps the upstream placeholder list")
+    check(tokens(locales.new[M.BLOODSTREAM_ZH_KEY]) == tokens(M.BLOODSTREAM_ZH_KEY), "Bloodstream dedicated Chinese keeps the placeholder list")
+    -- old argument contract: the upstream key's Chinese must describe getDamageInc as an increase
+    for name, loc in pairs(locales) do
+        local zh = loc[M.BLOODSTREAM_FMT]
+        check(zh and zh:find("伤害增加 %d%%", 1, true) and not zh:find("变为原来的", 1, true),
+              "Bloodstream upstream key keeps the old 'increase' contract ("..name..")")
+        check(tokens(zh) == tokens(M.BLOODSTREAM_FMT), "Bloodstream upstream Chinese keeps placeholders ("..name..")")
+    end
+end
 check(tr[M.REPAIR_FMT] ~= nil, "Automated repair has a Chinese translation")
 
 -- ---------------------------------------------------------------- Automated Repair System
@@ -186,26 +223,74 @@ do
             combatTalentLimit = function(self, t, limit, low, high) return low + (high - low) * level / 5 end,
         }
     end
-    local pattern = tr[M.BLOODSTREAM_FMT]
+    local function args(a, third)
+        return a:combatTalentWeaponDamage(def, 0.3, 1.1) * 100, def.getDuration(a, def), third,
+               damDesc(a, "PHYSICAL", def.getDamage(a, def))
+    end
+    -- what each code version shows with a given locale
+    local function new_code(a) return def.info(a, def) end
+    local function old_code(a) return orig_info(a, def) end
+    local function expect_fixed(loc, a)
+        return raw_format(loc[M.BLOODSTREAM_ZH_KEY], args(a, def.getDamage(a, def)))
+    end
+    local function expect_upstream(loc, a)
+        return raw_format(loc[M.BLOODSTREAM_FMT], args(a, def.getDamageInc(a, def)))
+    end
+    local function no_new_mismatch(out, a, label)
+        local inc, mult = def.getDamageInc(a, def), def.getDamage(a, def)
+        if out:find("变为原来的", 1, true) then
+            check(out:find("变为原来的 "..raw_format("%d", mult).."%", 1, true) ~= nil, label..": multiplier wording carries getDamage")
+        else
+            check(out:find("伤害增加 "..raw_format("%d", inc).."%", 1, true) ~= nil, label..": increase wording carries getDamageInc (upstream contract)")
+        end
+    end
+
+    local matrix = {
+        {"new code + new locale", "new", new_code, expect_fixed},
+        {"new code + new locale without supplement", "new_nosupp", new_code, expect_upstream},
+        {"old code + new locale", "new", old_code, expect_upstream},
+    }
+    if locales.old then
+        matrix[#matrix + 1] = {"new code + old locale", "old", new_code, expect_fixed}
+        matrix[#matrix + 1] = {"new code + old locale without supplement", "old_nosupp", new_code, expect_upstream}
+        matrix[#matrix + 1] = {"old code + old locale", "old_nosupp", old_code, expect_upstream}
+    else
+        print("skip old-locale pairings: CHN_TEST_OLD_LOCALE not set")
+    end
+
     for _, case in ipairs({{0.2, 0.5}, {1, 1}, {5, 1}, {3, 0.8}}) do
         local a = actor(case[1], case[2])
+        local tag = ("L%.1f/S%.1f"):format(case[1], case[2])
         config.settings.locale = "en_US"
-        check(def.info(a, def) == orig_info(a, def), ("bloodstream L%.1f/S%.1f: English unchanged"):format(case[1], case[2]))
+        check(new_code(a) == old_code(a), "bloodstream "..tag..": English byte-identical to upstream info")
         config.settings.locale = "zh_hans"
-        local inc, mult = def.getDamageInc(a, def), def.getDamage(a, def)
-        local out = def.info(a, def)
-        local expected = raw_format(pattern, a:combatTalentWeaponDamage(def, 0.3, 1.1) * 100,
-                                    def.getDuration(a, def), mult, damDesc(a, "PHYSICAL", mult))
-        check(out == expected, ("bloodstream L%.1f/S%.1f: Chinese uses getDamage %d (getDamageInc %d)"):format(case[1], case[2], mult, inc))
-        check(out:find("变为原来的 "..raw_format("%d", mult).."%", 1, true) ~= nil,
-              ("bloodstream L%.1f/S%.1f: shows '变为原来的 %d%%'"):format(case[1], case[2], mult))
-        if math.floor(inc) ~= math.floor(mult) then
-            check(not out:find("原来的 "..raw_format("%d", inc).."%", 1, true), "bloodstream: getDamageInc value not shown")
+        for _, m in ipairs(matrix) do
+            tr = locales[m[2]]
+            local before = copy(a)
+            local out = m[3](a)
+            check(out == m[4](tr, a), "bloodstream "..tag..": "..m[1])
+            no_new_mismatch(out, a, "bloodstream "..tag..": "..m[1])
+            check(same(a, before), "bloodstream "..tag..": "..m[1]..": actor unchanged")
         end
+        tr = locales.new
+
+        -- injected error inside the new path: back to the original info (old contract)
+        local saved = string.tformat
+        string.tformat = function(fmt, ...) if fmt == M.BLOODSTREAM_ZH_KEY then error("injected") end return saved(fmt, ...) end
+        local before = copy(a)
+        local ok, out = pcall(new_code, a)
+        string.tformat = saved
+        check(ok and out == expect_upstream(tr, a), "bloodstream "..tag..": injected error falls back to original info")
+        no_new_mismatch(out, a, "bloodstream "..tag..": injected error")
+        check(same(a, before), "bloodstream "..tag..": injected error leaves the actor unchanged")
     end
     local low = actor(0.2, 0.5)
     check(def.getDamage(low, def) < 100, "bloodstream: covered a multiplier below 100%")
     check(M.installBloodstream(nil, damDesc, "PHYSICAL") == false, "bloodstream: missing definition is a no-op")
+    local saved_t = _t
+    _t = nil
+    check(M.hasTranslation(M.BLOODSTREAM_ZH_KEY, "tformat") == false, "bloodstream: no _t means no new path")
+    _t = saved_t
 end
 
 -- ---------------------------------------------------------------- integration / fallback

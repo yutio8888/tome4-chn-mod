@@ -5,7 +5,12 @@
 --
 -- 1. Bloodstream (data/talents/steam/sawmaiming.lua): info passes
 --    getDamageInc as the bleed figure, but action multiplies the existing
---    EFF_CUT power by getDamage/100. The Chinese text shows getDamage.
+--    EFF_CUT power by getDamage/100. The Chinese path formats the dedicated
+--    addon-only key BLOODSTREAM_ZH_KEY (Chinese in data/chn_supplement.lua)
+--    with getDamage. The upstream English key keeps its original argument
+--    contract (getDamageInc) everywhere, so old/new locale and code mix
+--    never pair new arguments with old wording or vice versa. If the key has
+--    no translation, or anything fails, the untouched original info is used.
 -- 2. AUTOMATED_REPAIR_SYSTEM (data/timed_effects/other.lua): activate
 --    overwrites eff.heal/eff.resist/eff.life with addTemporaryValue ids, and
 --    long_desc formats those ids. The Chinese text reads the increments the
@@ -21,7 +26,16 @@ local BLOODSTREAM_FMT = [[You "gently" slam your saws into the wounds of a creat
 
 local REPAIR_FMT = "Engaged in automated repairs, preventing any action but increasing life regen by %d, all resistances by %d%% and preventing death until falling below -%d life."
 
+-- Addon-only display key: accurate English description of what action does
+-- (sawmaiming.lua action), never shown itself; only used when translated.
+local BLOODSTREAM_ZH_KEY = [[You "gently" slam your saws into the wounds of a creature, dealing %d%% weapon damage and deepening the wounds.
+		If the attack hits, the target was already bleeding before the attack and is still bleeding after it, that bleeding effect's duration is increased by %d turns and its damage becomes %d%% of its current value (this may be done only once per bleeding effect).
+		When this happens a gush of blood is projected in a narrow cone of radius 4, dealing %0.2f physical damage to all creatures.
+		The power and damage improves with your Steampower.
+		#{italic}#The marvels of technology, now at the service of true butchery!#{normal}###chn-mod bloodstream actual multiplier]]
+
 M.BLOODSTREAM_FMT = BLOODSTREAM_FMT
+M.BLOODSTREAM_ZH_KEY = BLOODSTREAM_ZH_KEY
 M.REPAIR_FMT = REPAIR_FMT
 
 local function is_zh()
@@ -36,6 +50,14 @@ local function warn_once(key, err)
     print("[chn-mod] dynamic description fallback for "..key..": "..tostring(err))
 end
 
+-- Capability check: the dedicated key must have its own translation in the
+-- current locale (_t returns the key itself when untranslated).
+function M.hasTranslation(key, tag)
+    if type(_t) ~= "function" then return false end
+    local ok, tr = pcall(_t, key, tag)
+    return ok and type(tr) == "string" and tr ~= key
+end
+
 function M.installBloodstream(def, damDesc, physical)
     if not def or def.__chn_bloodstream then return false end
     if type(def.info) ~= "function" or type(def.getDamage) ~= "function"
@@ -44,10 +66,12 @@ function M.installBloodstream(def, damDesc, physical)
     end
     local info = def.info
     def.info = function(self, t, ...)
-        if not is_zh() then return info(self, t, ...) end
+        if not is_zh() or not M.hasTranslation(BLOODSTREAM_ZH_KEY, "tformat") then
+            return info(self, t, ...)
+        end
         local ok, res = pcall(function()
             local dam = t.getDamage(self, t)
-            return BLOODSTREAM_FMT:tformat(
+            return BLOODSTREAM_ZH_KEY:tformat(
                 self:combatTalentWeaponDamage(t, 0.3, 1.1) * 100,
                 t.getDuration(self, t),
                 dam,
