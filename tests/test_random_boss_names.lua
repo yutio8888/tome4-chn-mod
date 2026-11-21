@@ -2756,10 +2756,14 @@ do
 				cur = nil
 			end
 		end
+		local type_file = nil
 		for ci = #chain, 1, -1 do
 			for fk, fv in pairs(chain[ci]) do
 				if fk ~= "_file" and fk ~= "_tag" and fk ~= "_file_bases" then
 					r[fk] = fv
+					if fk == "type" then
+						type_file = chain[ci]._file
+					end
 				end
 			end
 		end
@@ -2814,7 +2818,7 @@ do
 					is_target = true
 				end
 			end
-			if is_target and not e.type and not (e.base and e._file_bases[e.base] and e._file_bases[e.base].type) then
+			if is_target and type_file and type_file ~= fpath then
 				live_counts.cross_file = live_counts.cross_file + 1
 			end
 			if r.name == "ancient elven mummy" and fpath:find("ancient%-elven%-ruins/npcs%.lua$") then
@@ -2831,8 +2835,8 @@ do
 	assert(live_counts.undead >= 76 and live_counts.horror >= 78 and live_counts.elemental >= 25
 		and live_counts.naga >= 9 and live_counts.elf >= 13 and live_counts.yaech >= 5
 		and live_counts.aquatic_demon >= 1 and live_counts.ogre >= 10 and live_counts.krog >= 1
-		and live_counts.cross_file >= 39,
-		string.format("T21 live entity extraction counts below expected (undead=%d, horror=%d, elemental=%d, naga=%d, elf=%d, yaech=%d, aquatic_demon=%d, ogre=%d, krog=%d, cross_file=%d)",
+		and live_counts.cross_file == 39,
+		string.format("T21 live entity extraction counts mismatch (undead=%d, horror=%d, elemental=%d, naga=%d, elf=%d, yaech=%d, aquatic_demon=%d, ogre=%d, krog=%d, cross_file=%d)",
 			live_counts.undead, live_counts.horror, live_counts.elemental, live_counts.naga,
 			live_counts.elf, live_counts.yaech, live_counts.aquatic_demon, live_counts.ogre, live_counts.krog, live_counts.cross_file))
 	print(string.format("[PASS] T21: Routing matrix (§5.3) & 2-pass cross-file live NPC scan verified (undead=%d, horror=%d, elemental=%d, naga=%d, elf=%d, yaech=%d, aquatic_demon=%d, ogre=%d, krog=%d, cross_file=%d)",
