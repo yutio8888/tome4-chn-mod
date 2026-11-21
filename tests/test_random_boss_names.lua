@@ -1742,6 +1742,85 @@ local function run_edge_case_tests(fn_name)
 	dofile("superload/mod/class/GameState.lua")
 	assert(gs[fn_name] == fn_before, "E30: superload must be idempotent on double load")
 
+	-- NPC audit regression tests (4 culture/sex matching fixes):
+	do
+		-- (d) 2-argument BossNames.culture_of(base, state) backward compatibility
+		local c2_h, s2_h = BossNames.culture_of({ type = "humanoid", subtype = "human", female = true }, {})
+		assert(c2_h == "human" and s2_h == "female", "2-arg culture_of backward compatibility failed for human/female")
+		local c2_m, s2_m = BossNames.culture_of({ type = "humanoid", subtype = "human" }, {})
+		assert(c2_m == "human" and s2_m == "male", "2-arg culture_of backward compatibility failed for human/male")
+
+		-- (c) humanoid/elf -> elf, humanoid/yaech -> yeek, aquatic/demon -> demon (2-arg, 3-arg, and end-to-end)
+		local c_elf2, s_elf2 = BossNames.culture_of({ type = "humanoid", subtype = "elf", female = true }, {})
+		assert(c_elf2 == "elf" and s_elf2 == "female", "humanoid/elf 2-arg must map to elf/female")
+		local c_elf3, s_elf3 = BossNames.culture_of({ type = "humanoid" }, {}, { type = "humanoid", subtype = "elf", female = false })
+		assert(c_elf3 == "elf" and s_elf3 == "male", "humanoid/elf 3-arg must map to elf/male")
+
+		local c_yaech2, s_yaech2 = BossNames.culture_of({ type = "humanoid", subtype = "yaech", female = false }, {})
+		assert(c_yaech2 == "yeek" and s_yaech2 == "male", "humanoid/yaech 2-arg must map to yeek/male")
+		local c_yaech3, s_yaech3 = BossNames.culture_of({ type = "humanoid", subtype = "yaech" }, {}, { female = true })
+		assert(c_yaech3 == "yeek" and s_yaech3 == "female", "humanoid/yaech 3-arg must map to yeek/female")
+
+		local c_aqd2, s_aqd2 = BossNames.culture_of({ type = "aquatic", subtype = "demon" }, {})
+		assert(c_aqd2 == "demon" and s_aqd2 == "none", "aquatic/demon 2-arg must map to demon/none")
+		local c_aqd3, s_aqd3 = BossNames.culture_of({ type = "aquatic" }, {}, { type = "aquatic", subtype = "demon" })
+		assert(c_aqd3 == "demon" and s_aqd3 == "none", "aquatic/demon 3-arg must map to demon/none")
+
+		local st_sub = make_gamestate(true)
+		local b_elf_e2e = st_sub[fn_name](st_sub, make_base_actor{ name = "永恒精灵", type = "humanoid", subtype = "elf", female = true }, { level = 10, rank = 3.2 })
+		assert(b_elf_e2e.__chn_randboss_name and b_elf_e2e.__chn_randboss_name.culture == "elf" and b_elf_e2e.__chn_randboss_name.sex == "female",
+			"end-to-end humanoid/elf must use elf/female pool")
+		local b_yaech_e2e = st_sub[fn_name](st_sub, make_base_actor{ name = "夺心魔心灵杀手", type = "humanoid", subtype = "yaech", female = false }, { level = 10, rank = 3.2 })
+		assert(b_yaech_e2e.__chn_randboss_name and b_yaech_e2e.__chn_randboss_name.culture == "yeek" and b_yaech_e2e.__chn_randboss_name.sex == "male",
+			"end-to-end humanoid/yaech must use yeek/male pool")
+		local b_aqd_e2e = st_sub[fn_name](st_sub, make_base_actor{ name = "恶魔", type = "aquatic", subtype = "demon" }, { level = 10, rank = 3.2 })
+		assert(b_aqd_e2e.__chn_randboss_name and b_aqd_e2e.__chn_randboss_name.culture == "demon" and b_aqd_e2e.__chn_randboss_name.sex == "none",
+			"end-to-end aquatic/demon must use demon/none pool")
+
+		-- (a) Simulate resolvers.racial_visual setting b.female = true during b:resolve() while base.female == nil,
+		-- and b.female = false explicitly overriding base.female = true
+		local orig_resolve = Actor.resolve
+		local base_no_female = make_base_actor{ name = "人类", type = "humanoid", subtype = "human", female = nil }
+		Actor.resolve = function(self_actor)
+			self_actor.female = true
+		end
+		local st_res_f = make_gamestate(true)
+		local b_res_f = st_res_f[fn_name](st_res_f, base_no_female, { level = 10, rank = 3.2 })
+		Actor.resolve = orig_resolve
+		assert(base_no_female.female == nil and b_res_f.female == true)
+		assert(b_res_f.__chn_randboss_name and b_res_f.__chn_randboss_name.culture == "human" and b_res_f.__chn_randboss_name.sex == "female",
+			"resolved b.female = true with base.female == nil must select female pool")
+
+		local base_female_true = make_base_actor{ name = "人类", type = "humanoid", subtype = "human", female = true }
+		Actor.resolve = function(self_actor)
+			self_actor.female = false
+		end
+		local st_res_m = make_gamestate(true)
+		local b_res_m = st_res_m[fn_name](st_res_m, base_female_true, { level = 10, rank = 3.2 })
+		Actor.resolve = orig_resolve
+		assert(base_female_true.female == true and b_res_m.female == false)
+		assert(b_res_m.__chn_randboss_name and b_res_m.__chn_randboss_name.culture == "human" and b_res_m.__chn_randboss_name.sex == "male",
+			"resolved b.female = false must override base.female = true and select male pool")
+
+		-- (b) Simulate dynamic resolver subtype on base (base.subtype = { __resolver = "rngtable" }) resolved to b.subtype = "shalore"
+		local base_dyn_sub = make_base_actor{
+			name = "永恒精灵",
+			type = "humanoid",
+			subtype = { __resolver = "rngtable", "shalore", "thalore" },
+			female = nil,
+		}
+		Actor.resolve = function(self_actor)
+			self_actor.subtype = "shalore"
+			self_actor.female = true
+		end
+		local st_dyn_sub = make_gamestate(true)
+		local b_dyn_sub = st_dyn_sub[fn_name](st_dyn_sub, base_dyn_sub, { level = 10, rank = 3.5 })
+		Actor.resolve = orig_resolve
+		assert(type(base_dyn_sub.subtype) == "table" and b_dyn_sub.subtype == "shalore")
+		assert(b_dyn_sub.__chn_randboss_name and b_dyn_sub.__chn_randboss_name.culture == "elf" and b_dyn_sub.__chn_randboss_name.sex == "female" and b_dyn_sub.__chn_randboss_name.tier == "epic",
+			"resolved b.subtype = 'shalore' from dynamic resolver table on base must select elf pool")
+	end
+
 	forbid_random_and_time()
 end
 

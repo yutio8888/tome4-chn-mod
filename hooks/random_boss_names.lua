@@ -112,7 +112,7 @@ function M.tier_of(rank)
 	return "rare"
 end
 
-function M.culture_of(base, state)
+function M.culture_of(base, state, actor)
 	local cultures = type(rules) == "table" and type(rules.cultures) == "table" and rules.cultures or nil
 	local def_map = type(rules) == "table" and type(rules.def_to_culture) == "table" and rules.def_to_culture or {}
 	local sub_map = type(rules) == "table" and type(rules.humanoid_subtype_to_culture) == "table" and rules.humanoid_subtype_to_culture or {}
@@ -120,7 +120,9 @@ function M.culture_of(base, state)
 
 	local culture
 	local def
-	if type(base) == "table" and type(base.random_name_def) == "string" and base.random_name_def ~= "" then
+	if type(actor) == "table" and type(actor.random_name_def) == "string" and actor.random_name_def ~= "" then
+		def = actor.random_name_def
+	elseif type(base) == "table" and type(base.random_name_def) == "string" and base.random_name_def ~= "" then
 		def = base.random_name_def
 	elseif type(state) == "table" and type(state.birth) == "table" and type(state.birth.world_base_random_name_def) == "string" and state.birth.world_base_random_name_def ~= "" then
 		def = state.birth.world_base_random_name_def
@@ -131,11 +133,23 @@ function M.culture_of(base, state)
 		culture = def_map[prefix]
 	end
 
-	if not culture and type(base) == "table" then
-		if base.type == "demon" then
+	if not culture then
+		local etype
+		if type(actor) == "table" and type(actor.type) == "string" and actor.type ~= "" then
+			etype = actor.type
+		elseif type(base) == "table" and type(base.type) == "string" and base.type ~= "" then
+			etype = base.type
+		end
+		local esub
+		if type(actor) == "table" and type(actor.subtype) == "string" and actor.subtype ~= "" then
+			esub = actor.subtype
+		elseif type(base) == "table" and type(base.subtype) == "string" and base.subtype ~= "" then
+			esub = base.subtype
+		end
+		if etype == "demon" or esub == "demon" then
 			culture = "demon"
-		elseif base.type == "humanoid" and type(base.subtype) == "string" then
-			culture = sub_map[base.subtype]
+		elseif etype == "humanoid" and type(esub) == "string" then
+			culture = sub_map[esub]
 		end
 	end
 
@@ -146,7 +160,13 @@ function M.culture_of(base, state)
 	local cdef = cultures and cultures[culture] or nil
 	local sex = "none"
 	if type(cdef) == "table" and cdef.gendered == true then
-		sex = (type(base) == "table" and base.female) and "female" or "male"
+		local is_female
+		if type(actor) == "table" and actor.female ~= nil then
+			is_female = (actor.female and true or false)
+		else
+			is_female = (type(base) == "table" and base.female and true or false)
+		end
+		sex = is_female and "female" or "male"
 	end
 	return culture, sex
 end
@@ -767,7 +787,7 @@ function M.rename(b, base, data, state)
 	if (affixes ~= "" and not plain_label(affixes)) or not utf8_valid(prefix .. "名" .. suffix) then return end
 
 	local tier = M.tier_of(b.rank)
-	local culture, sex = M.culture_of(base, state)
+	local culture, sex = M.culture_of(base, state, b)
 	local ledger, is_new_ledger = inspect_ledger(state)
 	if ledger == nil then return end
 
