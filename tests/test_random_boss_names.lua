@@ -1417,6 +1417,76 @@ local function run_edge_case_tests(fn_name)
 			assert(rawequal(captured_actor.rnd_boss_init, handler), "B3-R4: legacy createRandomBoss must restore b.rnd_boss_init on mid-execution error")
 			captured_actor:rnd_boss_init(explicit_token)
 			assert(rawequal(seen_arg, explicit_token), "B3-R4: later explicit argument to b.rnd_boss_init must be preserved")
+
+			-- B3 Round 5 (a): data.nb_classes setter explicitly invokes b:rnd_boss_init(explicit_tag, "tail", nil) once before engine's normal call
+			local st_r5_two = make_gamestate(true)
+			local actor_r5, first_arg, second_arg
+			local r5_calls, r5_rng_draws = 0, 0
+			local r5_tag = { tag = "explicit" }
+			local d_r5_two
+			local r5_handler = function(_b, opt, ...)
+				r5_calls = r5_calls + 1
+				if r5_calls == 1 then
+					first_arg = opt
+					assert(select("#", ...) == 2 and (...) == "tail" and select(2, ...) == nil, "B3-R5: varargs on explicit call must be preserved")
+				else
+					second_arg = opt
+					if not rawget(opt, "no_loot_randart") then
+						r5_rng_draws = r5_rng_draws + 1
+					end
+				end
+			end
+			d_r5_two = setmetatable({
+				level = 10,
+				rank = 3.2,
+				no_loot_randart = true,
+				init = function(_d, b)
+					actor_r5 = b
+					b.rnd_boss_init = r5_handler
+				end,
+			}, {
+				__newindex = function(t, k, v)
+					rawset(t, k, v)
+					if k == "nb_classes" then
+						actor_r5:rnd_boss_init(r5_tag, "tail", nil)
+					end
+				end,
+			})
+			local boss_r5_two = st_r5_two:createRandomBoss(base, d_r5_two)
+			assert(r5_calls == 2 and rawequal(first_arg, r5_tag) and rawequal(second_arg, d_r5_two) and r5_rng_draws == 0,
+				"B3-R5: explicit call in nb_classes setter + subsequent engine call must both receive their expected args with 0 extra RNG")
+			assert(rawequal(rawget(boss_r5_two, "rnd_boss_init"), r5_handler),
+				"B3-R5: b.rnd_boss_init must remain original handler after both calls")
+
+			-- B3 Round 5 (b): data.nb_classes getter (__index) throws a marker object -> same marker propagates and captured actor immediately has original handler
+			local st_r5_get = make_gamestate(true)
+			local captured_r5_get, observed_r5_later
+			local err_marker = { marker = true }
+			local later_arg = { later = true }
+			local r5_get_handler = function(_b, opt)
+				observed_r5_later = opt
+			end
+			local d_r5_get = setmetatable({
+				level = 10,
+				rank = 3.2,
+				init = function(_d, b)
+					captured_r5_get = b
+					b.rnd_boss_init = r5_get_handler
+				end,
+			}, {
+				__index = function(_, k)
+					if k == "nb_classes" then
+						error(err_marker, 0)
+					end
+				end,
+			})
+			local ok_r5_get, caught_r5 = pcall(st_r5_get.createRandomBoss, st_r5_get, base, d_r5_get)
+			assert(not ok_r5_get and rawequal(caught_r5, err_marker) and captured_r5_get ~= nil,
+				"B3-R5: nb_classes getter error marker must propagate unchanged")
+			assert(rawequal(rawget(captured_r5_get, "rnd_boss_init"), r5_get_handler),
+				"B3-R5: captured actor must immediately have original rnd_boss_init handler when nb_classes getter throws")
+			captured_r5_get:rnd_boss_init(later_arg)
+			assert(rawequal(observed_r5_later, later_arg), "B3-R5: subsequent explicit call after getter failure must preserve argument")
 		end
 	end
 

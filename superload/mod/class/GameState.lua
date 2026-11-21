@@ -34,6 +34,8 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
             local call_base = base
             local call_data = data
             local post_changed = false
+            local cloned_b = nil
+            local rbi_installed = false
             local rbi_state = nil
 
             local function restore_rbi()
@@ -54,9 +56,9 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
                 local raw_rbi = rawget(b, "rnd_boss_init")
                 local wrapper
                 wrapper = function(boss, arg2, ...)
-                    restore_rbi()
                     if rawequal(arg2, call_data) then
-                        arg2 = data
+                        restore_rbi()
+                        return real_rbi(boss, data, ...)
                     end
                     return real_rbi(boss, arg2, ...)
                 end
@@ -72,7 +74,7 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
                             clone_count = clone_count + 1
                             local b = base:clone(...)
                             if clone_count == 1 then
-                                install_rbi(b)
+                                cloned_b = b
                             end
                             return b
                         end,
@@ -80,10 +82,10 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
                 end
                 call_data = setmetatable({}, {
                     __newindex = function(_, k, v)
-                        local ok, err = pcall(function() data[k] = v end)
-                        if not ok then
-                            restore_rbi()
-                            error(err, 0)
+                        data[k] = v
+                        if wrap_rnd_boss_init and not rbi_installed and k == "nb_classes" then
+                            rbi_installed = true
+                            install_rbi(cloned_b)
                         end
                     end,
                     __index = function(_, k)
@@ -91,10 +93,10 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
                             local real_init = data.init
                             if not real_init then return real_init end
                             return function(_p, boss, ...)
-                                restore_rbi()
-                                local res = pack(real_init(data, boss, ...))
-                                install_rbi(boss)
-                                return unpack(res, 1, res.n)
+                                if cloned_b == nil and type(boss) == "table" then
+                                    cloned_b = boss
+                                end
+                                return real_init(data, boss, ...)
                             end
                         elseif k == "post" then
                             local real_post = data.post
