@@ -23,8 +23,35 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
         _M[sentinel] = true
         local orig = _M[fname]
         _M[fname] = function(self, base, data, ...)
-            local result = pack(orig(self, base, data, ...))
-            pcall(BossNames.rename, result[1], base, data, self)
+            local orig_post = type(data) == "table" and rawget(data, "post") or nil
+            local pre_name, pre_unique, post_called = nil, nil, false
+            local wrapped_post = nil
+            if type(orig_post) == "function" then
+                wrapped_post = function(b, d, ...)
+                    if not post_called and type(b) == "table" then
+                        post_called = true
+                        pre_name = rawget(b, "name")
+                        pre_unique = rawget(b, "unique")
+                    end
+                    rawset(data, "post", orig_post)
+                    return orig_post(b, d, ...)
+                end
+                rawset(data, "post", wrapped_post)
+            end
+            local ok, result = pcall(function(...)
+                return pack(orig(self, base, data, ...))
+            end, ...)
+            if wrapped_post and type(data) == "table" and rawget(data, "post") == wrapped_post then
+                rawset(data, "post", orig_post)
+            end
+            if not ok then
+                error(result, 0)
+            end
+            local b = result[1]
+            local post_modified = post_called and type(b) == "table" and (rawget(b, "name") ~= pre_name or rawget(b, "unique") ~= pre_unique)
+            if not post_modified then
+                pcall(BossNames.rename, b, base, data, self)
+            end
             return unpack(result, 1, result.n)
         end
     end

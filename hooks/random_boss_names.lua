@@ -241,23 +241,27 @@ local function decode_segment_chars(I, M_pool, F, idx)
 	end
 end
 
-local function check_char_valid(c, approved, banned)
+local function check_char_valid(c, approved, banned, reject_female, female_only)
 	if type(c) ~= "string" or c == "" then return false end
 	if approved and not approved[c] then return false end
 	if banned and banned[c] then return false end
+	if reject_female and female_only and female_only[c] then return false end
 	return true
 end
 
-local function validate_and_build_segment(c1, c2, c3, max_len)
+local function validate_and_build_segment(c1, c2, c3, max_len, reject_female)
 	local len = c3 ~= nil and 3 or 2
 	if len > max_len then return nil, nil end
 	local approved = type(rules.approved_chars) == "table" and rules.approved_chars or nil
 	local banned = type(rules.banned_chars) == "table" and rules.banned_chars or nil
 	local banned_init = type(rules.banned_initial_chars) == "table" and rules.banned_initial_chars or nil
+	local female_only = type(rules.female_only_chars) == "table" and rules.female_only_chars or nil
 	if type(c1) ~= "string" or (banned_init and banned_init[c1]) then
 		return nil, nil
 	end
-	if not check_char_valid(c1, approved, banned) or not check_char_valid(c2, approved, banned) then
+	if not check_char_valid(c1, approved, banned, reject_female, female_only)
+		or not check_char_valid(c2, approved, banned, reject_female, female_only)
+	then
 		return nil, nil
 	end
 	if c1 == c2 then return nil, nil end
@@ -267,7 +271,7 @@ local function validate_and_build_segment(c1, c2, c3, max_len)
 	if nc1 == nc2 then return nil, nil end
 
 	if c3 ~= nil then
-		if not check_char_valid(c3, approved, banned) then
+		if not check_char_valid(c3, approved, banned, reject_female, female_only) then
 			return nil, nil
 		end
 		if c3 == c1 or c3 == c2 then return nil, nil end
@@ -391,10 +395,11 @@ function M.candidate_at(culture, sex, tier, idx)
 	if not I then
 		return nil, nil
 	end
+	local reject_female_given = (sex ~= "female")
 
 	if tier == "rare" then
 		local c1, c2, c3 = decode_segment_chars(I, M_pool, F, norm)
-		local personal, core, a1, a2, a3, na1, na2, na3 = validate_and_build_segment(c1, c2, c3, max_g)
+		local personal, core, a1, a2, a3, na1, na2, na3 = validate_and_build_segment(c1, c2, c3, max_g, reject_female_given)
 		if not personal then
 			return nil, nil
 		end
@@ -412,12 +417,12 @@ function M.candidate_at(culture, sex, tier, idx)
 		local g_idx = math.floor(norm / surname_raw)
 		local s_idx = norm % surname_raw
 		local gc1, gc2, gc3 = decode_segment_chars(I, M_pool, F, g_idx)
-		local given_str, given_core, ga1, ga2, ga3, gna1, gna2, gna3 = validate_and_build_segment(gc1, gc2, gc3, max_g)
+		local given_str, given_core, ga1, ga2, ga3, gna1, gna2, gna3 = validate_and_build_segment(gc1, gc2, gc3, max_g, reject_female_given)
 		if not given_str then
 			return nil, nil
 		end
 		local sc1, sc2, sc3 = decode_segment_chars(SI, SM, SF, s_idx)
-		local sur_str, sur_core, sa1, sa2, sa3, sna1, sna2, sna3 = validate_and_build_segment(sc1, sc2, sc3, max_s)
+		local sur_str, sur_core, sa1, sa2, sa3, sna1, sna2, sna3 = validate_and_build_segment(sc1, sc2, sc3, max_s, true)
 		if not sur_str then
 			return nil, nil
 		end
@@ -446,20 +451,7 @@ function M.candidate_at(culture, sex, tier, idx)
 	return nil, nil
 end
 
-function M.ensure_ledger(state)
-	if type(state) ~= "table" then
-		return nil
-	end
-	local raw = rawget(state, "__chn_randboss_ledger")
-	if raw == nil then
-		local fresh = {
-			version = 1,
-			count = 0,
-			used = {},
-		}
-		rawset(state, "__chn_randboss_ledger", fresh)
-		return fresh
-	end
+local function is_valid_ledger_table(raw)
 	if type(raw) ~= "table"
 		or raw.version ~= 1
 		or type(raw.used) ~= "table"
@@ -468,9 +460,38 @@ function M.ensure_ledger(state)
 		or raw.count > M.MAX_LEDGER
 		or math.floor(raw.count) ~= raw.count
 	then
+		return false
+	end
+	return true
+end
+
+local function inspect_ledger(state)
+	if type(state) ~= "table" then
+		return nil, false
+	end
+	local raw = rawget(state, "__chn_randboss_ledger")
+	if raw == nil then
+		return {
+			version = 1,
+			count = 0,
+			used = {},
+		}, true
+	end
+	if not is_valid_ledger_table(raw) then
+		return nil, false
+	end
+	return raw, false
+end
+
+function M.ensure_ledger(state)
+	local ledger, is_new = inspect_ledger(state)
+	if not ledger then
 		return nil
 	end
-	return raw
+	if is_new then
+		rawset(state, "__chn_randboss_ledger", ledger)
+	end
+	return ledger
 end
 
 local function collect_party_names()
@@ -518,7 +539,7 @@ local function normalize_party_set(party_names)
 	return set
 end
 
-function M.select(culture, sex, tier, seed_key, ledger, party_names)
+function M.select(culture, sex, tier, seed_key, ledger, party_names, prefix, suffix)
 	if type(ledger) ~= "table" or type(ledger.used) ~= "table" or type(ledger.count) ~= "number" then
 		return nil, nil, nil
 	end
@@ -532,13 +553,26 @@ function M.select(culture, sex, tier, seed_key, ledger, party_names)
 	local used = ledger.used
 	local party_set = normalize_party_set(party_names)
 	local recorded = ledger.count < M.MAX_LEDGER
+	local has_affix = type(prefix) == "string" or type(suffix) == "string"
+	local pre = type(prefix) == "string" and prefix or ""
+	local suf = type(suffix) == "string" and suffix or ""
+	local excluded = type(rules) == "table" and type(rules.excluded_exact) == "table" and rules.excluded_exact or nil
 
 	for step = 0, max_probes - 1 do
 		local idx = (start + step * stride) % total
 		local personal, core = M.candidate_at(culture, sex, tier, idx)
 		if personal and core then
 			if not used[core] and not party_set[personal] and not party_set[core] then
-				return personal, core, recorded, step + 1
+				local ok = true
+				if has_affix then
+					local full_name = pre .. personal .. suf
+					if (excluded and excluded[full_name]) or party_set[full_name] then
+						ok = false
+					end
+				end
+				if ok then
+					return personal, core, recorded, step + 1
+				end
 			end
 		end
 	end
@@ -552,6 +586,10 @@ function M.extract_personal_slot(orig, base, data)
 	local t_fn = rawget(_G, "_t")
 	local tbase = type(t_fn) == "function" and t_fn(base.name) or base.name
 	if type(tbase) ~= "string" or tbase == "" then
+		return nil
+	end
+	-- §2.2 rule 7 / E11: Reject if translated base name remains untranslated (contains ASCII letters), even when scheme omits #base#.
+	if tbase:find("[A-Za-z]") then
 		return nil
 	end
 
@@ -588,7 +626,7 @@ function M.extract_personal_slot(orig, base, data)
 	local prefix = probe:sub(1, p1 - 1)
 	local suffix = probe:sub(p1 + 1)
 
-	-- Reject if template or base name remains untranslated (contains ASCII letters).
+	-- Reject if template remains untranslated (contains ASCII letters).
 	if (prefix .. suffix):find("[A-Za-z]") then
 		return nil
 	end
@@ -686,7 +724,7 @@ function M.surname_audit(culture)
 	local valid_count = 0
 	for idx = 0, total - 1 do
 		local c1, c2, c3 = decode_segment_chars(SI, SM, SF, idx)
-		local sur, core, a1, a2, a3, na1, na2, na3 = validate_and_build_segment(c1, c2, c3, max_s)
+		local sur, core, a1, a2, a3, na1, na2, na3 = validate_and_build_segment(c1, c2, c3, max_s, true)
 		if sur and check_segment_filters(sur, core, a1, a2, a3, na1, na2, na3) then
 			valid_count = valid_count + 1
 			if not seen_sur[sur] then
@@ -719,15 +757,18 @@ function M.rename(b, base, data, state)
 	if type(meta) == "table" and meta.text == orig then return end
 	local prefix, X, suffix = M.extract_personal_slot(orig, base, data)
 	if not prefix then return end
+	if not plain_label(prefix .. suffix) or not utf8_valid(prefix .. "名" .. suffix) then return end
+
 	local tier = M.tier_of(b.rank)
 	local culture, sex = M.culture_of(base, state)
-	if type(state) ~= "table" then return end
-	local ledger = M.ensure_ledger(state)
+	local ledger, is_new_ledger = inspect_ledger(state)
 	if ledger == nil then return end
+
+	local rule_ver = type(rules) == "table" and rules.version or 1
 	local scheme_tag = (type(data) == "table" and type(data.name_scheme) == "string") and data.name_scheme or "default"
 	local key = table.concat({
 		"rb",
-		tostring(type(rules) == "table" and rules.version or 1),
+		tostring(rule_ver),
 		tostring(tier),
 		tostring(culture),
 		tostring(sex),
@@ -736,21 +777,18 @@ function M.rename(b, base, data, state)
 		tostring(b.define_as),
 		scheme_tag,
 	}, "\0")
-	local personal, core, recorded = M.select(culture, sex, tier, key, ledger, collect_party_names())
+
+	local personal, core, recorded = M.select(culture, sex, tier, key, ledger, collect_party_names(), prefix, suffix)
 	if not personal or not core then return end
 	local new_name = prefix .. personal .. suffix
 	if not plain_label(new_name) or not utf8_valid(new_name) then return end
-	-- Also check full new_name against D / excluded_exact if applicable
 	if type(rules) == "table" and type(rules.excluded_exact) == "table" and rules.excluded_exact[new_name] then
 		return
 	end
-	if recorded then
-		ledger.used[core] = true
-		ledger.count = ledger.count + 1
-	end
-	b.name = new_name
-	rawset(b, "__chn_randboss_name", {
-		version = type(rules) == "table" and rules.version or 1,
+
+	-- Pre-assemble metadata before any mutation
+	local new_meta = {
+		version = rule_ver,
 		text = new_name,
 		original = orig,
 		core = core,
@@ -758,7 +796,25 @@ function M.rename(b, base, data, state)
 		culture = culture,
 		sex = sex,
 		recorded = recorded == true,
-	})
+	}
+
+	-- Atomic commit: update ledger count before used[core], attach ledger only when valid, then set meta & name
+	if recorded then
+		local prev_count = ledger.count
+		ledger.count = prev_count + 1
+		local ok_used, err_used = pcall(function()
+			ledger.used[core] = true
+		end)
+		if not ok_used then
+			pcall(function() ledger.count = prev_count end)
+			error(err_used, 0)
+		end
+	end
+	if is_new_ledger then
+		rawset(state, "__chn_randboss_ledger", ledger)
+	end
+	rawset(b, "__chn_randboss_name", new_meta)
+	b.name = new_name
 end
 
 return M

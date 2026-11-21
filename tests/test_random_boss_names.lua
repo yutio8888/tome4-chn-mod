@@ -150,7 +150,7 @@ do
 		assert(not rules.banned_chars[ch], "approved char is in banned_chars: " .. ch)
 	end
 
-	local function check_list(cname, list_name, lst, min_len, is_initial, is_male_or_none_final)
+	local function check_list(cname, list_name, lst, min_len, is_initial, reject_female_chars)
 		assert(type(lst) == "table", cname .. "." .. list_name .. " must be a table")
 		assert(#lst >= min_len, string.format("%s.%s length %d < %d", cname, list_name, #lst, min_len))
 		local seen = {}
@@ -163,24 +163,25 @@ do
 			if is_initial then
 				assert(not rules.banned_initial_chars[ch], cname .. "." .. list_name .. " initial char in banned_initial_chars: " .. ch)
 			end
-			if is_male_or_none_final then
-				assert(not rules.female_only_chars[ch], cname .. "." .. list_name .. " male/none final contains female char: " .. ch)
+			if reject_female_chars then
+				assert(not rules.female_only_chars[ch], cname .. "." .. list_name .. " non-female pool contains female_only_chars: " .. ch)
 			end
 		end
 	end
 
 	for _, cname in ipairs(culture_order) do
 		local c = rules.cultures[cname]
-		check_list(cname, "given.initials", c.given.initials, 32, true, false)
-		check_list(cname, "given.middles", c.given.middles, 22, false, false)
+		-- Strict §4.6.7 compliance across all positions of male/neutral given pools and shared surname pools
+		check_list(cname, "given.initials", c.given.initials, 32, true, true)
+		check_list(cname, "given.middles", c.given.middles, 22, false, true)
 		if c.gendered then
 			check_list(cname, "given.finals.male", c.given.finals.male, 24, false, true)
 			check_list(cname, "given.finals.female", c.given.finals.female, 24, false, false)
 		else
 			check_list(cname, "given.finals.none", c.given.finals.none, 24, false, true)
 		end
-		check_list(cname, "surname.initials", c.surname.initials, 24, true, false)
-		check_list(cname, "surname.middles", c.surname.middles, 16, false, false)
+		check_list(cname, "surname.initials", c.surname.initials, 24, true, true)
+		check_list(cname, "surname.middles", c.surname.middles, 16, false, true)
 		check_list(cname, "surname.finals", c.surname.finals, 20, false, true)
 	end
 
@@ -191,7 +192,7 @@ do
 		local stride = BossNames.stride_for(total)
 		assert(gcd(stride, total) == 1, string.format("stride %d not coprime with total %d", stride, total))
 	end
-	print("[PASS] T01: Data integrity verified across 8 cultures and 26 cohorts")
+	print("[PASS] T01: Data integrity verified across 8 cultures and 26 cohorts (strict §4.6.7 gender char compliance)")
 end
 
 -- ============================================================================
@@ -308,17 +309,53 @@ do
 end
 
 -- ============================================================================
--- T05 & T04 Epic Sampling: 6-Source Collision Audit (R1-R3 = 0) & Epic 208,000 Sample Audit
+-- T05 & T04 Epic Sampling: 6-Source Collision Audit (R1-R3 = 0) & Epic 208,000 Valid Sample Audit
 -- ============================================================================
 local live_collision = GenTokens.build_collision_tables(rules)
 do
 	local counts = live_collision.sources.counts
 	local D = live_collision.sources.D
 	local T = live_collision.sources.T
-	print(string.format("       T05 source counts: S1=%d, S2=%d, S3=%d, S4=%d, S5=%d, S6=%d (S1+S3=%d)",
-		counts.S1, counts.S2, counts.S3, counts.S4, counts.S5, counts.S6, counts.S1 + counts.S3))
+	print(string.format("       T05 source counts: S1=%d, S2=%d, S3=%d, S4=%d, S5=%d, S6=%d (defs=%d, en=%d, S1+S3=%d)",
+		counts.S1, counts.S2, counts.S3, counts.S4, counts.S5, counts.S6, counts.S6_defs, counts.S6_en, counts.S1 + counts.S3))
 	assert(counts.S1 + counts.S3 >= 3000, "S1 + S3 must be >= 3000")
 	assert(counts.S6 >= 200, "S6 unique entity zh names must be >= 200")
+	assert(counts.S6_core_defs > 0 and counts.S6_dlc_defs > 0, "S6 must find definitions in both core and DLCs")
+
+	-- B4 verification: all-context translations included, unided_name excluded, missing/duplicate sources rejected
+	assert(D["炎华月"] and D["霜华月"] and D["种族灭绝"], "S6 must include all translation contexts from S1-S4")
+	assert(not D["光辉的精灵木长弓"], "S6 must not extract unided_name as entity name")
+	assert(D["部落高阶大地法师沃尔"] and rules.excluded_exact["部落高阶大地法师沃尔"] == true, "Vor full Chinese name must be in D and baked excluded_exact")
+
+	-- Negative tests for B4 source validation:
+	-- 1) Missing core tome_data_dir must fail
+	local ok_missing_core = pcall(GenTokens.collect_sources, { tome_data_dir = "/nonexistent_tome_data_dir_12345" })
+	assert(not ok_missing_core, "collect_sources must fail when tome_data_dir does not exist")
+	-- 2) Missing DLC root must fail
+	local ok_missing_dlc = pcall(GenTokens.collect_sources, { dlc_root = "/nonexistent_dlc_root_12345" })
+	assert(not ok_missing_dlc, "collect_sources must fail when dlc_root does not exist")
+	-- 3) Duplicate DLC locale files must fail
+	local cults_zh = (os.getenv("DLC_ROOT") or "/workspace/tome4-dlcs") .. "/cults/tome-cults/data/locales/zh_hans.lua"
+	local ok_dup_dlc = pcall(GenTokens.collect_sources, { dlc_paths = { cults_zh, cults_zh, cults_zh } })
+	assert(not ok_dup_dlc, "collect_sources must fail when duplicate DLC locale files are provided")
+	-- 4) Lexical S6 parser must ignore comments, nested tables, non-literal unique, and unided_name
+	local synthetic_lua = [=[
+		-- newEntity{ name = "CommentedEntity", unique = true }
+		--[[ newEntity{ name = "BlockCommentEntity", unique = true } ]]
+		newEntity{
+			base = "BASE_BOW",
+			name = "RealUniqueBow",
+			unided_name = _t"shining elven-wood longbow",
+			unique = true,
+			nested = { name = "NestedFakeName", unique = true },
+		}
+		newEntity{
+			name = "NonUniqueEntity",
+			unique = false,
+		}
+	]=]
+	local extracted_syn = GenTokens.extract_fixed_entities_from_source(synthetic_lua)
+	assert(#extracted_syn == 1 and extracted_syn[1] == "RealUniqueBow", "S6 lexical extractor failed synthetic boundary check")
 
 	-- Verify baked tables in data/chn_randboss_names.lua are supersets of live computation
 	local baked_tokens_set = {}
@@ -375,18 +412,22 @@ do
 		end
 	end
 
-	-- T04: Deterministic sample >= 200,000 epic candidates across all 13 epic cohorts (16,000 slots per epic cohort = 208,000 slots)
+	-- T04: Deterministic sample of 208,000 VALID epic candidates (16,000 valid outputs per epic cohort x 13 cohorts)
 	local epic_slots_probed = 0
 	local epic_valid_checked = 0
 	for _, co in ipairs(cohorts_26) do
 		if co.tier == "epic" then
 			local total = BossNames.cohort_total(co.culture, co.sex, "epic")
 			local stride = BossNames.stride_for(total)
-			for k = 1, 16000 do
+			local k = 0
+			local valid_in_cohort = 0
+			while valid_in_cohort < 16000 do
+				k = k + 1
 				epic_slots_probed = epic_slots_probed + 1
 				local idx = (k * stride) % total
 				local personal, core = BossNames.candidate_at(co.culture, co.sex, "epic", idx)
 				if personal then
+					valid_in_cohort = valid_in_cohort + 1
 					epic_valid_checked = epic_valid_checked + 1
 					local unsep = personal:gsub(rules.separator, "")
 					assert(not D[personal] and not D[core] and not D[unsep], "epic R1 collision: " .. personal)
@@ -402,10 +443,10 @@ do
 			end
 		end
 	end
-	assert(epic_slots_probed >= 200000, "T04 must sample >= 200,000 epic candidates")
-	print(string.format("[PASS] T04 & T05: 0 R1-R3 collisions across %d unique given/surname segments and %d sampled epic slots (%d valid)",
+	assert(epic_valid_checked == 208000, "T04 must audit 208,000 valid epic candidates")
+	print(string.format("[PASS] T04 & T05: 0 R1-R3 collisions across %d unique given/surname segments and %d valid epic names (%d slots probed)",
 		(function() local c = 0; for _ in pairs(checked_segments) do c = c + 1 end; return c end)(),
-		epic_slots_probed, epic_valid_checked))
+		epic_valid_checked, epic_slots_probed))
 end
 
 -- ============================================================================
@@ -663,37 +704,100 @@ local function make_gamestate(wrap_superload)
 end
 
 -- ============================================================================
--- T07: string.tformat Real Semantics & 10+ Real Chinese Templates
+-- T07: string.tformat Real Semantics & All Real Chinese #rng# Templates from Locale Files
 -- ============================================================================
+local verified_real_templates = {}
 do
+	-- Load all real #rng# templates from the actual locale sources (S1, S2, S3, S4)
+	local dlc_root = os.getenv("DLC_ROOT") or "/workspace/tome4-dlcs"
+	local locale_paths = {
+		os.getenv("TOME_ZH_HANS_LUA") or "/workspace/t-engine4/game/modules/tome/data/locales/zh_hans.lua",
+		dlc_root .. "/ashes-urhrok/tome-ashes-urhrok/data/locales/zh_hans.lua",
+		dlc_root .. "/cults/tome-cults/data/locales/zh_hans.lua",
+		dlc_root .. "/orcs/tome-orcs/data/locales/zh_hans.lua",
+		os.getenv("ADDON_ZH_HANS_LUA") or "data/locales/zh_hans.lua",
+		os.getenv("ADDON_SUPPLEMENT_LUA") or "data/chn_supplement.lua",
+	}
+	local live_rng_map = {}
+	local live_tformat_default = nil
+	for _, lp in ipairs(locale_paths) do
+		local env = setmetatable({
+			locale = function() end,
+			section = function() end,
+			setFlag = function() end,
+			forceFontPackage = function() end,
+			t = function(src, dst, tag, order)
+				if type(src) == "string" and type(dst) == "string" then
+					if src == "%s the %s" and tag == "tformat" then
+						live_tformat_default = { dst = dst, order = order }
+					end
+					if src:find("#rng#", 1, true) and tag == "_t" then
+						live_rng_map[src] = dst
+					end
+				end
+			end,
+		}, { __index = _G })
+		local chunk = assert(loadfile(lp))
+		setfenv(chunk, env)
+		chunk()
+	end
+	assert(live_tformat_default and live_tformat_default.dst == "%s %s", "failed to load real '%s the %s' tformat entry from locale files")
+	assert(type(live_tformat_default.order) == "table" and live_tformat_default.order[1] == 2 and live_tformat_default.order[2] == 1)
+
 	local real_templates = {
 		{ en = "#rng# the Invader", zh = "入侵者#rng#", base = "orc archer", expected_pre = "入侵者", expected_suf = "" },
 		{ en = "#rng# the Tidebender", zh = "驭潮者#rng#", base = "orc archer", expected_pre = "驭潮者", expected_suf = "" },
 		{ en = "#rng# the Invoker", zh = "#rng#祈唤者", base = "human", expected_pre = "", expected_suf = "祈唤者" },
-		{ en = "#rng# the Bringer of Doom", zh = "厄运使者#rng#", base = "major demon", expected_pre = "厄运使者", expected_suf = "" },
+		{ en = "#rng# the Bringer of Doom", zh = "末日招来者#rng#", base = "major demon", expected_pre = "末日招来者", expected_suf = "" },
 		{ en = "#rng# the Spawn of Urh'Rok", zh = "#rng# 乌鲁洛克的子嗣", base = "major demon", expected_pre = "", expected_suf = " 乌鲁洛克的子嗣" },
-		{ en = "#rng# the Witherer", zh = "枯萎者#rng#", base = "human", expected_pre = "枯萎者", expected_suf = "" },
+		{ en = "#rng# the Witherer", zh = "枯萎使者#rng#", base = "human", expected_pre = "枯萎使者", expected_suf = "" },
 		{ en = "#rng# the Flamebringer", zh = "火焰使者#rng#", base = "human", expected_pre = "火焰使者", expected_suf = "" },
-		{ en = "#rng# the Grand Necromancer", zh = "大死灵法师#rng#", base = "human", expected_pre = "大死灵法师", expected_suf = "" },
+		{ en = "Grand Necromancer #rng#", zh = "高阶死灵法师#rng#", base = "human", expected_pre = "高阶死灵法师", expected_suf = "" },
 		{ en = "#rng# the Guard", zh = "守卫 #rng#", base = "human", expected_pre = "守卫 ", expected_suf = "" },
-		{ en = "#rng# the Bandit Leader", zh = "盗贼首领 #rng#", base = "human", expected_pre = "盗贼首领 ", expected_suf = "" },
-		{ en = "Sleeping #base# #rng#", zh = "沉睡的#base# #rng#", base = "fire wyrm", expected_pre = "沉睡的火焰巨龙 ", expected_suf = "" },
+		{ en = "Bandit Leader #rng#", zh = "盗贼首领 #rng#", base = "human", expected_pre = "盗贼首领 ", expected_suf = "" },
+		{ en = "Sleeping #rng#", zh = "沉睡的 #rng#", base = "fire wyrm", expected_pre = "沉睡的 ", expected_suf = "" },
 		{ en = "#rng# the Blightborn", zh = "枯萎之子#rng#", base = "orc archer", expected_pre = "枯萎之子", expected_suf = "" },
+		{ en = "#rng# the Herald", zh = "传令官#rng#", base = "human", expected_pre = "传令官", expected_suf = "" },
 	}
 	for _, tc in ipairs(real_templates) do
+		assert(live_rng_map[tc.en] == tc.zh, string.format("template pair mismatch in live locale: %q -> expected %q, got %q", tc.en, tc.zh, tostring(live_rng_map[tc.en])))
+		locale_dict._t[tc.en] = tc.zh
 		local base = make_base_actor{ name = tc.base }
-		local orig = tc.zh:gsub("#rng#", "Arnold"):gsub("#base#", _t(tc.base))
-		local pre, X, suf = BossNames.extract_personal_slot(orig, base, { name_scheme = tc.zh })
+		local orig = _t(tc.en):gsub("#rng#", "Arnold"):gsub("#base#", _t(tc.base))
+		local pre, X, suf = BossNames.extract_personal_slot(orig, base, { name_scheme = _t(tc.en) })
 		assert(pre == tc.expected_pre and X == "Arnold" and suf == tc.expected_suf,
 			"failed template reconstruction for " .. tc.zh)
 	end
 
-	-- Verify default "%s the %s" with {2,1} order
+	-- Also test every single valid #rng# template across all live locale files (all 32 keys)
+	local all_rng_keys = {}
+	for en, zh in pairs(live_rng_map) do
+		local _, c = zh:gsub("#rng#", "")
+		if c == 1 and not zh:gsub("#rng#", ""):gsub("#base#", ""):find("[#A-Za-z]") then
+			all_rng_keys[#all_rng_keys + 1] = en
+			locale_dict._t[en] = zh
+		end
+	end
+	table.sort(all_rng_keys)
+	assert(#all_rng_keys >= 30, "expected >= 30 valid #rng# templates in live locales, got " .. tostring(#all_rng_keys))
 	local base_h = make_base_actor{ name = "human" }
+	for _, en in ipairs(all_rng_keys) do
+		local zh = _t(en)
+		verified_real_templates[#verified_real_templates + 1] = zh
+		local orig = zh:gsub("#rng#", "Arnold"):gsub("#base#", _t(base_h.name))
+		local pre, X, suf = BossNames.extract_personal_slot(orig, base_h, { name_scheme = zh })
+		assert(pre and X == "Arnold" and suf and (pre .. X .. suf) == orig, "failed live locale template: " .. en .. " => " .. zh)
+	end
+
+	-- Also verify template containing both #base# and #rng#
+	local pre_b, X_b, suf_b = BossNames.extract_personal_slot("沉睡的火焰巨龙 Arnold", make_base_actor{ name = "fire wyrm" }, { name_scheme = "沉睡的#base# #rng#" })
+	assert(pre_b == "沉睡的火焰巨龙 " and X_b == "Arnold" and suf_b == "")
+
+	-- Verify default "%s the %s" with {2,1} order
 	local pre, X, suf = BossNames.extract_personal_slot("人类 Arnold", base_h, {})
 	assert(pre == "人类 " and X == "Arnold" and suf == "")
 
-	-- Verify changing "%s the %s" translation to another permutation (e.g. "%s·%s" with {1,2} or "【%s】%s" with {2,1}) works without code changes
+	-- Verify changing "%s the %s" translation to another permutation (e.g. "【%s】%s" with {2,1} or "%s（%s）" with {1,2}) works without code changes
 	locale_dict.tformat["%s the %s"] = { dst = "【%s】%s", order = { 2, 1 } }
 	local pre2, X2, suf2 = BossNames.extract_personal_slot("【人类】Arnold", base_h, {})
 	assert(pre2 == "【人类】" and X2 == "Arnold" and suf2 == "")
@@ -704,7 +808,7 @@ do
 
 	-- Restore standard translation
 	locale_dict.tformat["%s the %s"] = { dst = "%s %s", order = { 2, 1 } }
-	print("[PASS] T07: string.tformat semantics and 12 real Chinese templates verified")
+	print(string.format("[PASS] T07: string.tformat semantics and %d real Chinese templates verified from live locale sources", #all_rng_keys))
 end
 
 -- ============================================================================
@@ -1022,9 +1126,16 @@ local function run_edge_case_tests(fn_name)
 	assert(rawget(b01, "__chn_randboss_name") == nil and rawget(st_en, "__chn_randboss_ledger") == nil)
 	config.settings.locale = "zh_hans"
 
-	-- E08: name_scheme without #rng# ("腐化的 #base#") -> skip
-	local b08 = gs[fn_name](gs, base, { level = 10, rank = 3.5, name_scheme = "腐化的 #base#" })
-	assert(b08.name == "腐化的 人类" and rawget(b08, "__chn_randboss_name") == nil)
+	-- E08: name_scheme without #rng# ("腐化的 #base#") -> skip, zero state mutation
+	local st08 = make_gamestate(true)
+	local b08 = st08[fn_name](st08, base, { level = 10, rank = 3.5, name_scheme = "腐化的 #base#" })
+	assert(b08.name == "腐化的 人类" and rawget(b08, "__chn_randboss_name") == nil and rawget(st08, "__chn_randboss_ledger") == nil)
+
+	-- B2: Percent in template ("守卫%#rng#") on fresh state -> skip, must NOT create empty ledger
+	local st_pct = make_gamestate(true)
+	local b_pct = st_pct[fn_name](st_pct, base, { level = 10, rank = 3.2, name_scheme = "守卫%#rng#" })
+	assert(rawget(b_pct, "__chn_randboss_name") == nil and rawget(st_pct, "__chn_randboss_ledger") == nil,
+		"B2: failed validation on '守卫%#rng#' must not create empty ledger in state")
 
 	-- E09: name_scheme with 2 #rng# -> skip
 	local b09 = gs[fn_name](gs, base, { level = 10, rank = 3.5, name_scheme = "#rng#与#rng#" })
@@ -1034,18 +1145,63 @@ local function run_edge_case_tests(fn_name)
 	local b10 = gs[fn_name](gs, base, { level = 10, rank = 3.5, name_scheme = "#rng# the Blightborn" })
 	assert(b10.name:find("the Blightborn", 1, true) and rawget(b10, "__chn_randboss_name") == nil)
 
-	-- E11: Untranslated base name (_t returns English) -> skip
+	-- E11 & B3: Untranslated base name (_t returns English) -> skip, even when template omits #base# (e.g. "守卫 #rng#")
 	local un_base = make_base_actor{ name = "untranslated_wyrm", random_name_def = "cornac_#sex#" }
-	local b11 = gs[fn_name](gs, un_base, { level = 10, rank = 3.5 })
-	assert(b11.name:find("untranslated_wyrm", 1, true) and rawget(b11, "__chn_randboss_name") == nil)
+	local st11_a = make_gamestate(true)
+	local b11 = st11_a[fn_name](st11_a, un_base, { level = 10, rank = 3.5 })
+	assert(b11.name:find("untranslated_wyrm", 1, true) and rawget(b11, "__chn_randboss_name") == nil and rawget(st11_a, "__chn_randboss_ledger") == nil)
+	local st11_b = make_gamestate(true)
+	local b11_scheme = st11_b[fn_name](st11_b, un_base, { level = 10, rank = 3.2, name_scheme = "守卫 #rng#" })
+	assert(rawget(b11_scheme, "__chn_randboss_name") == nil and rawget(st11_b, "__chn_randboss_ledger") == nil,
+		"B3/E11: untranslated base name with '守卫 #rng#' must be skipped with zero ledger writes")
 
-	-- E12: data.post modified b.name -> define_as/unique check fails -> skip
+	-- E12 & B3: data.post modified b.name (or both b.name and b.unique to same-byte-length Chinese) -> skip
 	local b12 = gs[fn_name](gs, base, {
 		level = 10,
 		rank = 3.5,
 		post = function(b) b.name = "自定义首领名" end,
 	})
 	assert(b12.name == "自定义首领名" and rawget(b12, "__chn_randboss_name") == nil)
+
+	-- B3 same-width post rename + unique sync ("守卫丙丁" -> "守卫甲乙")
+	local st12_sw = make_gamestate(true)
+	local saved_ng2_new = NameGenerator2.new
+	NameGenerator2.new = function()
+		return { generate = function() return "丙丁" end }
+	end
+	local caller_data_sw = {
+		level = 10,
+		rank = 3.2,
+		name_scheme = "守卫#rng#",
+		post = function(b)
+			b.name = "守卫甲乙"
+			b.unique = b.name
+		end,
+	}
+	local orig_post_ref = caller_data_sw.post
+	local b12_sw, id12_sw = st12_sw[fn_name](st12_sw, base, caller_data_sw)
+	NameGenerator2.new = saved_ng2_new
+	assert(caller_data_sw.post == orig_post_ref, "B3: caller data.post reference must remain intact")
+	assert(b12_sw.name == "守卫甲乙" and b12_sw.unique == "守卫甲乙",
+		"B3/E12: same-width post rename+unique sync must not be overwritten, got " .. tostring(b12_sw.name))
+	assert(rawget(b12_sw, "__chn_randboss_name") == nil and rawget(st12_sw, "__chn_randboss_ledger") == nil)
+	assert(id12_sw == b12_sw.define_as)
+
+	-- B1: Full Display Name R1 collision defense ("部落高阶大地法师#rng#" + "Seed438" must avoid fixed unique "部落高阶大地法师沃尔" and succeed)
+	local st_b1 = make_gamestate(true)
+	NameGenerator2.new = function()
+		return { generate = function() return "Seed438" end }
+	end
+	local b_vor, id_vor = st_b1[fn_name](st_b1, base, {
+		level = 10,
+		rank = 3.2,
+		name_scheme = "部落高阶大地法师#rng#",
+	})
+	NameGenerator2.new = saved_ng2_new
+	assert(rawget(b_vor, "__chn_randboss_name") ~= nil, "B1: Vor prefix spawn must still succeed via next probe candidate")
+	assert(b_vor.name ~= "部落高阶大地法师沃尔", "B1: full display name collided with fixed unique 部落高阶大地法师沃尔")
+	assert(b_vor.name:sub(1, #"部落高阶大地法师") == "部落高阶大地法师" and b_vor.unique == "部落高阶大地法师Seed438" and id_vor == b_vor.define_as)
+	assert(st_b1.__chn_randboss_ledger and st_b1.__chn_randboss_ledger.count == 1)
 
 	-- E13: data.post modified b.unique -> skip
 	local b13 = gs[fn_name](gs, base, {
@@ -1065,31 +1221,62 @@ local function run_edge_case_tests(fn_name)
 	assert(b16_a.name ~= orig16 and b16_b.name ~= orig16)
 	assert(b16_a.__chn_randboss_name.core ~= b16_b.__chn_randboss_name.core)
 
-	-- E22: Corrupted rules data (empty pool / wrong type) -> vanilla fallback, no exception leaked
+	-- E22 & B2: Corrupted rules data (empty pool / wrong type) on fresh state -> vanilla fallback, zero ledger creation
 	local saved_human_init = rules.cultures.human.given.initials
 	rules.cultures.human.given.initials = {}
-	local b22 = gs[fn_name](gs, base, { level = 10, rank = 3.2 })
-	assert(rawget(b22, "__chn_randboss_name") == nil)
+	local st22_a = make_gamestate(true)
+	local b22 = st22_a[fn_name](st22_a, base, { level = 10, rank = 3.2 })
+	assert(rawget(b22, "__chn_randboss_name") == nil and rawget(st22_a, "__chn_randboss_ledger") == nil,
+		"B2/E22: empty pool on fresh state must not create empty ledger")
 	rules.cultures.human.given.initials = "corrupted_non_table"
-	local b22_b = gs[fn_name](gs, base, { level = 10, rank = 3.2 })
-	assert(rawget(b22_b, "__chn_randboss_name") == nil)
+	local st22_b = make_gamestate(true)
+	local b22_b = st22_b[fn_name](st22_b, base, { level = 10, rank = 3.2 })
+	assert(rawget(b22_b, "__chn_randboss_name") == nil and rawget(st22_b, "__chn_randboss_ledger") == nil)
 	rules.cultures.human.given.initials = saved_human_init
 
-	-- E23: rename throws an internal error -> wrapper swallows it and returns original function results (including boss_id)
-	local broken_state = setmetatable({}, {
-		__index = function() error("injected rename crash") end,
+	-- E23 & B2: rename / select / commit throws an internal error -> wrapper swallows it, returns full tuple, and leaves zero partial state
+	local st23_sel = make_gamestate(true)
+	local old_select = BossNames.select
+	BossNames.select = function() error("injected selection error") end
+	local b23_s, id23_s = st23_sel[fn_name](st23_sel, base, { level = 10, rank = 3.2 })
+	BossNames.select = old_select
+	assert(type(b23_s) == "table" and id23_s == b23_s.define_as)
+	assert(rawget(b23_s, "__chn_randboss_name") == nil and rawget(st23_sel, "__chn_randboss_ledger") == nil,
+		"B2/E23: selection failure must not leave empty ledger in fresh state")
+
+	-- B2: Commit-phase fault injection 1: readonly ledger.count must not leave used[core] = true
+	local st23_ro = make_gamestate(true)
+	local used_ro = {}
+	st23_ro.__chn_randboss_ledger = setmetatable({ version = 1, used = used_ro }, {
+		__index = { count = 0 },
+		__newindex = function() error("injected readonly count error") end,
 	})
-	-- Also test direct error inside BossNames.rename when invoked by superload wrapper
-	local bad_ledger_mt = setmetatable({ version = 1, count = 0 }, {
+	local b23_ro, id23_ro = st23_ro[fn_name](st23_ro, base, { level = 10, rank = 3.2 })
+	assert(id23_ro == b23_ro.define_as and rawget(b23_ro, "__chn_randboss_name") == nil and b23_ro.name == b23_ro.unique)
+	assert(next(used_ro) == nil and st23_ro.__chn_randboss_ledger.count == 0,
+		"B2: count write failure must not leave core reserved in ledger.used")
+
+	-- B2: Commit-phase fault injection 2: rules.version fault on second access must not leave b.name changed without meta
+	local st23_ver = make_gamestate(true)
+	local orig_ver = rules.version
+	rules.version = nil
+	local ver_reads = 0
+	setmetatable(rules, {
 		__index = function(_, k)
-			if k == "used" then error("injected rename crash") end
+			if k == "version" then
+				ver_reads = ver_reads + 1
+				if ver_reads == 2 then error("injected meta assembly error") end
+				return 1
+			end
 		end,
 	})
-	gs.__chn_randboss_ledger = bad_ledger_mt
-	local b23, id23 = gs[fn_name](gs, base, { level = 10, rank = 3.5 })
-	gs.__chn_randboss_ledger = nil
-	assert(type(b23) == "table" and type(id23) == "string" and id23 == b23.define_as)
-	assert(rawget(b23, "__chn_randboss_name") == nil)
+	local b23_ver, id23_ver = st23_ver[fn_name](st23_ver, base, { level = 10, rank = 3.2 })
+	setmetatable(rules, nil)
+	rules.version = orig_ver
+	assert(id23_ver == b23_ver.define_as)
+	assert((rawget(b23_ver, "__chn_randboss_name") ~= nil and b23_ver.name == b23_ver.__chn_randboss_name.text and st23_ver.__chn_randboss_ledger.count == 1)
+		or (rawget(b23_ver, "__chn_randboss_name") == nil and b23_ver.name == b23_ver.unique and rawget(st23_ver, "__chn_randboss_ledger") == nil),
+		"B2: commit must be atomic (either full rename+meta+ledger or zero mutation)")
 
 	-- E24: Original function throws an error -> propagates unchanged with matching message
 	local ok24, err24 = pcall(function()
@@ -1172,57 +1359,86 @@ end
 
 run_edge_case_tests("createRandomBoss")
 run_edge_case_tests("createRandomBossNew")
-print("[PASS] T14 & T17: All edge cases (E01–E32) and createRandomBossNew equivalence verified")
+print("[PASS] T14 & T17: All edge cases (E01–E32, B1–B3) and createRandomBossNew equivalence verified")
 
 -- ============================================================================
--- T15: Mixed Stress Test (1,000 spawns across 8 cultures x sex x 2 tiers x 7 templates)
+-- T15: Mixed Stress Test (1,000 spawns across all 26 cohorts x 8 templates = 208 combinations)
 -- ============================================================================
 do
 	local t0 = orig_os_clock()
 	local st = {}
 	_G.game = { state = st }
 
-	local lcg = 314159265
-	local function next_test_rand(n)
-		lcg = (lcg * 1664525 + 1013904223) % 4294967296
-		return (lcg % n) + 1
-	end
-
 	local culture_bases = {
-		{ name = "human", type = "humanoid", subtype = "human", random_name_def = "cornac_#sex#", female = false },
-		{ name = "human", type = "humanoid", subtype = "human", random_name_def = "higher_#sex#", female = true },
-		{ name = "eternal elf", type = "humanoid", subtype = "shalore", random_name_def = "shalore_#sex#", female = false },
-		{ name = "eternal elf", type = "humanoid", subtype = "thalore", random_name_def = "thalore_#sex#", female = true },
-		{ name = "dwarven earthwarden", type = "humanoid", subtype = "dwarf", random_name_def = "dwarf_#sex#", female = false },
-		{ name = "dwarven earthwarden", type = "humanoid", subtype = "dwarf", random_name_def = "dwarf_#sex#", female = true },
-		{ name = "halfling slinger", type = "humanoid", subtype = "halfling", random_name_def = "halfling_#sex#", female = false },
-		{ name = "halfling slinger", type = "humanoid", subtype = "halfling", random_name_def = "halfling_#sex#", female = true },
-		{ name = "yeek mindslayer", type = "humanoid", subtype = "yeek", random_name_def = "yeek_#sex#", female = false },
-		{ name = "yeek mindslayer", type = "humanoid", subtype = "yeek", random_name_def = "yeek_#sex#", female = true },
-		{ name = "orc archer", type = "humanoid", subtype = "orc", random_name_def = nil },
-		{ name = "major demon", type = "demon", subtype = "major", random_name_def = "demon" },
-		{ name = "brown bear", type = "animal", subtype = "bear", random_name_def = nil },
+		{ culture = "human", sex = "male", name = "human", type = "humanoid", subtype = "human", random_name_def = "cornac_#sex#", female = false },
+		{ culture = "human", sex = "female", name = "human", type = "humanoid", subtype = "human", random_name_def = "higher_#sex#", female = true },
+		{ culture = "elf", sex = "male", name = "eternal elf", type = "humanoid", subtype = "shalore", random_name_def = "shalore_#sex#", female = false },
+		{ culture = "elf", sex = "female", name = "eternal elf", type = "humanoid", subtype = "thalore", random_name_def = "thalore_#sex#", female = true },
+		{ culture = "dwarf", sex = "male", name = "dwarven earthwarden", type = "humanoid", subtype = "dwarf", random_name_def = "dwarf_#sex#", female = false },
+		{ culture = "dwarf", sex = "female", name = "dwarven earthwarden", type = "humanoid", subtype = "dwarf", random_name_def = "dwarf_#sex#", female = true },
+		{ culture = "halfling", sex = "male", name = "halfling slinger", type = "humanoid", subtype = "halfling", random_name_def = "halfling_#sex#", female = false },
+		{ culture = "halfling", sex = "female", name = "halfling slinger", type = "humanoid", subtype = "halfling", random_name_def = "halfling_#sex#", female = true },
+		{ culture = "yeek", sex = "male", name = "yeek mindslayer", type = "humanoid", subtype = "yeek", random_name_def = "yeek_#sex#", female = false },
+		{ culture = "yeek", sex = "female", name = "yeek mindslayer", type = "humanoid", subtype = "yeek", random_name_def = "yeek_#sex#", female = true },
+		{ culture = "orc", sex = "none", name = "orc archer", type = "humanoid", subtype = "orc", random_name_def = nil },
+		{ culture = "demon", sex = "none", name = "major demon", type = "demon", subtype = "major", random_name_def = "demon" },
+		{ culture = "monster", sex = "none", name = "brown bear", type = "animal", subtype = "bear", random_name_def = nil },
 	}
 	local templates = {
-		nil,
+		false, -- default "%s the %s" template
 		"守卫 #rng#",
-		"#rng#祈唤者",
+		"扰乱者#rng#",
 		"入侵者#rng#",
 		"火焰使者#rng#",
 		"盗贼首领 #rng#",
 		"沉睡的#base# #rng#",
 		"#rng# 乌鲁洛克的子嗣",
 	}
-	local ranks = { 3.2, 3.5, 4.0 }
+	local tier_ranks = {
+		{ tier = "rare", rank = 3.2 },
+		{ tier = "epic", rank = 4.0 },
+	}
+
+	-- Build all 13 x 2 x 8 = 208 (cohort x template) combinations and step with coprime stride 53
+	local combos = {}
+	for _, cb in ipairs(culture_bases) do
+		for _, tr in ipairs(tier_ranks) do
+			for t_idx, tmpl in ipairs(templates) do
+				combos[#combos + 1] = {
+					cb = cb,
+					tier = tr.tier,
+					rank = tr.rank,
+					tmpl = tmpl,
+					t_idx = t_idx,
+				}
+			end
+		end
+	end
+	assert(#combos == 208)
+
+	local lcg = 314159265
+	local function next_token_num()
+		lcg = (lcg * 1664525 + 1013904223) % 4294967296
+		return math.floor(lcg / 65536)
+	end
+
 	local seen_cores = {}
+	local hit_cohorts = {}
+	local hit_templates = {}
+	local hit_combos = {}
 	local D = live_collision.sources.D
 
 	for i = 1, 1000 do
-		local cb = culture_bases[next_test_rand(#culture_bases)]
-		local tmpl = templates[next_test_rand(#templates)]
-		local rk = ranks[next_test_rand(#ranks)]
-		local base = make_base_actor(cb)
-		local raw_rng_token = "Rand" .. tostring(i) .. "x" .. tostring(next_test_rand(9999))
+		local c_idx = ((i - 1) * 53) % #combos + 1
+		local entry = combos[c_idx]
+		hit_combos[c_idx] = true
+		hit_cohorts[entry.cb.culture .. ":" .. entry.cb.sex .. ":" .. entry.tier] = true
+		hit_templates[entry.t_idx] = (hit_templates[entry.t_idx] or 0) + 1
+
+		local base = make_base_actor(entry.cb)
+		local tmpl = entry.tmpl or nil
+		local rk = entry.rank
+		local raw_rng_token = "Rand" .. tostring(i) .. "x" .. tostring(next_token_num())
 		local orig_name
 		if tmpl then
 			orig_name = tmpl:gsub("#rng#", raw_rng_token):gsub("#base#", _t(base.name))
@@ -1238,6 +1454,7 @@ do
 
 		BossNames.rename(b, base, { name_scheme = tmpl, rank = rk }, st)
 		local meta = assert(rawget(b, "__chn_randboss_name"), "failed to rename mixed boss #" .. i)
+		assert(meta.culture == entry.cb.culture and meta.sex == entry.cb.sex and meta.tier == entry.tier)
 		assert(plain_label(b.name), "invalid plain_label on mixed boss #" .. i)
 		assert(not seen_cores[meta.core], "duplicate core in 1000 mixed spawns at #" .. i .. ": " .. meta.core)
 		seen_cores[meta.core] = true
@@ -1256,9 +1473,19 @@ do
 		end
 	end
 	local elapsed = orig_os_clock() - t0
+	local n_cohorts_hit = 0
+	for _ in pairs(hit_cohorts) do n_cohorts_hit = n_cohorts_hit + 1 end
+	local n_templates_hit = 0
+	for _ in pairs(hit_templates) do n_templates_hit = n_templates_hit + 1 end
+	local n_combos_hit = 0
+	for _ in pairs(hit_combos) do n_combos_hit = n_combos_hit + 1 end
+	assert(n_cohorts_hit == 26, "T15 must hit all 26 cohorts, hit " .. tostring(n_cohorts_hit))
+	assert(n_templates_hit == #templates, "T15 must hit all 8 templates (including default), hit " .. tostring(n_templates_hit))
+	assert(n_combos_hit == 208, "T15 must hit all 208 cohort x template combinations, hit " .. tostring(n_combos_hit))
 	assert(st.__chn_randboss_ledger.count == 1000)
 	assert(elapsed < 3.0, string.format("T15 mixed stress test took %.3fs (>= 3.0s limit)", elapsed))
-	print(string.format("[PASS] T15: 1,000 mixed spawns -> 1,000 unique cores, 0 collisions, elapsed=%.3fs (< 3s)", elapsed))
+	print(string.format("[PASS] T15: 1,000 mixed spawns across all %d cohorts x %d templates (%d combos) -> 1,000 unique cores, 0 collisions, elapsed=%.3fs (< 3s)",
+		n_cohorts_hit, n_templates_hit, n_combos_hit, elapsed))
 end
 
 -- ============================================================================
