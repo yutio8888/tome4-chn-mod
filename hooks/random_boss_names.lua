@@ -452,13 +452,19 @@ function M.candidate_at(culture, sex, tier, idx)
 end
 
 local function is_valid_ledger_table(raw)
-	if type(raw) ~= "table"
-		or raw.version ~= 1
-		or type(raw.used) ~= "table"
-		or type(raw.count) ~= "number"
-		or raw.count < 0
-		or raw.count > M.MAX_LEDGER
-		or math.floor(raw.count) ~= raw.count
+	if type(raw) ~= "table" or getmetatable(raw) ~= nil then
+		return false
+	end
+	local version = rawget(raw, "version")
+	local count = rawget(raw, "count")
+	local used = rawget(raw, "used")
+	if version ~= 1
+		or type(used) ~= "table"
+		or getmetatable(used) ~= nil
+		or type(count) ~= "number"
+		or count < 0
+		or count > M.MAX_LEDGER
+		or math.floor(count) ~= count
 	then
 		return false
 	end

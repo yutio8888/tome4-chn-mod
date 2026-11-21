@@ -388,15 +388,16 @@ do
 	})
 	assert(not ok_fake_dlc, "B4: collect_sources must fail when a required DLC locale (Orcs) is replaced by another file")
 
-	-- B4 negative check 5: non-zh_hans locale file (e.g. official ko_KR.lua) must be rejected
+	-- B4 negative check 5: non-zh_hans locale file (e.g. official ko_KR.lua) must be rejected with zh_hans locale error
 	local dlc_o_kr = real_dlc_root .. "/orcs/tome-orcs/data/locales/ko_KR.lua"
-	local ok_kr = pcall(GenTokens.collect_sources, {
+	local ok_kr, err_kr = pcall(GenTokens.collect_sources, {
 		dlc_paths = { dlc_a, dlc_c, dlc_o_kr },
 	})
-	assert(not ok_kr, "B4: collect_sources must reject non-zh_hans locale file (ko_KR.lua)")
+	assert(not ok_kr and tostring(err_kr):find('must declare locale "zh_hans"', 1, true),
+		"B4: collect_sources must reject non-zh_hans locale file (ko_KR.lua) with locale error, got: " .. tostring(err_kr))
 
 	-- B4 negative check 6: forged empty Orcs section header prepended to another zh_hans locale must be rejected
-	local forged_locale_path = "/tmp/tome4-rb-forged-orcs-header.lua"
+	local forged_locale_path = os.tmpname()
 	local core_zh_path = os.getenv("TOME_ZH_HANS_LUA") or "/workspace/t-engine4/game/modules/tome/data/locales/zh_hans.lua"
 	local cf = assert(io.open(core_zh_path, "rb"))
 	local core_zh_bytes = cf:read("*a")
@@ -405,11 +406,12 @@ do
 	ff:write('section "tome-orcs/data/general/npcs/orc.lua"\n')
 	ff:write(core_zh_bytes)
 	ff:close()
-	local ok_forged = pcall(GenTokens.collect_sources, {
+	local ok_forged, err_forged = pcall(GenTokens.collect_sources, {
 		dlc_paths = { dlc_a, dlc_c, forged_locale_path },
 	})
 	os.remove(forged_locale_path)
-	assert(not ok_forged, "B4: collect_sources must reject forged empty DLC section header with foreign entity entries")
+	assert(not ok_forged and tostring(err_forged):find("is not a valid Ashes/Cults/Orcs DLC locale", 1, true),
+		"B4: collect_sources must reject forged empty DLC section header with foreign entity entries, got: " .. tostring(err_forged))
 
 	-- Verify baked tables in data/chn_randboss_names.lua are supersets of live computation
 	local baked_tokens_set = {}
@@ -1353,6 +1355,69 @@ local function run_edge_case_tests(fn_name)
 			assert(rawequal(base_rbi.rnd_boss_init, orig_rbi), "B3-R3(" .. test_loc .. "): base.rnd_boss_init must never be mutated")
 		end
 		config.settings.locale = "zh_hans"
+
+		-- B3 Round 4:
+		-- (a) createRandomBossNew must never wrap b.rnd_boss_init (neither during life_rating nor after an upstream error)
+		-- (b) legacy createRandomBoss must restore b.rnd_boss_init if data.__newindex throws before the engine calls b.rnd_boss_init
+		-- (c) explicit non-proxy second argument passed to b.rnd_boss_init must never be overwritten with creation options
+		if fn_name == "createRandomBossNew" then
+			for _, abort in ipairs{ false, true } do
+				local st_new_rbi = make_gamestate(true)
+				local actor_ref, retained_during, seen_arg
+				local explicit_tag = { no_loot_randart = true }
+				local handler = function(_b, opts)
+					seen_arg = opts
+				end
+				local d_new_rbi = {
+					level = 10,
+					rank = 3.2,
+					init = function(_d, b)
+						actor_ref = b
+						b.rnd_boss_init = handler
+					end,
+					life_rating = function(lr)
+						retained_during = actor_ref.rnd_boss_init
+						if abort then error("stop_in_life_rating", 0) end
+						return lr
+					end,
+				}
+				local ok_call, err_call = pcall(st_new_rbi.createRandomBossNew, st_new_rbi, base, d_new_rbi)
+				assert(ok_call == not abort, "B3-R4: createRandomBossNew abort flag mismatch")
+				if abort then
+					assert(err_call == "stop_in_life_rating")
+				end
+				assert(rawequal(retained_during, handler), "B3-R4: createRandomBossNew must never wrap b.rnd_boss_init during execution")
+				assert(rawequal(actor_ref.rnd_boss_init, handler), "B3-R4: createRandomBossNew must leave b.rnd_boss_init unwrapped after return/error")
+				actor_ref:rnd_boss_init(explicit_tag)
+				assert(rawequal(seen_arg, explicit_tag), "B3-R4: explicit argument to b.rnd_boss_init must be preserved")
+			end
+		elseif fn_name == "createRandomBoss" then
+			local st_leg_abort = make_gamestate(true)
+			local captured_actor, seen_arg
+			local explicit_token = { custom = true }
+			local handler = function(_b, opt)
+				seen_arg = opt
+			end
+			local readonly_opts = setmetatable({
+				level = 10,
+				rank = 3.2,
+				init = function(_d, b)
+					captured_actor = b
+					b.rnd_boss_init = handler
+				end,
+			}, {
+				__newindex = function(_, key)
+					if key == "nb_classes" then
+						error("readonly_options_error", 0)
+					end
+				end,
+			})
+			local ok_leg, err_leg = pcall(st_leg_abort.createRandomBoss, st_leg_abort, base, readonly_opts)
+			assert(not ok_leg and err_leg == "readonly_options_error", "B3-R4: readonly options error must propagate")
+			assert(rawequal(captured_actor.rnd_boss_init, handler), "B3-R4: legacy createRandomBoss must restore b.rnd_boss_init on mid-execution error")
+			captured_actor:rnd_boss_init(explicit_token)
+			assert(rawequal(seen_arg, explicit_token), "B3-R4: later explicit argument to b.rnd_boss_init must be preserved")
+		end
 	end
 
 	-- Round 2 regression: bare "#rng#" template (empty prefix and suffix) must rename and record
@@ -1508,6 +1573,28 @@ local function run_edge_case_tests(fn_name)
 	assert(id23_del == b23_del.define_as and rawget(b23_del, "__chn_randboss_name") == nil and b23_del.name == b23_del.unique)
 	assert(ledger_del.count == 0 and backing_store.count == 0 and rawget(ledger_del, "count") == nil and next(used_del) == nil,
 		"B2-R3: delegated count post-write failure must roll back backing store count to 0 without materializing raw count")
+
+	-- B2 Round 4: Commit-phase fault injection 6: monotonic delegated count backing store that rejects decreasing writes must be rejected pre-commit with zero writes
+	local st23_mono = make_gamestate(true)
+	local mono_backing = { count = 0 }
+	local mono_writes = {}
+	local mono_used = {}
+	local ledger_mono = setmetatable({ version = 1, used = mono_used }, {
+		__index = mono_backing,
+		__newindex = function(_, k, v)
+			mono_writes[#mono_writes + 1] = v
+			if v < mono_backing[k] then
+				error("counter must not decrease")
+			end
+			mono_backing[k] = v
+			error("injected failure after storing increment")
+		end,
+	})
+	st23_mono.__chn_randboss_ledger = ledger_mono
+	local b23_mono, id23_mono = st23_mono[fn_name](st23_mono, base, { level = 10, rank = 3.2 })
+	assert(id23_mono == b23_mono.define_as and rawget(b23_mono, "__chn_randboss_name") == nil and b23_mono.name == b23_mono.unique)
+	assert(#mono_writes == 0 and ledger_mono.count == 0 and mono_backing.count == 0 and rawget(ledger_mono, "count") == nil and next(mono_used) == nil,
+		"B2-R4: monotonic delegated ledger must be rejected pre-commit with zero writes")
 
 	-- E24: Original function throws an error -> propagates unchanged with matching message
 	local ok24, err24 = pcall(function()

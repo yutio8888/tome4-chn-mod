@@ -26,6 +26,7 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
     if not rawget(_M, sentinel) and type(_M[fname]) == "function" then
         _M[sentinel] = true
         local orig = _M[fname]
+        local wrap_rnd_boss_init = (fname == "createRandomBoss")
         _M[fname] = function(self, base, data, ...)
             if not is_zh_hans() then
                 return orig(self, base, data, ...)
@@ -43,7 +44,7 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
             end
 
             local function install_rbi(b)
-                if type(b) ~= "table" then return end
+                if not wrap_rnd_boss_init or type(b) ~= "table" then return end
                 if rbi_state and rbi_state.b == b and rawget(b, "rnd_boss_init") == rbi_state.wrapper then
                     return
                 end
@@ -52,16 +53,19 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
                 if not real_rbi then return end
                 local raw_rbi = rawget(b, "rnd_boss_init")
                 local wrapper
-                wrapper = function(boss, _p, ...)
+                wrapper = function(boss, arg2, ...)
                     restore_rbi()
-                    return real_rbi(boss, data, ...)
+                    if rawequal(arg2, call_data) then
+                        arg2 = data
+                    end
+                    return real_rbi(boss, arg2, ...)
                 end
                 rbi_state = { b = b, raw = raw_rbi, wrapper = wrapper }
                 rawset(b, "rnd_boss_init", wrapper)
             end
 
             if type(data) == "table" then
-                if type(base) == "table" and type(base.clone) == "function" then
+                if wrap_rnd_boss_init and type(base) == "table" and type(base.clone) == "function" then
                     local clone_count = 0
                     call_base = setmetatable({
                         clone = function(_bp, ...)
@@ -75,7 +79,13 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
                     }, { __index = base, __newindex = base })
                 end
                 call_data = setmetatable({}, {
-                    __newindex = data,
+                    __newindex = function(_, k, v)
+                        local ok, err = pcall(function() data[k] = v end)
+                        if not ok then
+                            restore_rbi()
+                            error(err, 0)
+                        end
+                    end,
                     __index = function(_, k)
                         if k == "init" then
                             local real_init = data.init
