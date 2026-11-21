@@ -9,7 +9,7 @@ if not rawget(_M, "__chn_generateRandart") and type(_M.generateRandart) == "func
     function _M:generateRandart(...)
         local result = pack(generate(self, ...))
         -- Upstream remains authoritative and errors from the original generator propagate.
-        pcall(Names.annotate, result[1], DamageType)
+        pcall(Names.annotate, result[1], DamageType, self)
         return unpack(result, 1, result.n)
     end
 end
