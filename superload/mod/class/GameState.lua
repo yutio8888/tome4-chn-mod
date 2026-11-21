@@ -30,9 +30,50 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
             if not is_zh_hans() then
                 return orig(self, base, data, ...)
             end
+            local call_base = base
             local call_data = data
             local post_changed = false
+            local rbi_state = nil
+
+            local function restore_rbi()
+                if rbi_state and rawget(rbi_state.b, "rnd_boss_init") == rbi_state.wrapper then
+                    rawset(rbi_state.b, "rnd_boss_init", rbi_state.raw)
+                end
+                rbi_state = nil
+            end
+
+            local function install_rbi(b)
+                if type(b) ~= "table" then return end
+                if rbi_state and rbi_state.b == b and rawget(b, "rnd_boss_init") == rbi_state.wrapper then
+                    return
+                end
+                restore_rbi()
+                local real_rbi = b.rnd_boss_init
+                if not real_rbi then return end
+                local raw_rbi = rawget(b, "rnd_boss_init")
+                local wrapper
+                wrapper = function(boss, _p, ...)
+                    restore_rbi()
+                    return real_rbi(boss, data, ...)
+                end
+                rbi_state = { b = b, raw = raw_rbi, wrapper = wrapper }
+                rawset(b, "rnd_boss_init", wrapper)
+            end
+
             if type(data) == "table" then
+                if type(base) == "table" and type(base.clone) == "function" then
+                    local clone_count = 0
+                    call_base = setmetatable({
+                        clone = function(_bp, ...)
+                            clone_count = clone_count + 1
+                            local b = base:clone(...)
+                            if clone_count == 1 then
+                                install_rbi(b)
+                            end
+                            return b
+                        end,
+                    }, { __index = base, __newindex = base })
+                end
                 call_data = setmetatable({}, {
                     __newindex = data,
                     __index = function(_, k)
@@ -40,12 +81,16 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
                             local real_init = data.init
                             if not real_init then return real_init end
                             return function(_p, boss, ...)
-                                return real_init(data, boss, ...)
+                                restore_rbi()
+                                local res = pack(real_init(data, boss, ...))
+                                install_rbi(boss)
+                                return unpack(res, 1, res.n)
                             end
                         elseif k == "post" then
                             local real_post = data.post
                             if not real_post then return real_post end
                             return function(boss, _p, ...)
+                                restore_rbi()
                                 local pre_name = type(boss) == "table" and boss.name or nil
                                 local pre_unique = type(boss) == "table" and boss.unique or nil
                                 local res = pack(real_post(boss, data, ...))
@@ -59,7 +104,8 @@ for _, fname in ipairs{"createRandomBoss", "createRandomBossNew"} do
                     end,
                 })
             end
-            local result = pack(orig(self, base, call_data, ...))
+            local result = pack(orig(self, call_base, call_data, ...))
+            restore_rbi()
             if not post_changed then
                 pcall(BossNames.rename, result[1], base, data, self)
             end

@@ -388,6 +388,29 @@ do
 	})
 	assert(not ok_fake_dlc, "B4: collect_sources must fail when a required DLC locale (Orcs) is replaced by another file")
 
+	-- B4 negative check 5: non-zh_hans locale file (e.g. official ko_KR.lua) must be rejected
+	local dlc_o_kr = real_dlc_root .. "/orcs/tome-orcs/data/locales/ko_KR.lua"
+	local ok_kr = pcall(GenTokens.collect_sources, {
+		dlc_paths = { dlc_a, dlc_c, dlc_o_kr },
+	})
+	assert(not ok_kr, "B4: collect_sources must reject non-zh_hans locale file (ko_KR.lua)")
+
+	-- B4 negative check 6: forged empty Orcs section header prepended to another zh_hans locale must be rejected
+	local forged_locale_path = "/tmp/tome4-rb-forged-orcs-header.lua"
+	local core_zh_path = os.getenv("TOME_ZH_HANS_LUA") or "/workspace/t-engine4/game/modules/tome/data/locales/zh_hans.lua"
+	local cf = assert(io.open(core_zh_path, "rb"))
+	local core_zh_bytes = cf:read("*a")
+	cf:close()
+	local ff = assert(io.open(forged_locale_path, "wb"))
+	ff:write('section "tome-orcs/data/general/npcs/orc.lua"\n')
+	ff:write(core_zh_bytes)
+	ff:close()
+	local ok_forged = pcall(GenTokens.collect_sources, {
+		dlc_paths = { dlc_a, dlc_c, forged_locale_path },
+	})
+	os.remove(forged_locale_path)
+	assert(not ok_forged, "B4: collect_sources must reject forged empty DLC section header with foreign entity entries")
+
 	-- Verify baked tables in data/chn_randboss_names.lua are supersets of live computation
 	local baked_tokens_set = {}
 	for _, tok in ipairs(rules.fixed_name_tokens) do
@@ -1283,6 +1306,55 @@ local function run_edge_case_tests(fn_name)
 			"B3: coroutine resume after post yield failed")
 	end
 
+	-- B3 Round 3: b.rnd_boss_init(b, data) in legacy createRandomBoss (and if installed via data.init) must receive the real data table
+	do
+		for _, test_loc in ipairs{ "en_US", "zh_hans" } do
+			config.settings.locale = test_loc
+			local st_rbi = make_gamestate(true)
+			local rbi_calls = 0
+			local orig_rbi
+			orig_rbi = function(b, opts)
+				rbi_calls = rbi_calls + 1
+				assert(rawequal(opts, st_rbi._test_d), "B3-R3(" .. test_loc .. "): b.rnd_boss_init must receive real data table")
+				assert(rawget(opts, "no_loot_randart") == true, "B3-R3(" .. test_loc .. "): rawget(opts, 'no_loot_randart') must work")
+				assert(rawequal(b.rnd_boss_init, orig_rbi), "B3-R3(" .. test_loc .. "): b.rnd_boss_init must be restored inside callback")
+				local kcount = 0
+				for _ in pairs(opts) do kcount = kcount + 1 end
+				assert(kcount >= 3, "B3-R3(" .. test_loc .. "): pairs(opts) must iterate real data keys")
+			end
+			local base_rbi = make_base_actor{
+				name = "人类",
+				type = "humanoid",
+				subtype = "human",
+			}
+			base_rbi.rnd_boss_init = orig_rbi
+			base_rbi.clone = function(self_base)
+				local saved_fn = self_base.rnd_boss_init
+				local saved_clone = self_base.clone
+				self_base.rnd_boss_init = nil
+				self_base.clone = nil
+				local c = Actor.clone(self_base)
+				self_base.rnd_boss_init = saved_fn
+				self_base.clone = saved_clone
+				c.rnd_boss_init = saved_fn
+				return c
+			end
+			local d_rbi = {
+				level = 10,
+				rank = 3.2,
+				no_loot_randart = true,
+			}
+			st_rbi._test_d = d_rbi
+			local b_rbi = st_rbi[fn_name](st_rbi, base_rbi, d_rbi)
+			if fn_name == "createRandomBoss" then
+				assert(rbi_calls == 1, "B3-R3(" .. test_loc .. "): b.rnd_boss_init must be invoked once in createRandomBoss")
+			end
+			assert(rawequal(b_rbi.rnd_boss_init, orig_rbi), "B3-R3(" .. test_loc .. "): b.rnd_boss_init must remain original function after return")
+			assert(rawequal(base_rbi.rnd_boss_init, orig_rbi), "B3-R3(" .. test_loc .. "): base.rnd_boss_init must never be mutated")
+		end
+		config.settings.locale = "zh_hans"
+	end
+
 	-- Round 2 regression: bare "#rng#" template (empty prefix and suffix) must rename and record
 	for _, bare_seed in ipairs{ "Seed438", "丙丁" } do
 		local st_bare = make_gamestate(true)
@@ -1417,6 +1489,25 @@ local function run_edge_case_tests(fn_name)
 	assert(id23_inh == b23_inh.define_as and rawget(b23_inh, "__chn_randboss_name") == nil and b23_inh.name == b23_inh.unique)
 	assert(next(used_inh) == nil and rawget(ledger_inh, "count") == nil,
 		"B2: readonly used failure must not materialize rawget(ledger, 'count')")
+
+	-- B2 Round 3: Commit-phase fault injection 5: delegated count backing store where __newindex writes store[k] = v then throws on increment
+	local st23_del = make_gamestate(true)
+	local backing_store = { count = 0 }
+	local used_del = {}
+	local ledger_del = setmetatable({ version = 1, used = used_del }, {
+		__index = backing_store,
+		__newindex = function(_, k, v)
+			backing_store[k] = v
+			if k == "count" and v > 0 then
+				error("injected post-write delegated count error")
+			end
+		end,
+	})
+	st23_del.__chn_randboss_ledger = ledger_del
+	local b23_del, id23_del = st23_del[fn_name](st23_del, base, { level = 10, rank = 3.2 })
+	assert(id23_del == b23_del.define_as and rawget(b23_del, "__chn_randboss_name") == nil and b23_del.name == b23_del.unique)
+	assert(ledger_del.count == 0 and backing_store.count == 0 and rawget(ledger_del, "count") == nil and next(used_del) == nil,
+		"B2-R3: delegated count post-write failure must roll back backing store count to 0 without materializing raw count")
 
 	-- E24: Original function throws an error -> propagates unchanged with matching message
 	local ok24, err24 = pcall(function()

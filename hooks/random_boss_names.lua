@@ -803,7 +803,8 @@ function M.rename(b, base, data, state)
 	if recorded then
 		local had_core = (ledger.used[core] ~= nil)
 		local raw_count = rawget(ledger, "count")
-		local next_count = ledger.count + 1
+		local prev_count = ledger.count
+		local next_count = prev_count + 1
 		local ok_used, err_used = pcall(function()
 			ledger.used[core] = true
 		end)
@@ -826,7 +827,13 @@ function M.rename(b, base, data, state)
 				pcall(rawset, ledger, "count", nil)
 			else
 				pcall(rawset, ledger, "count", raw_count)
-				pcall(function() ledger.count = raw_count end)
+			end
+			local ok_chk, cur_count = pcall(function() return ledger.count end)
+			if ok_chk and cur_count ~= prev_count then
+				pcall(function() ledger.count = prev_count end)
+				if raw_count == nil then
+					pcall(rawset, ledger, "count", nil)
+				end
 			end
 			error(err_cnt, 0)
 		end

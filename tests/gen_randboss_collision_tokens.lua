@@ -70,12 +70,18 @@ local function load_locale_file(path, label, D, entity_trans, all_trans, seen_fi
 	seen_fingerprints[fp] = tostring(label) .. ":" .. tostring(path)
 
 	local count = 0
+	local declared_locales = {}
+	local current_section = ""
 	local sections = {}
+	local section_entity_counts = {}
 	local file_entities = {}
 	local env = setmetatable({
-		locale = function() end,
+		locale = function(loc)
+			declared_locales[#declared_locales + 1] = tostring(loc)
+		end,
 		section = function(sec)
 			if type(sec) == "string" then
+				current_section = sec
 				sections[sec] = true
 			end
 		end,
@@ -97,6 +103,7 @@ local function load_locale_file(path, label, D, entity_trans, all_trans, seen_fi
 					end
 					eset[dst] = true
 					file_entities[src] = dst
+					section_entity_counts[current_section] = (section_entity_counts[current_section] or 0) + 1
 					D[dst] = true
 					count = count + 1
 				end
@@ -106,7 +113,11 @@ local function load_locale_file(path, label, D, entity_trans, all_trans, seen_fi
 	local chunk = assert(loadstring(content, path))
 	setfenv(chunk, env)
 	chunk()
-	return count, sections, file_entities
+	if #declared_locales ~= 1 or declared_locales[1] ~= "zh_hans" then
+		error(string.format("%s (%s) must declare locale \"zh_hans\", got %q",
+			tostring(label), tostring(path), tostring(declared_locales[1])), 0)
+	end
+	return count, sections, section_entity_counts, file_entities
 end
 
 local function canonicalize_dir_path(dir, label)
@@ -347,13 +358,29 @@ local DLC_SIGNATURES = {
 	},
 }
 
-local function identify_dlc_locale(sections, count)
+local function identify_dlc_locale(sections, section_entity_counts, total_count)
 	for dlc_id, sig in pairs(DLC_SIGNATURES) do
-		if count >= sig.min_entities then
-			for sec in pairs(sections) do
+		local has_section = false
+		local all_belong = true
+		for sec in pairs(sections) do
+			has_section = true
+			if sec:sub(1, #sig.section_prefix) ~= sig.section_prefix then
+				all_belong = false
+				break
+			end
+		end
+		if has_section and all_belong then
+			local matched_entities = 0
+			for sec, cnt in pairs(section_entity_counts) do
 				if sec:sub(1, #sig.section_prefix) == sig.section_prefix then
-					return dlc_id
+					matched_entities = matched_entities + cnt
+				else
+					all_belong = false
+					break
 				end
+			end
+			if all_belong and matched_entities == total_count and matched_entities >= sig.min_entities then
+				return dlc_id
 			end
 		end
 	end
@@ -404,9 +431,9 @@ function M.collect_sources(opts)
 	local s4_per_dlc = {}
 	local seen_dlc_ids = {}
 	for i, p in ipairs(dlc_paths) do
-		local c, sections = load_locale_file(p, "S4(dlc_" .. tostring(i) .. ")", D, entity_trans, all_trans, seen_locale_fps)
+		local c, sections, section_entity_counts = load_locale_file(p, "S4(dlc_" .. tostring(i) .. ")", D, entity_trans, all_trans, seen_locale_fps)
 		assert(c > 0, "S4 loaded 0 entity names from " .. tostring(p))
-		local dlc_id = identify_dlc_locale(sections, c)
+		local dlc_id = identify_dlc_locale(sections, section_entity_counts, c)
 		if not dlc_id then
 			error("S4 locale file is not a valid Ashes/Cults/Orcs DLC locale: " .. tostring(p), 0)
 		end
