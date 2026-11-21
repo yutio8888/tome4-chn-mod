@@ -70,9 +70,15 @@ local function load_locale_file(path, label, D, entity_trans, all_trans, seen_fi
 	seen_fingerprints[fp] = tostring(label) .. ":" .. tostring(path)
 
 	local count = 0
+	local sections = {}
+	local file_entities = {}
 	local env = setmetatable({
 		locale = function() end,
-		section = function() end,
+		section = function(sec)
+			if type(sec) == "string" then
+				sections[sec] = true
+			end
+		end,
 		setFlag = function() end,
 		forceFontPackage = function() end,
 		t = function(src, dst, tag)
@@ -90,6 +96,7 @@ local function load_locale_file(path, label, D, entity_trans, all_trans, seen_fi
 						entity_trans[src] = eset
 					end
 					eset[dst] = true
+					file_entities[src] = dst
 					D[dst] = true
 					count = count + 1
 				end
@@ -99,21 +106,26 @@ local function load_locale_file(path, label, D, entity_trans, all_trans, seen_fi
 	local chunk = assert(loadstring(content, path))
 	setfenv(chunk, env)
 	chunk()
-	return count
+	return count, sections, file_entities
 end
 
-local function list_files_in_dir(dir, pattern_args, label)
+local function canonicalize_dir_path(dir, label)
 	if type(dir) ~= "string" or dir == "" then
 		error("missing directory path for " .. tostring(label), 0)
 	end
-	local check_cmd = string.format("test -d %q && echo OK", dir)
+	local check_cmd = string.format("cd -P -- %q 2>/dev/null && pwd -P", dir)
 	local cp = io.popen(check_cmd, "r")
-	local ok_line = cp and cp:read("*l") or nil
+	local real_dir = cp and cp:read("*l") or nil
 	if cp then cp:close() end
-	if ok_line ~= "OK" then
+	if not real_dir or real_dir == "" then
 		error("required source directory does not exist (" .. tostring(label) .. "): " .. tostring(dir), 0)
 	end
-	local cmd = string.format("find %q %s 2>/dev/null", dir, pattern_args)
+	return real_dir
+end
+
+local function list_files_in_dir(dir, pattern_args, label)
+	local real_dir = canonicalize_dir_path(dir, label)
+	local cmd = string.format("find %q %s 2>/dev/null", real_dir, pattern_args)
 	local p = assert(io.popen(cmd, "r"))
 	local files = {}
 	for line in p:lines() do
@@ -123,7 +135,7 @@ local function list_files_in_dir(dir, pattern_args, label)
 	end
 	p:close()
 	table.sort(files)
-	return files
+	return files, real_dir
 end
 
 -- Lexical scanner for Lua source files to extract top-level literal `name` where `unique = true` inside balanced `newEntity{...}` constructors.
@@ -242,6 +254,10 @@ local function tokenize_lua(s)
 	return tokens, vals
 end
 
+local function is_field_terminator(tok)
+	return tok == "," or tok == ";" or tok == "}"
+end
+
 function M.extract_fixed_entities_from_source(s)
 	local results = {}
 	if type(s) ~= "string" or not s:find("newEntity", 1, true) or not s:find("unique", 1, true) then
@@ -255,24 +271,34 @@ function M.extract_fixed_entities_from_source(s)
 			if w[k] == "(" then k = k + 1 end
 			if w[k] == "{" then
 				local depth = 1
+				local block_depth = 0
+				local loop_cond = false
 				local name = nil
 				local is_unique = false
 				k = k + 1
 				while k <= nw and depth > 0 do
 					local a = w[k]
 					local prev = w[k - 1]
-					if depth == 1 and (prev == "{" or prev == "," or prev == ";") and w[k + 1] == "=" then
-						if a == "unique" and w[k + 2] == "true" then
-							is_unique = true
+					if depth == 1 and block_depth == 0 and (prev == "{" or prev == "," or prev == ";") and w[k + 1] == "=" then
+						if a == "unique" then
+							if w[k + 2] == "true" and is_field_terminator(w[k + 3]) then
+								is_unique = true
+							elseif w[k + 2] == "false" and is_field_terminator(w[k + 3]) then
+								is_unique = false
+							end
 						elseif a == "name" then
 							local h = k + 2
 							if w[h] == "_t" or w[h] == "_nt" then h = h + 1 end
-							if w[h] == "(" then h = h + 1 end
+							local had_paren = false
+							if w[h] == "(" then
+								had_paren = true
+								h = h + 1
+							end
 							local v_tok = w[h]
 							local v_val = vals[h]
 							local z = h + 1
-							if w[z] == ")" then z = z + 1 end
-							if v_tok == "STRING" and (w[z] == "," or w[z] == ";" or w[z] == "}") then
+							if had_paren and w[z] == ")" then z = z + 1 end
+							if v_tok == "STRING" and is_field_terminator(w[z]) then
 								name = v_val
 							end
 						end
@@ -281,6 +307,19 @@ function M.extract_fixed_entities_from_source(s)
 						depth = depth + 1
 					elseif a == "}" or a == ")" then
 						depth = depth - 1
+					elseif a == "for" or a == "while" then
+						loop_cond = true
+					elseif a == "do" then
+						if loop_cond then
+							loop_cond = false
+						end
+						block_depth = block_depth + 1
+					elseif a == "function" or a == "if" or a == "repeat" then
+						block_depth = block_depth + 1
+					elseif a == "end" or a == "until" then
+						if block_depth > 0 then
+							block_depth = block_depth - 1
+						end
 					end
 					k = k + 1
 				end
@@ -291,6 +330,34 @@ function M.extract_fixed_entities_from_source(s)
 		end
 	end
 	return results
+end
+
+local DLC_SIGNATURES = {
+	["ashes-urhrok"] = {
+		section_prefix = "tome-ashes-urhrok/",
+		min_entities = 30,
+	},
+	["cults"] = {
+		section_prefix = "tome-cults/",
+		min_entities = 150,
+	},
+	["orcs"] = {
+		section_prefix = "tome-orcs/",
+		min_entities = 300,
+	},
+}
+
+local function identify_dlc_locale(sections, count)
+	for dlc_id, sig in pairs(DLC_SIGNATURES) do
+		if count >= sig.min_entities then
+			for sec in pairs(sections) do
+				if sec:sub(1, #sig.section_prefix) == sig.section_prefix then
+					return dlc_id
+				end
+			end
+		end
+	end
+	return nil
 end
 
 function M.collect_sources(opts)
@@ -335,11 +402,25 @@ function M.collect_sources(opts)
 	assert(#dlc_paths == 3, "S4 requires exactly 3 distinct DLC locale files (ashes-urhrok, cults, orcs), got " .. tostring(#dlc_paths))
 	local s4_count = 0
 	local s4_per_dlc = {}
+	local seen_dlc_ids = {}
 	for i, p in ipairs(dlc_paths) do
-		local c = load_locale_file(p, "S4(dlc_" .. tostring(i) .. ")", D, entity_trans, all_trans, seen_locale_fps)
+		local c, sections = load_locale_file(p, "S4(dlc_" .. tostring(i) .. ")", D, entity_trans, all_trans, seen_locale_fps)
 		assert(c > 0, "S4 loaded 0 entity names from " .. tostring(p))
+		local dlc_id = identify_dlc_locale(sections, c)
+		if not dlc_id then
+			error("S4 locale file is not a valid Ashes/Cults/Orcs DLC locale: " .. tostring(p), 0)
+		end
+		if seen_dlc_ids[dlc_id] then
+			error("S4 duplicate DLC locale identity (" .. dlc_id .. "): " .. tostring(p), 0)
+		end
+		seen_dlc_ids[dlc_id] = p
 		s4_per_dlc[i] = c
 		s4_count = s4_count + c
+	end
+	for req_dlc in pairs(DLC_SIGNATURES) do
+		if not seen_dlc_ids[req_dlc] then
+			error("S4 missing required DLC locale for " .. req_dlc, 0)
+		end
 	end
 
 	-- S5: terminology/*.tsv
@@ -374,14 +455,14 @@ function M.collect_sources(opts)
 	end
 	assert(s5_count > 0, "S5 loaded 0 terminology entries from " .. tostring(term_dir))
 
-	-- S6: fixed unique entities from TOME_DATA_DIR and DLC_ROOT (both must exist and contain definitions)
-	if tome_data_dir == dlc_root then
-		error("S6 tome_data_dir and dlc_root must be distinct directories", 0)
-	end
-	local core_lua_files = list_files_in_dir(tome_data_dir, "-name '*.lua' ! -path '*/locales/*'", "S6(tome_data_dir)")
+	-- S6: fixed unique entities from TOME_DATA_DIR and DLC_ROOT (both must exist, resolve to distinct physical directories, and contain definitions)
+	local core_lua_files, real_core_dir = list_files_in_dir(tome_data_dir, "-name '*.lua' ! -path '*/locales/*'", "S6(tome_data_dir)")
 	assert(#core_lua_files > 0, "S6 found no lua files in tome_data_dir: " .. tostring(tome_data_dir))
-	local dlc_lua_files = list_files_in_dir(dlc_root, "-name '*.lua' ! -path '*/locales/*'", "S6(dlc_root)")
+	local dlc_lua_files, real_dlc_dir = list_files_in_dir(dlc_root, "-name '*.lua' ! -path '*/locales/*'", "S6(dlc_root)")
 	assert(#dlc_lua_files > 0, "S6 found no lua files in dlc_root: " .. tostring(dlc_root))
+	if real_core_dir == real_dlc_dir or real_dlc_dir:sub(1, #real_core_dir + 1) == real_core_dir .. "/" or real_core_dir:sub(1, #real_dlc_dir + 1) == real_dlc_dir .. "/" then
+		error(string.format("S6 tome_data_dir (%s) and dlc_root (%s) must resolve to distinct physical directories", tostring(real_core_dir), tostring(real_dlc_dir)), 0)
+	end
 
 	local s6_unique_zh = {}
 	local s6_en_set = {}

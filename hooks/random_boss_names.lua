@@ -757,7 +757,8 @@ function M.rename(b, base, data, state)
 	if type(meta) == "table" and meta.text == orig then return end
 	local prefix, X, suffix = M.extract_personal_slot(orig, base, data)
 	if not prefix then return end
-	if not plain_label(prefix .. suffix) or not utf8_valid(prefix .. "名" .. suffix) then return end
+	local affixes = prefix .. suffix
+	if (affixes ~= "" and not plain_label(affixes)) or not utf8_valid(prefix .. "名" .. suffix) then return end
 
 	local tier = M.tier_of(b.rank)
 	local culture, sex = M.culture_of(base, state)
@@ -798,16 +799,36 @@ function M.rename(b, base, data, state)
 		recorded = recorded == true,
 	}
 
-	-- Atomic commit: update ledger count before used[core], attach ledger only when valid, then set meta & name
+	-- Atomic commit: update ledger used[core] then count with full rollback on failure, before attaching ledger or setting meta & name
 	if recorded then
-		local prev_count = ledger.count
-		ledger.count = prev_count + 1
+		local had_core = (ledger.used[core] ~= nil)
+		local raw_count = rawget(ledger, "count")
+		local next_count = ledger.count + 1
 		local ok_used, err_used = pcall(function()
 			ledger.used[core] = true
 		end)
 		if not ok_used then
-			pcall(function() ledger.count = prev_count end)
+			if not had_core then
+				pcall(rawset, ledger.used, core, nil)
+				pcall(function() ledger.used[core] = nil end)
+			end
 			error(err_used, 0)
+		end
+		local ok_cnt, err_cnt = pcall(function()
+			ledger.count = next_count
+		end)
+		if not ok_cnt then
+			if not had_core then
+				pcall(rawset, ledger.used, core, nil)
+				pcall(function() ledger.used[core] = nil end)
+			end
+			if raw_count == nil then
+				pcall(rawset, ledger, "count", nil)
+			else
+				pcall(rawset, ledger, "count", raw_count)
+				pcall(function() ledger.count = raw_count end)
+			end
+			error(err_cnt, 0)
 		end
 	end
 	if is_new_ledger then

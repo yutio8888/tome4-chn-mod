@@ -353,9 +353,40 @@ do
 			name = "NonUniqueEntity",
 			unique = false,
 		}
+		newEntity{
+			unique = true and false,
+			name = "BooleanExpression",
+		}
+		newEntity{
+			unique = true,
+			name = "Top",
+			act = function()
+				do local x = 1; name = "Assignment"; end
+			end,
+		}
 	]=]
 	local extracted_syn = GenTokens.extract_fixed_entities_from_source(synthetic_lua)
-	assert(#extracted_syn == 1 and extracted_syn[1] == "RealUniqueBow", "S6 lexical extractor failed synthetic boundary check")
+	assert(#extracted_syn == 2 and extracted_syn[1] == "RealUniqueBow" and extracted_syn[2] == "Top",
+		"S6 lexical extractor failed synthetic boundary check: got " .. table.concat(extracted_syn, ","))
+
+	-- B4 negative check 3: physical directory aliasing (tome_data_dir and dlc_root pointing to same physical directory via "/.")
+	local real_tome_data = os.getenv("TOME_DATA_DIR") or "/workspace/t-engine4/game/modules/tome/data"
+	local real_dlc_root = os.getenv("DLC_ROOT") or "/workspace/tome4-dlcs"
+	local dlc_a = real_dlc_root .. "/ashes-urhrok/tome-ashes-urhrok/data/locales/zh_hans.lua"
+	local dlc_c = real_dlc_root .. "/cults/tome-cults/data/locales/zh_hans.lua"
+	local dlc_o = real_dlc_root .. "/orcs/tome-orcs/data/locales/zh_hans.lua"
+	local ok_alias = pcall(GenTokens.collect_sources, {
+		tome_data_dir = real_tome_data,
+		dlc_root = real_tome_data .. "/.",
+		dlc_paths = { dlc_a, dlc_c, dlc_o },
+	})
+	assert(not ok_alias, "B4: collect_sources must fail when tome_data_dir and dlc_root resolve to the same physical directory")
+
+	-- B4 negative check 4: missing DLC locale replaced by an unrelated locale file
+	local ok_fake_dlc = pcall(GenTokens.collect_sources, {
+		dlc_paths = { dlc_a, dlc_c, os.getenv("ADDON_ZH_HANS_LUA") or "data/locales/zh_hans.lua" },
+	})
+	assert(not ok_fake_dlc, "B4: collect_sources must fail when a required DLC locale (Orcs) is replaced by another file")
 
 	-- Verify baked tables in data/chn_randboss_names.lua are supersets of live computation
 	local baked_tokens_set = {}
@@ -1163,7 +1194,7 @@ local function run_edge_case_tests(fn_name)
 	})
 	assert(b12.name == "自定义首领名" and rawget(b12, "__chn_randboss_name") == nil)
 
-	-- B3 same-width post rename + unique sync ("守卫丙丁" -> "守卫甲乙")
+	-- B3 same-width post rename + unique sync ("守卫丙丁" -> "守卫甲乙"), including init-installed post, metatable __index post, and callable table post
 	local st12_sw = make_gamestate(true)
 	local saved_ng2_new = NameGenerator2.new
 	NameGenerator2.new = function()
@@ -1180,12 +1211,95 @@ local function run_edge_case_tests(fn_name)
 	}
 	local orig_post_ref = caller_data_sw.post
 	local b12_sw, id12_sw = st12_sw[fn_name](st12_sw, base, caller_data_sw)
-	NameGenerator2.new = saved_ng2_new
 	assert(caller_data_sw.post == orig_post_ref, "B3: caller data.post reference must remain intact")
 	assert(b12_sw.name == "守卫甲乙" and b12_sw.unique == "守卫甲乙",
 		"B3/E12: same-width post rename+unique sync must not be overwritten, got " .. tostring(b12_sw.name))
 	assert(rawget(b12_sw, "__chn_randboss_name") == nil and rawget(st12_sw, "__chn_randboss_ledger") == nil)
 	assert(id12_sw == b12_sw.define_as)
+
+	-- B3 Round 2: post installed by data.init, inherited via __index, or callable table
+	for _, post_mode in ipairs{ "init-installs-post", "inherited-post", "callable-post" } do
+		local st_pm = make_gamestate(true)
+		local d_pm = { level = 10, rank = 3.2, name_scheme = "守卫#rng#" }
+		local patch_fn = function(b)
+			b.name = "守卫甲乙"
+			b.unique = b.name
+		end
+		if post_mode == "init-installs-post" then
+			d_pm.init = function(t) t.post = patch_fn end
+		elseif post_mode == "inherited-post" then
+			setmetatable(d_pm, { __index = { post = patch_fn } })
+		else
+			d_pm.post = setmetatable({}, { __call = function(_, b) patch_fn(b) end })
+		end
+		local b_pm, id_pm = st_pm[fn_name](st_pm, base, d_pm)
+		assert(b_pm.name == "守卫甲乙" and b_pm.unique == "守卫甲乙" and id_pm == b_pm.define_as,
+			"B3(" .. post_mode .. "): post rename must be respected, got " .. tostring(b_pm.name))
+		assert(rawget(b_pm, "__chn_randboss_name") == nil and rawget(st_pm, "__chn_randboss_ledger") == nil,
+			"B3(" .. post_mode .. "): must not overwrite or record in ledger")
+	end
+
+	-- B3 Round 2: data.init cancels data.post by reference equality (both zh_hans and en_US) -> zero extra RNG calls
+	for _, test_loc in ipairs{ "zh_hans", "en_US" } do
+		config.settings.locale = test_loc
+		local st_cancel = make_gamestate(true)
+		local post_rng_calls = 0
+		local function optional_post()
+			post_rng_calls = post_rng_calls + 1
+		end
+		local d_cancel = {
+			level = 10,
+			rank = 3.2,
+			name_scheme = "守卫#rng#",
+			post = optional_post,
+			init = function(d)
+				assert(d.post == optional_post, "B3: init must observe original data.post reference")
+				d.post = nil
+			end,
+		}
+		st_cancel[fn_name](st_cancel, base, d_cancel)
+		assert(post_rng_calls == 0 and d_cancel.post == nil, "B3(" .. test_loc .. "): cancelled post must not run")
+	end
+	config.settings.locale = "zh_hans"
+
+	-- B3 Round 2: PUC Lua 5.1 coroutine.yield inside data.post must succeed without C-call boundary error
+	do
+		local st_co = make_gamestate(true)
+		local d_co = {
+			level = 10,
+			rank = 3.2,
+			name_scheme = "守卫#rng#",
+			post = function()
+				coroutine.yield("post_yield_marker")
+			end,
+		}
+		local co = coroutine.create(function()
+			return st_co[fn_name](st_co, base, d_co)
+		end)
+		local ok_y1, msg_y1 = coroutine.resume(co)
+		assert(ok_y1 and msg_y1 == "post_yield_marker", "B3: coroutine yield inside post failed: " .. tostring(msg_y1))
+		local ok_y2, b_co = coroutine.resume(co)
+		assert(ok_y2 and type(b_co) == "table" and rawget(b_co, "__chn_randboss_name") ~= nil,
+			"B3: coroutine resume after post yield failed")
+	end
+
+	-- Round 2 regression: bare "#rng#" template (empty prefix and suffix) must rename and record
+	for _, bare_seed in ipairs{ "Seed438", "丙丁" } do
+		local st_bare = make_gamestate(true)
+		NameGenerator2.new = function()
+			return { generate = function() return bare_seed end }
+		end
+		local b_bare, id_bare = st_bare[fn_name](st_bare, base, {
+			level = 10,
+			rank = 3.2,
+			name_scheme = "#rng#",
+		})
+		assert(rawget(b_bare, "__chn_randboss_name") ~= nil and b_bare.name ~= bare_seed,
+			"bare #rng# template must rename for seed " .. bare_seed)
+		assert(b_bare.unique == bare_seed and id_bare == b_bare.define_as)
+		assert(st_bare.__chn_randboss_ledger and st_bare.__chn_randboss_ledger.count == 1)
+	end
+	NameGenerator2.new = saved_ng2_new
 
 	-- B1: Full Display Name R1 collision defense ("部落高阶大地法师#rng#" + "Seed438" must avoid fixed unique "部落高阶大地法师沃尔" and succeed)
 	local st_b1 = make_gamestate(true)
@@ -1253,8 +1367,8 @@ local function run_edge_case_tests(fn_name)
 	})
 	local b23_ro, id23_ro = st23_ro[fn_name](st23_ro, base, { level = 10, rank = 3.2 })
 	assert(id23_ro == b23_ro.define_as and rawget(b23_ro, "__chn_randboss_name") == nil and b23_ro.name == b23_ro.unique)
-	assert(next(used_ro) == nil and st23_ro.__chn_randboss_ledger.count == 0,
-		"B2: count write failure must not leave core reserved in ledger.used")
+	assert(next(used_ro) == nil and st23_ro.__chn_randboss_ledger.count == 0 and rawget(st23_ro.__chn_randboss_ledger, "count") == nil,
+		"B2: count write failure must not leave core reserved in ledger.used or materialize raw count")
 
 	-- B2: Commit-phase fault injection 2: rules.version fault on second access must not leave b.name changed without meta
 	local st23_ver = make_gamestate(true)
@@ -1277,6 +1391,32 @@ local function run_edge_case_tests(fn_name)
 	assert((rawget(b23_ver, "__chn_randboss_name") ~= nil and b23_ver.name == b23_ver.__chn_randboss_name.text and st23_ver.__chn_randboss_ledger.count == 1)
 		or (rawget(b23_ver, "__chn_randboss_name") == nil and b23_ver.name == b23_ver.unique and rawget(st23_ver, "__chn_randboss_ledger") == nil),
 		"B2: commit must be atomic (either full rename+meta+ledger or zero mutation)")
+
+	-- B2: Commit-phase fault injection 3: used.__newindex writes key before throwing -> rollback must remove orphaned key
+	local st23_late = make_gamestate(true)
+	local used_late = setmetatable({}, {
+		__newindex = function(t, k, v)
+			rawset(t, k, v)
+			error("injected late used error")
+		end,
+	})
+	st23_late.__chn_randboss_ledger = { version = 1, used = used_late, count = 0 }
+	local b23_late, id23_late = st23_late[fn_name](st23_late, base, { level = 10, rank = 3.2 })
+	assert(id23_late == b23_late.define_as and rawget(b23_late, "__chn_randboss_name") == nil and b23_late.name == b23_late.unique)
+	assert(next(used_late) == nil and st23_late.__chn_randboss_ledger.count == 0,
+		"B2: late used error must roll back orphaned core reservation")
+
+	-- B2: Commit-phase fault injection 4: inherited count (rawget == nil) + readonly used -> must not materialize raw count = 0
+	local st23_inh = make_gamestate(true)
+	local used_inh = setmetatable({}, {
+		__newindex = function() error("injected readonly used error") end,
+	})
+	local ledger_inh = setmetatable({ version = 1, used = used_inh }, { __index = { count = 0 } })
+	st23_inh.__chn_randboss_ledger = ledger_inh
+	local b23_inh, id23_inh = st23_inh[fn_name](st23_inh, base, { level = 10, rank = 3.2 })
+	assert(id23_inh == b23_inh.define_as and rawget(b23_inh, "__chn_randboss_name") == nil and b23_inh.name == b23_inh.unique)
+	assert(next(used_inh) == nil and rawget(ledger_inh, "count") == nil,
+		"B2: readonly used failure must not materialize rawget(ledger, 'count')")
 
 	-- E24: Original function throws an error -> propagates unchanged with matching message
 	local ok24, err24 = pcall(function()
@@ -1484,8 +1624,41 @@ do
 	assert(n_combos_hit == 208, "T15 must hit all 208 cohort x template combinations, hit " .. tostring(n_combos_hit))
 	assert(st.__chn_randboss_ledger.count == 1000)
 	assert(elapsed < 3.0, string.format("T15 mixed stress test took %.3fs (>= 3.0s limit)", elapsed))
-	print(string.format("[PASS] T15: 1,000 mixed spawns across all %d cohorts x %d templates (%d combos) -> 1,000 unique cores, 0 collisions, elapsed=%.3fs (< 3s)",
-		n_cohorts_hit, n_templates_hit, n_combos_hit, elapsed))
+
+	-- Full 26 cohorts x (32 live templates + default = 33) = 858 combinations through real createRandomBoss
+	rng_seed = 20260858
+	_G.rng = make_recording_rng()
+	local st_858 = make_gamestate(true)
+	_G.game = { state = st_858 }
+	local live_33 = { false }
+	for _, zh_t in ipairs(verified_real_templates) do
+		live_33[#live_33 + 1] = zh_t
+	end
+	assert(#live_33 == 33, "expected 33 templates (default + 32 live locale templates), got " .. tostring(#live_33))
+	local seen_858 = {}
+	local count_858 = 0
+	for _, cb in ipairs(culture_bases) do
+		for _, tr in ipairs(tier_ranks) do
+			for _, tmpl in ipairs(live_33) do
+				local base_i = make_base_actor(cb)
+				local b_i, id_i = st_858:createRandomBoss(base_i, {
+					level = 10,
+					rank = tr.rank,
+					name_scheme = tmpl or nil,
+				})
+				local m_i = assert(rawget(b_i, "__chn_randboss_name"), "858 matrix failed on " .. cb.culture .. "/" .. cb.sex .. "/" .. tr.tier)
+				assert(m_i.culture == cb.culture and m_i.sex == cb.sex and m_i.tier == tr.tier)
+				assert(b_i:getName() == m_i.text and id_i == b_i.define_as)
+				assert(not seen_858[m_i.core], "duplicate core in 858 matrix: " .. m_i.core)
+				seen_858[m_i.core] = true
+				count_858 = count_858 + 1
+			end
+		end
+	end
+	forbid_random_and_time()
+	assert(count_858 == 858 and st_858.__chn_randboss_ledger.count == 858)
+	print(string.format("[PASS] T15: 1,000 mixed spawns (%d combos) + all 26 x 33 = %d live template matrix -> 0 collisions, elapsed=%.3fs (< 3s)",
+		n_combos_hit, count_858, elapsed))
 end
 
 -- ============================================================================
