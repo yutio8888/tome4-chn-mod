@@ -446,9 +446,9 @@ do
 					end
 				end
 				local reject_rate = rejected_cross / sampled_disjoint
-				epic_lb = math.floor((P / 2) * (1 - reject_rate))
-				new_pool_epic_lb[co.culture] = { lb = epic_lb, reject_rate = reject_rate }
-				assert(epic_lb >= 20000000, string.format("new epic cohort %s adjusted lower bound %d < 20000000", key, epic_lb))
+				local est_epic = math.floor((P / 2) * (1 - reject_rate))
+				new_pool_epic_lb[co.culture] = { est = est_epic, reject_rate = reject_rate }
+				assert(est_epic >= 20000000, string.format("new epic cohort %s estimated epic combos %d < 20000000", key, est_epic))
 			else
 				assert(epic_lb >= 5000000, string.format("epic cohort %s lower bound %d < 5000000", key, epic_lb))
 			end
@@ -460,9 +460,9 @@ do
 	end
 	print(string.format("[PASS] T02: Rare full-enumeration capacity verified across 15 cohorts (min_core=%d [%s], undead=%d, eldritch=%d)",
 		min_rare_core, min_rare_cohort.key, rare_audits["undead:none"].core_count, rare_audits["eldritch:none"].core_count))
-	print(string.format("[PASS] T03: Epic lower bound verified (min_sur_core=%d [%s], undead_sur=%d, eldritch_sur=%d, min_epic_lb=%d [%s], undead_epic_lb=%d, eldritch_epic_lb=%d)",
+	print(string.format("[PASS] T03: Epic capacity verified (min_sur_core=%d [%s], undead_sur=%d, eldritch_sur=%d, min_epic_lb=%d [%s], undead_est_epic=%d, eldritch_est_epic=%d)",
 		min_sur_core, min_sur_culture, surname_audits.undead.core_count, surname_audits.eldritch.core_count,
-		min_epic_lb, min_epic_cohort, new_pool_epic_lb.undead.lb, new_pool_epic_lb.eldritch.lb))
+		min_epic_lb, min_epic_cohort, new_pool_epic_lb.undead.est, new_pool_epic_lb.eldritch.est))
 
 	-- ============================================================================
 	-- T05 & T04 Epic Sampling: 6-Source Collision Audit (R1-R3 = 0) & Epic 240,000 Valid Sample Audit
@@ -2623,14 +2623,14 @@ do
 		return tokens, vals
 	end
 
-	local function extract_npcs_from_file(path)
+	local function parse_raw_npcs_from_file(path, tag)
 		local f = assert(io.open(path, "rb"))
 		local src = f:read("*a")
 		f:close()
 		local tokens, vals = tokenize_npc_lua(src)
 		local nt = #tokens
 		local idx = 1
-		local bases = {}
+		local file_bases = {}
 		local entities = {}
 		while idx <= nt do
 			if tokens[idx] == "newEntity" then
@@ -2639,7 +2639,7 @@ do
 				if tokens[j] == "{" then
 					local depth = 1
 					local k = j + 1
-					local ent = {}
+					local ent = { _file = path, _tag = tag, _file_bases = file_bases }
 					while k <= nt and depth > 0 do
 						local tk = tokens[k]
 						if tk == "{" or tk == "(" or tk == "[" then
@@ -2679,7 +2679,7 @@ do
 							k = k + 1
 						end
 					end
-					if ent.define_as then bases[ent.define_as] = ent end
+					if ent.define_as then file_bases[ent.define_as] = ent end
 					entities[#entities + 1] = ent
 					idx = k
 				else
@@ -2689,78 +2689,155 @@ do
 				idx = idx + 1
 			end
 		end
-		local resolved = {}
-		for _, e in ipairs(entities) do
-			local r = {}
-			local cur = e
-			local seen = {}
-			local chain = {}
-			while cur and not seen[cur] do
-				seen[cur] = true
-				chain[#chain + 1] = cur
-				cur = cur.base and bases[cur.base] or nil
-			end
-			for ci = #chain, 1, -1 do
-				for fk, fv in pairs(chain[ci]) do r[fk] = fv end
-			end
-			if r.name and not r.unique then
-				resolved[#resolved + 1] = r
-			end
-		end
-		return resolved
+		return entities
 	end
 
 	local tome_data = os.getenv("TOME_DATA_DIR") or "/workspace/t-engine4/game/modules/tome/data"
 	local dlc_root = os.getenv("DLC_ROOT") or "/workspace/tome4-dlcs"
-	local scan_dirs = {
-		tome_data .. "/general/npcs",
-		tome_data .. "/zones",
-		dlc_root .. "/ashes-urhrok/tome-ashes-urhrok/data",
-		dlc_root .. "/cults/tome-cults/data",
-		dlc_root .. "/orcs/tome-orcs/data",
+	local scan_specs = {
+		{ tag = "core", dir = tome_data .. "/general/npcs" },
+		{ tag = "core", dir = tome_data .. "/zones" },
+		{ tag = "ashes", dir = dlc_root .. "/ashes-urhrok/tome-ashes-urhrok/data" },
+		{ tag = "cults", dir = dlc_root .. "/cults/tome-cults/data" },
+		{ tag = "orcs", dir = dlc_root .. "/orcs/tome-orcs/data" },
 	}
-	local live_counts = { undead = 0, horror = 0, elemental = 0, naga = 0, ogre = 0, krog = 0 }
-	for _, d in ipairs(scan_dirs) do
-		local p = assert(io.popen(string.format("find %q -type f -name \"*.lua\" 2>/dev/null", d), "r"))
+
+	-- Pass 1: Collect all raw entities and global base definitions across core + 3 DLCs
+	local all_raw_entities = {}
+	local bases_by_tag = {}
+	local bases_global = {}
+	for _, spec in ipairs(scan_specs) do
+		local file_list = {}
+		local p = assert(io.popen(string.format("find %q -type f -name \"*.lua\" 2>/dev/null", spec.dir), "r"))
 		for fpath in p:lines() do
-			for _, ent in ipairs(extract_npcs_from_file(fpath)) do
-				local c, s = BossNames.culture_of(ent, {}, ent)
-				if ent.type == "undead" then
-					assert(c == "undead" and s == "none", "T21 live undead mismatch: " .. fpath .. " " .. tostring(ent.name) .. " -> " .. tostring(c))
-					live_counts.undead = live_counts.undead + 1
-				elseif ent.type == "horror" then
-					assert(c == "eldritch" and s == "none", "T21 live horror mismatch: " .. fpath .. " " .. tostring(ent.name) .. " -> " .. tostring(c))
-					live_counts.horror = live_counts.horror + 1
-				elseif ent.type == "elemental" then
-					assert(c == "eldritch" and s == "none", "T21 live elemental mismatch: " .. fpath .. " " .. tostring(ent.name) .. " -> " .. tostring(c))
-					live_counts.elemental = live_counts.elemental + 1
-				elseif ent.subtype == "naga" then
-					assert(c == "elf" and s == (ent.female and "female" or "male"), "T21 live naga mismatch: " .. fpath .. " " .. tostring(ent.name))
-					live_counts.naga = live_counts.naga + 1
-				elseif ent.subtype == "ogre" then
-					if ent.random_name_def == "shalore_#sex#" then
-						assert(c == "elf", "T21 live humanoid ogre with shalore_#sex# must map to elf")
-					else
-						assert(c == "monster" and s == "none", "T21 live wild ogre must map to monster/none: " .. fpath .. " " .. tostring(ent.name))
+			file_list[#file_list + 1] = fpath
+		end
+		p:close()
+		table.sort(file_list)
+		for _, fpath in ipairs(file_list) do
+			for _, ent in ipairs(parse_raw_npcs_from_file(fpath, spec.tag)) do
+				all_raw_entities[#all_raw_entities + 1] = ent
+				if ent.define_as then
+					local tkey = spec.tag .. ":" .. ent.define_as
+					if not bases_by_tag[tkey] or ent.type then
+						bases_by_tag[tkey] = ent
 					end
-					live_counts.ogre = live_counts.ogre + 1
-				elseif ent.subtype == "krog" then
-					if ent.random_name_def == "thalore_#sex#" then
-						assert(c == "elf", "T21 live humanoid krog with thalore_#sex# must map to elf")
-					else
-						assert(c == "monster" and s == "none", "T21 live wild krog must map to monster/none: " .. fpath .. " " .. tostring(ent.name))
+					if not bases_global[ent.define_as] or (spec.tag == "core" and ent.type) then
+						bases_global[ent.define_as] = ent
 					end
-					live_counts.krog = live_counts.krog + 1
 				end
 			end
 		end
-		p:close()
 	end
-	assert(live_counts.undead >= 50 and live_counts.horror >= 40 and live_counts.elemental >= 20
-		and live_counts.naga >= 6 and live_counts.ogre >= 6 and live_counts.krog >= 1,
-		"T21 live entity extraction counts unexpectedly low")
-	print(string.format("[PASS] T21: Routing matrix (§5.3) & live non-unique NPC scan verified (undead=%d, horror=%d, elemental=%d, naga=%d, ogre=%d, krog=%d)",
-		live_counts.undead, live_counts.horror, live_counts.elemental, live_counts.naga, live_counts.ogre, live_counts.krog))
+
+	-- Pass 2: Resolve full cross-file parent chains and verify culture_of routing
+	local live_counts = {
+		undead = 0, horror = 0, elemental = 0, naga = 0,
+		elf = 0, yaech = 0, aquatic_demon = 0, ogre = 0, krog = 0,
+		cross_file = 0,
+	}
+	local spot_seen = {
+		ancient_elven_mummy = false,
+		searing_horror = false,
+	}
+	for _, e in ipairs(all_raw_entities) do
+		local r = {}
+		local cur = e
+		local seen = {}
+		local chain = {}
+		while cur and not seen[cur] do
+			seen[cur] = true
+			chain[#chain + 1] = cur
+			if cur.base then
+				cur = e._file_bases[cur.base]
+					or bases_by_tag[e._tag .. ":" .. cur.base]
+					or bases_global[cur.base]
+			else
+				cur = nil
+			end
+		end
+		for ci = #chain, 1, -1 do
+			for fk, fv in pairs(chain[ci]) do
+				if fk ~= "_file" and fk ~= "_tag" and fk ~= "_file_bases" then
+					r[fk] = fv
+				end
+			end
+		end
+		if r.name and not r.unique and r.type ~= "trap" then
+			local fpath = e._file
+			local c2, s2 = BossNames.culture_of(r, {})
+			local c, s = BossNames.culture_of(r, {}, r)
+			assert(c == c2 and s == s2, "T21 live 2-arg vs 3-arg mismatch: " .. fpath .. " " .. tostring(r.name))
+			local is_target = false
+			if r.type == "undead" then
+				assert(c == "undead" and s == "none", "T21 live undead mismatch: " .. fpath .. " " .. tostring(r.name) .. " -> " .. tostring(c))
+				live_counts.undead = live_counts.undead + 1
+				is_target = true
+			elseif r.type == "horror" then
+				assert(c == "eldritch" and s == "none", "T21 live horror mismatch: " .. fpath .. " " .. tostring(r.name) .. " -> " .. tostring(c))
+				live_counts.horror = live_counts.horror + 1
+				is_target = true
+			elseif r.type == "elemental" then
+				assert(c == "eldritch" and s == "none", "T21 live elemental mismatch: " .. fpath .. " " .. tostring(r.name) .. " -> " .. tostring(c))
+				live_counts.elemental = live_counts.elemental + 1
+				is_target = true
+			elseif r.type == "aquatic" and r.subtype == "demon" then
+				assert(c == "demon" and s == "none", "T21 live aquatic/demon mismatch: " .. fpath .. " " .. tostring(r.name) .. " -> " .. tostring(c))
+				live_counts.aquatic_demon = live_counts.aquatic_demon + 1
+				is_target = true
+			elseif r.type == "humanoid" and r.subtype == "naga" then
+				assert(c == "elf" and s == (r.female and "female" or "male"), "T21 live naga mismatch: " .. fpath .. " " .. tostring(r.name))
+				live_counts.naga = live_counts.naga + 1
+				is_target = true
+			elseif r.type == "humanoid" and r.subtype == "elf" then
+				assert(c == "elf" and s == (r.female and "female" or "male"), "T21 live elf mismatch: " .. fpath .. " " .. tostring(r.name))
+				live_counts.elf = live_counts.elf + 1
+				is_target = true
+			elseif r.type == "humanoid" and r.subtype == "yaech" then
+				assert(c == "yeek" and s == (r.female and "female" or "male"), "T21 live yaech mismatch: " .. fpath .. " " .. tostring(r.name))
+				live_counts.yaech = live_counts.yaech + 1
+				is_target = true
+			elseif r.subtype == "ogre" then
+				if r.random_name_def == "shalore_#sex#" then
+					assert(c == "elf", "T21 live humanoid ogre with shalore_#sex# must map to elf")
+				else
+					assert(c == "monster" and s == "none", "T21 live wild ogre must map to monster/none: " .. fpath .. " " .. tostring(r.name))
+					live_counts.ogre = live_counts.ogre + 1
+					is_target = true
+				end
+			elseif r.subtype == "krog" then
+				if r.random_name_def == "thalore_#sex#" then
+					assert(c == "elf", "T21 live humanoid krog with thalore_#sex# must map to elf")
+				else
+					assert(c == "monster" and s == "none", "T21 live wild krog must map to monster/none: " .. fpath .. " " .. tostring(r.name))
+					live_counts.krog = live_counts.krog + 1
+					is_target = true
+				end
+			end
+			if is_target and not e.type and not (e.base and e._file_bases[e.base] and e._file_bases[e.base].type) then
+				live_counts.cross_file = live_counts.cross_file + 1
+			end
+			if r.name == "ancient elven mummy" and fpath:find("ancient%-elven%-ruins/npcs%.lua$") then
+				assert(c == "undead" and s == "none", "T21 spot check failed for ancient elven mummy")
+				spot_seen.ancient_elven_mummy = true
+			elseif r.name == "searing horror" and fpath:find("tome%-cults/data/general/npcs/horror%.lua$") then
+				assert(c == "eldritch" and s == "none", "T21 spot check failed for searing horror")
+				spot_seen.searing_horror = true
+			end
+		end
+	end
+	assert(spot_seen.ancient_elven_mummy, "T21: cross-file inherited entity 'ancient elven mummy' was not extracted")
+	assert(spot_seen.searing_horror, "T21: cross-file inherited entity 'searing horror' was not extracted")
+	assert(live_counts.undead >= 76 and live_counts.horror >= 78 and live_counts.elemental >= 25
+		and live_counts.naga >= 9 and live_counts.elf >= 13 and live_counts.yaech >= 5
+		and live_counts.aquatic_demon >= 1 and live_counts.ogre >= 10 and live_counts.krog >= 1
+		and live_counts.cross_file >= 39,
+		string.format("T21 live entity extraction counts below expected (undead=%d, horror=%d, elemental=%d, naga=%d, elf=%d, yaech=%d, aquatic_demon=%d, ogre=%d, krog=%d, cross_file=%d)",
+			live_counts.undead, live_counts.horror, live_counts.elemental, live_counts.naga,
+			live_counts.elf, live_counts.yaech, live_counts.aquatic_demon, live_counts.ogre, live_counts.krog, live_counts.cross_file))
+	print(string.format("[PASS] T21: Routing matrix (§5.3) & 2-pass cross-file live NPC scan verified (undead=%d, horror=%d, elemental=%d, naga=%d, elf=%d, yaech=%d, aquatic_demon=%d, ogre=%d, krog=%d, cross_file=%d)",
+		live_counts.undead, live_counts.horror, live_counts.elemental, live_counts.naga,
+		live_counts.elf, live_counts.yaech, live_counts.aquatic_demon, live_counts.ogre, live_counts.krog, live_counts.cross_file))
 end
 
 -- ============================================================================
