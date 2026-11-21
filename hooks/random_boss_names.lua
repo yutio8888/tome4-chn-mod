@@ -115,6 +115,8 @@ end
 function M.culture_of(base, state, actor)
 	local cultures = type(rules) == "table" and type(rules.cultures) == "table" and rules.cultures or nil
 	local def_map = type(rules) == "table" and type(rules.def_to_culture) == "table" and rules.def_to_culture or {}
+	local type_map = type(rules) == "table" and type(rules.type_to_culture) == "table" and rules.type_to_culture or nil
+	local any_sub_map = type(rules) == "table" and type(rules.any_subtype_to_culture) == "table" and rules.any_subtype_to_culture or nil
 	local sub_map = type(rules) == "table" and type(rules.humanoid_subtype_to_culture) == "table" and rules.humanoid_subtype_to_culture or {}
 	local default_c = type(rules) == "table" and type(rules.default_culture) == "string" and rules.default_culture or "monster"
 
@@ -146,9 +148,22 @@ function M.culture_of(base, state, actor)
 		elseif type(base) == "table" and type(base.subtype) == "string" and base.subtype ~= "" then
 			esub = base.subtype
 		end
-		if etype == "demon" or esub == "demon" then
-			culture = "demon"
-		elseif etype == "humanoid" and type(esub) == "string" then
+
+		if type(etype) == "string" then
+			if type_map then
+				culture = type_map[etype]
+			elseif etype == "demon" then
+				culture = "demon"
+			end
+		end
+		if not culture and type(esub) == "string" then
+			if any_sub_map then
+				culture = any_sub_map[esub]
+			elseif esub == "demon" then
+				culture = "demon"
+			end
+		end
+		if not culture and etype == "humanoid" and type(esub) == "string" then
 			culture = sub_map[esub]
 		end
 	end
@@ -303,24 +318,32 @@ local function validate_and_build_segment(c1, c2, c3, max_len, reject_female)
 	end
 end
 
-local cached_bsubs_ref = nil
-local cached_ftoks_ref = nil
-local cached_2char_set = nil
-local cached_3char_set = nil
-local cached_long_list = nil
+local filter_cache_by_culture = {}
 
-local function get_compiled_filters()
+local function get_compiled_filters(culture)
 	local bsubs = type(rules.banned_substrings) == "table" and rules.banned_substrings or nil
+	local by_cult_tbl = type(rules.banned_substrings_by_culture) == "table" and rules.banned_substrings_by_culture or nil
+	local csubs = (by_cult_tbl and type(culture) == "string" and type(by_cult_tbl[culture]) == "table") and by_cult_tbl[culture] or nil
 	local ftoks = type(rules.fixed_name_tokens) == "table" and rules.fixed_name_tokens or nil
-	if bsubs == cached_bsubs_ref and ftoks == cached_ftoks_ref and cached_2char_set then
-		return cached_2char_set, cached_3char_set, cached_long_list
+	local ckey = type(culture) == "string" and culture or ""
+	local entry = filter_cache_by_culture[ckey]
+	if entry
+		and entry.bsubs_ref == bsubs
+		and entry.by_cult_ref == by_cult_tbl
+		and entry.csubs_ref == csubs
+		and entry.ftoks_ref == ftoks
+	then
+		return entry.s2, entry.s3, entry.long_l, entry.eff_bsubs
 	end
-	local s2, s3, long_l = {}, {}, {}
-	local function add_list(lst)
+	local s2, s3, long_l, eff_bsubs = {}, {}, {}, {}
+	local function add_list(lst, is_bsub)
 		if not lst then return end
 		for i = 1, #lst do
 			local w = lst[i]
 			if type(w) == "string" and w ~= "" then
+				if is_bsub then
+					eff_bsubs[#eff_bsubs + 1] = w
+				end
 				local blen = #w
 				if blen == 6 then
 					s2[w] = true
@@ -332,17 +355,23 @@ local function get_compiled_filters()
 			end
 		end
 	end
-	add_list(bsubs)
-	add_list(ftoks)
-	cached_bsubs_ref = bsubs
-	cached_ftoks_ref = ftoks
-	cached_2char_set = s2
-	cached_3char_set = s3
-	cached_long_list = long_l
-	return s2, s3, long_l
+	add_list(bsubs, true)
+	add_list(csubs, true)
+	add_list(ftoks, false)
+	filter_cache_by_culture[ckey] = {
+		bsubs_ref = bsubs,
+		by_cult_ref = by_cult_tbl,
+		csubs_ref = csubs,
+		ftoks_ref = ftoks,
+		s2 = s2,
+		s3 = s3,
+		long_l = long_l,
+		eff_bsubs = eff_bsubs,
+	}
+	return s2, s3, long_l, eff_bsubs
 end
 
-local function check_segment_filters(str, core_str, c1, c2, c3, nc1, nc2, nc3)
+local function check_segment_filters(str, core_str, c1, c2, c3, nc1, nc2, nc3, culture)
 	if not plain_label(str) then
 		return false
 	end
@@ -350,7 +379,7 @@ local function check_segment_filters(str, core_str, c1, c2, c3, nc1, nc2, nc3)
 	if excluded and (excluded[str] or excluded[core_str]) then
 		return false
 	end
-	local s2, s3, long_l = get_compiled_filters()
+	local s2, s3, long_l = get_compiled_filters(culture)
 	if c3 == nil then
 		if s2[str] or s2[core_str] then return false end
 	else
@@ -368,7 +397,7 @@ local function check_segment_filters(str, core_str, c1, c2, c3, nc1, nc2, nc3)
 	return true
 end
 
-local function check_epic_combined_filters(personal, unsep, core_str)
+local function check_epic_combined_filters(personal, unsep, core_str, g_last, g_prev, ng_last, ng_prev, s1, s2_ch, ns1, ns2_ch, culture)
 	if not plain_label(personal) then
 		return false
 	end
@@ -376,26 +405,23 @@ local function check_epic_combined_filters(personal, unsep, core_str)
 	if excluded and (excluded[personal] or excluded[unsep] or excluded[core_str]) then
 		return false
 	end
-	local bsubs = type(rules.banned_substrings) == "table" and rules.banned_substrings or nil
-	if bsubs then
-		for i = 1, #bsubs do
-			local sub = bsubs[i]
-			if type(sub) == "string" and sub ~= "" then
-				if personal:find(sub, 1, true) or unsep:find(sub, 1, true) or core_str:find(sub, 1, true) then
-					return false
-				end
-			end
-		end
+	local s2, s3, long_l = get_compiled_filters(culture)
+	-- Cross-boundary 2-char check (g_last .. s1)
+	if s2[g_last .. s1] or s2[ng_last .. ns1] then
+		return false
 	end
-	local ftoks = type(rules.fixed_name_tokens) == "table" and rules.fixed_name_tokens or nil
-	if ftoks then
-		for i = 1, #ftoks do
-			local tok = ftoks[i]
-			if type(tok) == "string" and tok ~= "" then
-				if unsep:find(tok, 1, true) or core_str:find(tok, 1, true) then
-					return false
-				end
-			end
+	-- Cross-boundary 3-char checks ((g_prev .. g_last .. s1) and (g_last .. s1 .. s2_ch))
+	if g_prev and (s3[g_prev .. g_last .. s1] or s3[ng_prev .. ng_last .. ns1]) then
+		return false
+	end
+	if s2_ch and (s3[g_last .. s1 .. s2_ch] or s3[ng_last .. ns1 .. ns2_ch]) then
+		return false
+	end
+	-- Longer banned substrings / fixed tokens (or any non-6/9-byte entries)
+	for i = 1, #long_l do
+		local sub = long_l[i]
+		if personal:find(sub, 1, true) or unsep:find(sub, 1, true) or core_str:find(sub, 1, true) then
+			return false
 		end
 	end
 	return true
@@ -423,7 +449,7 @@ function M.candidate_at(culture, sex, tier, idx)
 		if not personal then
 			return nil, nil
 		end
-		if not check_segment_filters(personal, core, a1, a2, a3, na1, na2, na3) then
+		if not check_segment_filters(personal, core, a1, a2, a3, na1, na2, na3, culture) then
 			return nil, nil
 		end
 		return personal, core
@@ -454,16 +480,20 @@ function M.candidate_at(culture, sex, tier, idx)
 		if sna2 == gna1 or sna2 == gna2 or (gna3 and sna2 == gna3) then return nil, nil end
 		if sna3 and (sna3 == gna1 or sna3 == gna2 or (gna3 and sna3 == gna3)) then return nil, nil end
 
-		if not check_segment_filters(given_str, given_core, ga1, ga2, ga3, gna1, gna2, gna3) then
+		if not check_segment_filters(given_str, given_core, ga1, ga2, ga3, gna1, gna2, gna3, culture) then
 			return nil, nil
 		end
-		if not check_segment_filters(sur_str, sur_core, sa1, sa2, sa3, sna1, sna2, sna3) then
+		if not check_segment_filters(sur_str, sur_core, sa1, sa2, sa3, sna1, sna2, sna3, culture) then
 			return nil, nil
 		end
 		local personal = given_str .. sep .. sur_str
 		local unsep = given_str .. sur_str
 		local core = given_core .. sur_core
-		if not check_epic_combined_filters(personal, unsep, core) then
+		local g_last = ga3 or ga2
+		local g_prev = ga3 and ga2 or ga1
+		local ng_last = gna3 or gna2
+		local ng_prev = gna3 and gna2 or gna1
+		if not check_epic_combined_filters(personal, unsep, core, g_last, g_prev, ng_last, ng_prev, sa1, sa2, sna1, sna2, culture) then
 			return nil, nil
 		end
 		return personal, core
@@ -751,7 +781,7 @@ function M.surname_audit(culture)
 	for idx = 0, total - 1 do
 		local c1, c2, c3 = decode_segment_chars(SI, SM, SF, idx)
 		local sur, core, a1, a2, a3, na1, na2, na3 = validate_and_build_segment(c1, c2, c3, max_s, true)
-		if sur and check_segment_filters(sur, core, a1, a2, a3, na1, na2, na3) then
+		if sur and check_segment_filters(sur, core, a1, a2, a3, na1, na2, na3, culture) then
 			valid_count = valid_count + 1
 			if not seen_sur[sur] then
 				seen_sur[sur] = true
@@ -792,10 +822,11 @@ function M.rename(b, base, data, state)
 	if ledger == nil then return end
 
 	local rule_ver = type(rules) == "table" and rules.version or 1
+	local seed_ver = (type(rules) == "table" and rules.seed_version) or rule_ver
 	local scheme_tag = (type(data) == "table" and type(data.name_scheme) == "string") and data.name_scheme or "default"
 	local key = table.concat({
 		"rb",
-		tostring(rule_ver),
+		tostring(seed_ver),
 		tostring(tier),
 		tostring(culture),
 		tostring(sex),

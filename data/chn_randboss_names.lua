@@ -20,9 +20,17 @@
 --      - yeek surname.initials: "蒂" -> "泰"
 --      - demon given.initials, given.middles, surname.initials, surname.middles: "玛" -> "穆"
 --      - demon given.finals.none: "玛" -> "瓦"
+--   5. V1.1 expansion (8 -> 10 cultures: added neutral 'undead' & 'eldritch' pools):
+--      - 4 new approved characters added:
+--        * "摩" (undead): Gothic/Latin Mor-/Mo- prefix/suffix syllable
+--        * "昆" (undead): Latin Quin- archaic initial syllable
+--        * "奈" (eldritch): Ny-/Nai- otherworldly syllable
+--        * "喀" (eldritch): harsh velar/palatal stop-fricative for alien/horror phonetics
+--      - version bumped to 2; seed_version frozen at 1 to preserve V1 deterministic selection baseline.
 
 return {
-	version = 1,
+	version = 2,
+	seed_version = 1,
 	separator = "·", -- U+00B7
 	max_given_chars = 3,
 	max_surname_chars = 3,
@@ -152,6 +160,36 @@ return {
 				finals = { "克", "格", "兹", "尔", "斯", "姆", "赫", "卡", "戈", "鲁", "罗", "达", "祖", "扎", "巴", "塔", "霍", "莫", "萨", "古" },
 			},
 		},
+		undead = {
+			gendered = false,
+			given = {
+				initials = { "阿", "贝", "卡", "德", "埃", "弗", "戈", "伊", "卢", "摩", "涅", "奥", "佩", "昆", "瑟", "塞", "维", "沃", "泽", "莫", "赫", "克", "兰", "欧", "萨", "索", "塔", "乌", "瓦", "厄", "蒙", "诺" },
+				middles = { "尔", "拉", "维", "斯", "德", "里", "塞", "莫", "卢", "西", "洛", "瑟", "克", "蒙", "纳", "伦", "乌", "奥", "涅", "托", "赛", "普" },
+				finals = {
+					none = { "斯", "姆", "恩", "尔", "克", "德", "特", "安", "翁", "昂", "隆", "洛", "奥", "里", "森", "顿", "伦", "文", "曼", "迪", "赛", "卢", "摩", "托" },
+				},
+			},
+			surname = {
+				initials = { "阿", "贝", "卡", "德", "埃", "弗", "戈", "伊", "卢", "摩", "涅", "奥", "佩", "昆", "瑟", "塞", "维", "沃", "泽", "莫", "赫", "兰", "欧", "索" },
+				middles = { "尔", "拉", "维", "斯", "德", "里", "塞", "莫", "卢", "西", "洛", "瑟", "克", "蒙", "纳", "伦" },
+				finals = { "斯", "姆", "恩", "尔", "克", "德", "特", "安", "翁", "昂", "隆", "洛", "奥", "里", "森", "顿", "伦", "文", "曼", "迪" },
+			},
+		},
+		eldritch = {
+			gendered = false,
+			given = {
+				initials = { "尤", "奈", "喀", "涅", "伊", "亚", "奎", "库", "撒", "索", "赫", "齐", "阿", "厄", "欧", "乌", "泽", "泰", "兹", "祖", "克", "基", "斯", "瑟", "塞", "诺", "提", "扎", "萨", "塔", "普", "吉" },
+				middles = { "斯", "索", "托", "撒", "赫", "克", "兹", "祖", "茨", "莱", "齐", "亚", "伊", "塔", "提", "库", "普", "乌", "奎", "涅", "瑟", "扎" },
+				finals = {
+					none = { "斯", "托", "普", "茨", "奎", "库", "伊", "亚", "赫", "克", "兹", "泽", "索", "撒", "姆", "恩", "尔", "格", "特", "塔", "祖", "涅", "基", "奈" },
+				},
+			},
+			surname = {
+				initials = { "尤", "奈", "喀", "涅", "伊", "亚", "奎", "库", "撒", "索", "赫", "齐", "阿", "厄", "欧", "乌", "泽", "泰", "兹", "祖", "克", "基", "斯", "瑟" },
+				middles = { "斯", "索", "托", "撒", "赫", "克", "兹", "祖", "茨", "莱", "齐", "亚", "伊", "塔", "提", "库" },
+				finals = { "斯", "托", "普", "茨", "奎", "库", "伊", "亚", "赫", "克", "兹", "泽", "索", "撒", "姆", "恩", "尔", "格", "特", "塔" },
+			},
+		},
 	},
 	def_to_culture = {
 		cornac = "human",
@@ -161,6 +199,15 @@ return {
 		dwarf = "dwarf",
 		halfling = "halfling",
 		yeek = "yeek",
+		demon = "demon",
+	},
+	type_to_culture = {
+		demon = "demon",
+		undead = "undead",
+		horror = "eldritch",
+		elemental = "eldritch",
+	},
+	any_subtype_to_culture = {
 		demon = "demon",
 	},
 	humanoid_subtype_to_culture = {
@@ -174,6 +221,7 @@ return {
 		halfling = "halfling",
 		yeek = "yeek",
 		yaech = "yeek",
+		naga = "elf",
 	},
 	default_culture = "monster",
 	rank_epic_threshold = 3.5,
@@ -261,27 +309,35 @@ return {
 		"西德", "阿曼", "巴林", "加纳", "马里",
 		"托里多", "纳米", "丁克", "塔林", "吉林", "达卡", "拉萨", "利马", "波恩", "伯尔尼", "基辅", "明斯克", "达拉斯", "莫莎", "莫萝", "贡多拉",
 		"马文", "林珊", "丁嘉", "加嘉", "嘉加", "里莉", "莉里", "里利", "利里", "莉利", "利莉", "茨兹", "兹茨", "妮尼", "尼妮", "蒂提", "提蒂",
+		-- V1.1 additions (G1: new-char substrings; G2: >=3-char old-char substrings)
+		"摩托", "摩卡", "摩斯", "摩洛", "摩纳", "萨摩", "昆特", "昆德拉", "奈斯", "奈亚", "喀斯特", "喀什", "摩洛哥", "摩纳哥",
+		"伊斯兰", "塞尔维", "奥斯曼", "撒哈拉", "伊西斯", "阿撒托斯", "索托斯", "哈斯塔", "阿萨姆", "诺基亚", "克苏鲁", "撒托斯", "亚撒托", "哈斯特", "哈斯托",
+	},
+	banned_substrings_by_culture = {
+		undead = { "德里", "萨德", "卢森", "莫迪", "佩恩", "贝恩", "赫拉", "索尔", "克隆", "奥迪", "阿迪", "萨斯", "维文", "德文", "蒙德" },
+		eldritch = { "吉普", "沙特", "赫拉", "索尔", "亚索", "萨斯", "诺基", "赫兹", "乌兹" },
 	},
 	-- Source counts: S1=927 S2=0 S3=2916 S4=695 S5=110 S6=845 (defs=712, en=699)
 	approved_chars = {
 		["丁"] = true, ["丝"] = true, ["丽"] = true, ["乌"] = true, ["亚"] = true, ["什"] = true, ["伊"] = true, ["伍"] = true, 
 		["伦"] = true, ["伯"] = true, ["佐"] = true, ["佩"] = true, ["克"] = true, ["兰"] = true, ["兹"] = true, ["内"] = true, 
 		["冈"] = true, ["凯"] = true, ["利"] = true, ["加"] = true, ["勒"] = true, ["博"] = true, ["卡"] = true, ["卢"] = true, 
-		["厄"] = true, ["古"] = true, ["吉"] = true, ["哈"] = true, ["嘉"] = true, ["埃"] = true, ["基"] = true, ["塔"] = true, 
-		["塞"] = true, ["多"] = true, ["夫"] = true, ["奇"] = true, ["奎"] = true, ["奥"] = true, ["妮"] = true, ["妲"] = true, 
-		["姆"] = true, ["威"] = true, ["娅"] = true, ["娜"] = true, ["婕"] = true, ["安"] = true, ["宾"] = true, ["尔"] = true, 
-		["尤"] = true, ["尼"] = true, ["巴"] = true, ["布"] = true, ["希"] = true, ["帕"] = true, ["库"] = true, ["弗"] = true, 
-		["德"] = true, ["恩"] = true, ["戈"] = true, ["扎"] = true, ["托"] = true, ["拉"] = true, ["提"] = true, ["撒"] = true, 
-		["文"] = true, ["斐"] = true, ["斯"] = true, ["昂"] = true, ["普"] = true, ["曼"] = true, ["朗"] = true, ["本"] = true, 
-		["杜"] = true, ["杰"] = true, ["林"] = true, ["柯"] = true, ["根"] = true, ["格"] = true, ["森"] = true, ["欧"] = true, 
-		["比"] = true, ["沃"] = true, ["沙"] = true, ["波"] = true, ["泰"] = true, ["泽"] = true, ["洛"] = true, ["涅"] = true, 
-		["温"] = true, ["特"] = true, ["玛"] = true, ["珀"] = true, ["珊"] = true, ["琪"] = true, ["琳"] = true, ["瑞"] = true, 
-		["瑟"] = true, ["瓦"] = true, ["皮"] = true, ["祖"] = true, ["穆"] = true, ["米"] = true, ["索"] = true, ["纳"] = true, 
-		["维"] = true, ["罗"] = true, ["翁"] = true, ["艾"] = true, ["芙"] = true, ["芬"] = true, ["茜"] = true, ["茨"] = true, 
-		["莉"] = true, ["莎"] = true, ["莫"] = true, ["莱"] = true, ["菈"] = true, ["菲"] = true, ["萝"] = true, ["萨"] = true, 
-		["蒂"] = true, ["蒙"] = true, ["蕾"] = true, ["薇"] = true, ["西"] = true, ["诺"] = true, ["贝"] = true, ["贡"] = true, 
-		["赛"] = true, ["赫"] = true, ["达"] = true, ["迪"] = true, ["里"] = true, ["阿"] = true, ["隆"] = true, ["雅"] = true, 
-		["霍"] = true, ["顿"] = true, ["马"] = true, ["鲁"] = true, ["默"] = true, ["黛"] = true, ["齐"] = true, 
+		["厄"] = true, ["古"] = true, ["吉"] = true, ["哈"] = true, ["喀"] = true, ["嘉"] = true, ["埃"] = true, ["基"] = true, 
+		["塔"] = true, ["塞"] = true, ["多"] = true, ["夫"] = true, ["奇"] = true, ["奈"] = true, ["奎"] = true, ["奥"] = true, 
+		["妮"] = true, ["妲"] = true, ["姆"] = true, ["威"] = true, ["娅"] = true, ["娜"] = true, ["婕"] = true, ["安"] = true, 
+		["宾"] = true, ["尔"] = true, ["尤"] = true, ["尼"] = true, ["巴"] = true, ["布"] = true, ["希"] = true, ["帕"] = true, 
+		["库"] = true, ["弗"] = true, ["德"] = true, ["恩"] = true, ["戈"] = true, ["扎"] = true, ["托"] = true, ["拉"] = true, 
+		["提"] = true, ["摩"] = true, ["撒"] = true, ["文"] = true, ["斐"] = true, ["斯"] = true, ["昂"] = true, ["昆"] = true, 
+		["普"] = true, ["曼"] = true, ["朗"] = true, ["本"] = true, ["杜"] = true, ["杰"] = true, ["林"] = true, ["柯"] = true, 
+		["根"] = true, ["格"] = true, ["森"] = true, ["欧"] = true, ["比"] = true, ["沃"] = true, ["沙"] = true, ["波"] = true, 
+		["泰"] = true, ["泽"] = true, ["洛"] = true, ["涅"] = true, ["温"] = true, ["特"] = true, ["玛"] = true, ["珀"] = true, 
+		["珊"] = true, ["琪"] = true, ["琳"] = true, ["瑞"] = true, ["瑟"] = true, ["瓦"] = true, ["皮"] = true, ["祖"] = true, 
+		["穆"] = true, ["米"] = true, ["索"] = true, ["纳"] = true, ["维"] = true, ["罗"] = true, ["翁"] = true, ["艾"] = true, 
+		["芙"] = true, ["芬"] = true, ["茜"] = true, ["茨"] = true, ["莉"] = true, ["莎"] = true, ["莫"] = true, ["莱"] = true, 
+		["菈"] = true, ["菲"] = true, ["萝"] = true, ["萨"] = true, ["蒂"] = true, ["蒙"] = true, ["蕾"] = true, ["薇"] = true, 
+		["西"] = true, ["诺"] = true, ["贝"] = true, ["贡"] = true, ["赛"] = true, ["赫"] = true, ["达"] = true, ["迪"] = true, 
+		["里"] = true, ["阿"] = true, ["隆"] = true, ["雅"] = true, ["霍"] = true, ["顿"] = true, ["马"] = true, ["鲁"] = true, 
+		["默"] = true, ["黛"] = true, ["齐"] = true, 
 	},
 	fixed_name_tokens = {
 		"乌克勒姆斯维奇", "乌克鲁克", "乌尔斯拉克", "乌尔格鲁斯", "乌尔维拉斯", "乌尔罗格", 

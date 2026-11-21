@@ -124,9 +124,10 @@ local function deep_equal(a, b, ignore_keys, visited)
 	return true
 end
 
-local culture_order = { "human", "elf", "dwarf", "halfling", "yeek", "orc", "demon", "monster" }
+local old_culture_order = { "human", "elf", "dwarf", "halfling", "yeek", "orc", "demon", "monster" }
+local culture_order = { "human", "elf", "dwarf", "halfling", "yeek", "orc", "demon", "monster", "undead", "eldritch" }
 local cohorts_26 = {}
-for _, cname in ipairs(culture_order) do
+for _, cname in ipairs(old_culture_order) do
 	local cdef = assert(rules.cultures[cname], "missing culture " .. cname)
 	local sexes = cdef.gendered and { "male", "female" } or { "none" }
 	for _, sex in ipairs(sexes) do
@@ -135,19 +136,42 @@ for _, cname in ipairs(culture_order) do
 		end
 	end
 end
-assert(#cohorts_26 == 26, "expected 26 cohorts, got " .. tostring(#cohorts_26))
+assert(#cohorts_26 == 26, "expected 26 old cohorts, got " .. tostring(#cohorts_26))
+
+local cohorts_30 = {}
+for _, cname in ipairs(culture_order) do
+	local cdef = assert(rules.cultures[cname], "missing culture " .. cname)
+	local sexes = cdef.gendered and { "male", "female" } or { "none" }
+	for _, sex in ipairs(sexes) do
+		for _, tier in ipairs{ "rare", "epic" } do
+			cohorts_30[#cohorts_30 + 1] = { culture = cname, sex = sex, tier = tier }
+		end
+	end
+end
+assert(#cohorts_30 == 30, "expected 30 cohorts, got " .. tostring(#cohorts_30))
 
 -- ============================================================================
--- T01: Data Integrity (§7.2 T01, §4.6, §4.7)
+-- T01: Data Integrity (§7.2 T01, §4.6, §4.7, V1.1 §8.1 T01)
 -- ============================================================================
 do
+	assert(rules.version == 2 and rules.seed_version == 1, "expected rules.version == 2 and rules.seed_version == 1")
 	local computed_approved = GenTokens.compute_approved_chars(rules)
+	local approved_count = 0
 	for ch in pairs(computed_approved) do
 		assert(rules.approved_chars[ch] == true, "pool char missing from approved_chars: " .. ch)
 	end
 	for ch, v in pairs(rules.approved_chars) do
 		assert(v == true and computed_approved[ch] == true, "extra/unreferenced char in approved_chars: " .. ch)
 		assert(not rules.banned_chars[ch], "approved char is in banned_chars: " .. ch)
+		approved_count = approved_count + 1
+	end
+	assert(approved_count == 147, "expected 147 approved_chars, got " .. tostring(approved_count))
+	for _, new_ch in ipairs{ "摩", "昆", "奈", "喀" } do
+		assert(rules.approved_chars[new_ch] == true, "new V1.1 char missing from approved_chars: " .. new_ch)
+		assert(rules.phonetic_equiv[new_ch] == nil, "new V1.1 char must not be a key in phonetic_equiv: " .. new_ch)
+		for k, v in pairs(rules.phonetic_equiv) do
+			assert(v ~= new_ch, "new V1.1 char must not be a value in phonetic_equiv (" .. tostring(k) .. " -> " .. tostring(v) .. ")")
+		end
 	end
 
 	local function check_list(cname, list_name, lst, min_len, is_initial, reject_female_chars)
@@ -185,14 +209,14 @@ do
 		check_list(cname, "surname.finals", c.surname.finals, 20, false, true)
 	end
 
-	for _, co in ipairs(cohorts_26) do
+	for _, co in ipairs(cohorts_30) do
 		local total, g_raw, s_raw = BossNames.cohort_total(co.culture, co.sex, co.tier)
 		assert(total > 0 and g_raw > 0, "cohort total <= 0 for " .. co.culture .. "/" .. co.sex .. "/" .. co.tier)
 		if co.tier == "epic" then assert(s_raw > 0) end
 		local stride = BossNames.stride_for(total)
 		assert(gcd(stride, total) == 1, string.format("stride %d not coprime with total %d", stride, total))
 	end
-	print("[PASS] T01: Data integrity verified across 8 cultures and 26 cohorts (strict §4.6.7 gender char compliance)")
+	print("[PASS] T01: Data integrity verified across 10 cultures and 30 cohorts (147 approved_chars, strict §4.6.7 gender char compliance)")
 end
 
 -- ============================================================================
@@ -206,27 +230,87 @@ local min_sur_core = math.huge
 local min_sur_culture = nil
 local min_epic_lb = math.huge
 local min_epic_cohort = nil
+local new_pool_epic_lb = {}
+
+-- Fast compiled substring matcher for test audits (equivalent to iterating all substrings with :find(sub, 1, true))
+local function build_fast_sub_matcher(sub_list_a, sub_list_b)
+	local s2, s3, long_l = {}, {}, {}
+	local function add_list(lst)
+		if type(lst) ~= "table" then return end
+		for i = 1, #lst do
+			local sub = lst[i]
+			if type(sub) == "string" and sub ~= "" then
+				local clen = #utf8_chars(sub)
+				if clen == 2 then
+					s2[sub] = true
+				elseif clen == 3 then
+					s3[sub] = true
+				elseif clen > 3 then
+					long_l[#long_l + 1] = sub
+				else
+					long_l[#long_l + 1] = sub
+				end
+			end
+		end
+	end
+	add_list(sub_list_a)
+	add_list(sub_list_b)
+	local has_s2 = next(s2) ~= nil
+	local has_s3 = next(s3) ~= nil
+	local n_long = #long_l
+	return function(str, chars)
+		chars = chars or utf8_chars(str)
+		local n = #chars
+		if has_s2 and n >= 2 then
+			local prev = chars[1]
+			for i = 2, n do
+				local cur = chars[i]
+				if s2[prev .. cur] then return prev .. cur end
+				prev = cur
+			end
+		end
+		if has_s3 and n >= 3 then
+			local c1, c2 = chars[1], chars[2]
+			for i = 3, n do
+				local c3 = chars[i]
+				if s3[c1 .. c2 .. c3] then return c1 .. c2 .. c3 end
+				c1, c2 = c2, c3
+			end
+		end
+		for i = 1, n_long do
+			local sub = long_l[i]
+			if str:find(sub, 1, true) then return sub end
+		end
+		return nil
+	end
+end
+
+local live_collision = GenTokens.build_collision_tables(rules)
 
 do
-	assert(type(rules.banned_substrings) == "table" and #rules.banned_substrings >= 40, "banned_substrings must be non-empty")
+	assert(type(rules.banned_substrings) == "table" and #rules.banned_substrings == 154, "banned_substrings must have 154 entries")
+	assert(type(rules.banned_substrings_by_culture) == "table", "banned_substrings_by_culture must be a table")
+	local match_tokens = build_fast_sub_matcher(rules.fixed_name_tokens, nil)
+	local culture_banned_matchers = {}
 	for _, cname in ipairs(culture_order) do
+		culture_banned_matchers[cname] = build_fast_sub_matcher(rules.banned_substrings, rules.banned_substrings_by_culture[cname])
 		local saudit = BossNames.surname_audit(cname)
 		surname_audits[cname] = saudit
-		assert(saudit.core_count >= 3000, string.format("surname %s core_count %d < 3000", cname, saudit.core_count))
+		local min_sur_req = (cname == "undead" or cname == "eldritch") and 5000 or 3000
+		assert(saudit.core_count >= min_sur_req, string.format("surname %s core_count %d < %d", cname, saudit.core_count, min_sur_req))
 		if saudit.core_count < min_sur_core then
 			min_sur_core = saudit.core_count
 			min_sur_culture = cname
 		end
-		-- T04 check on all surnames
+		local matcher = culture_banned_matchers[cname]
+		-- T04 check on all surnames (global + culture-scoped banned substrings)
 		for _, sur in ipairs(saudit.list) do
 			local sc = BossNames.core_of(sur)
-			for _, bsub in ipairs(rules.banned_substrings) do
-				assert(not sur:find(bsub, 1, true) and not sc:find(bsub, 1, true), "surname contains banned substring: " .. sur)
-			end
+			assert(not matcher(sur) and not matcher(sc), "surname contains banned substring (" .. cname .. "): " .. sur)
 		end
 	end
 
-	for _, co in ipairs(cohorts_26) do
+	for _, co in ipairs(cohorts_30) do
 		if co.tier == "rare" then
 			local key = co.culture .. ":" .. co.sex
 			local raudit = BossNames.audit_cohort(co.culture, co.sex, "rare")
@@ -236,18 +320,21 @@ do
 				min_rare_core = raudit.core_count
 				min_rare_cohort = { culture = co.culture, sex = co.sex, key = key, core_count = raudit.core_count }
 			end
-			-- T04 check on all rare given names
+			local matcher = culture_banned_matchers[co.culture]
+			-- T04 check on all rare given names (global + culture-scoped banned substrings)
 			for _, gname in ipairs(raudit.list) do
 				local gc = BossNames.core_of(gname)
-				for _, bsub in ipairs(rules.banned_substrings) do
-					assert(not gname:find(bsub, 1, true) and not gc:find(bsub, 1, true), "rare given contains banned substring: " .. gname)
-				end
+				assert(not matcher(gname) and not matcher(gc), "rare given contains banned substring (" .. co.culture .. "): " .. gname)
 			end
 		end
 	end
+	assert(rare_audits["undead:none"].core_count >= 10000, "undead rare core_count must be >= 10000")
+	assert(rare_audits["eldritch:none"].core_count >= 10000, "eldritch rare core_count must be >= 10000")
 
-	-- T03: Inclusion-exclusion epic lower bound P/2 >= 5,000,000 for all 13 epic cohorts
-	for _, co in ipairs(cohorts_26) do
+	-- T03: Inclusion-exclusion epic lower bound P/2 >= 5,000,000 for old cohorts,
+	-- and P/2 * (1 - cross_boundary_reject_rate) >= 20,000,000 over >= 300,000 deterministic valid-segment pairs for undead & eldritch
+	local D_live = live_collision.sources.D
+	for _, co in ipairs(cohorts_30) do
 		if co.tier == "epic" then
 			local key = co.culture .. ":" .. co.sex
 			local raudit = rare_audits[key]
@@ -296,23 +383,90 @@ do
 				P = P + (S_valid - overlap)
 			end
 			local epic_lb = math.floor(P / 2)
-			assert(epic_lb >= 5000000, string.format("epic cohort %s lower bound %d < 5000000", key, epic_lb))
+			if co.culture == "undead" or co.culture == "eldritch" then
+				-- Deterministic sample of 300,000 non-overlapping valid (given, surname) pairs to measure cross-boundary rejection rate
+				local g_list = raudit.list
+				local s_list = saudit.list
+				local ng, ns = #g_list, #s_list
+				local g_cores, g_csets = {}, {}
+				for i = 1, ng do
+					local gc = BossNames.core_of(g_list[i])
+					g_cores[i] = gc
+					g_csets[i] = utf8_chars(gc)
+				end
+				local s_cores, s_csets = {}, {}
+				for i = 1, ns do
+					local sc = BossNames.core_of(s_list[i])
+					s_cores[i] = sc
+					s_csets[i] = utf8_chars(sc)
+				end
+				local n_pairs = ng * ns
+				local p_stride = BossNames.stride_for(n_pairs)
+				local matcher = culture_banned_matchers[co.culture]
+				local sampled_disjoint = 0
+				local rejected_cross = 0
+				local step_k = 0
+				while sampled_disjoint < 300000 do
+					step_k = step_k + 1
+					local p_idx = (step_k * p_stride) % n_pairs
+					local g_i = (p_idx % ng) + 1
+					local s_i = math.floor(p_idx / ng) + 1
+					local gchars = g_csets[g_i]
+					local schars = s_csets[s_i]
+					local has_overlap = false
+					for i = 1, #gchars do
+						local gch = gchars[i]
+						for j = 1, #schars do
+							if gch == schars[j] then
+								has_overlap = true
+								break
+							end
+						end
+						if has_overlap then break end
+					end
+					if not has_overlap then
+						sampled_disjoint = sampled_disjoint + 1
+						local g = g_list[g_i]
+						local s = s_list[s_i]
+						local gc = g_cores[g_i]
+						local sc = s_cores[s_i]
+						local personal = g .. rules.separator .. s
+						local unsep = g .. s
+						local core = gc .. sc
+						local bad = false
+						if rules.excluded_exact[personal] or rules.excluded_exact[unsep] or rules.excluded_exact[core]
+							or D_live[personal] or D_live[unsep] or D_live[core]
+							or matcher(unsep) or matcher(core)
+							or match_tokens(unsep) or match_tokens(core) then
+							bad = true
+						end
+						if bad then
+							rejected_cross = rejected_cross + 1
+						end
+					end
+				end
+				local reject_rate = rejected_cross / sampled_disjoint
+				epic_lb = math.floor((P / 2) * (1 - reject_rate))
+				new_pool_epic_lb[co.culture] = { lb = epic_lb, reject_rate = reject_rate }
+				assert(epic_lb >= 20000000, string.format("new epic cohort %s adjusted lower bound %d < 20000000", key, epic_lb))
+			else
+				assert(epic_lb >= 5000000, string.format("epic cohort %s lower bound %d < 5000000", key, epic_lb))
+			end
 			if epic_lb < min_epic_lb then
 				min_epic_lb = epic_lb
 				min_epic_cohort = key
 			end
 		end
 	end
-	print(string.format("[PASS] T02: Rare full-enumeration capacity verified (min_core=%d [%s])", min_rare_core, min_rare_cohort.key))
-	print(string.format("[PASS] T03: Epic inclusion-exclusion lower bound verified (min_sur_core=%d [%s], min_epic_lb=%d [%s])",
-		min_sur_core, min_sur_culture, min_epic_lb, min_epic_cohort))
-end
+	print(string.format("[PASS] T02: Rare full-enumeration capacity verified across 15 cohorts (min_core=%d [%s], undead=%d, eldritch=%d)",
+		min_rare_core, min_rare_cohort.key, rare_audits["undead:none"].core_count, rare_audits["eldritch:none"].core_count))
+	print(string.format("[PASS] T03: Epic lower bound verified (min_sur_core=%d [%s], undead_sur=%d, eldritch_sur=%d, min_epic_lb=%d [%s], undead_epic_lb=%d, eldritch_epic_lb=%d)",
+		min_sur_core, min_sur_culture, surname_audits.undead.core_count, surname_audits.eldritch.core_count,
+		min_epic_lb, min_epic_cohort, new_pool_epic_lb.undead.lb, new_pool_epic_lb.eldritch.lb))
 
--- ============================================================================
--- T05 & T04 Epic Sampling: 6-Source Collision Audit (R1-R3 = 0) & Epic 208,000 Valid Sample Audit
--- ============================================================================
-local live_collision = GenTokens.build_collision_tables(rules)
-do
+	-- ============================================================================
+	-- T05 & T04 Epic Sampling: 6-Source Collision Audit (R1-R3 = 0) & Epic 240,000 Valid Sample Audit
+	-- ============================================================================
 	local counts = live_collision.sources.counts
 	local D = live_collision.sources.D
 	local T = live_collision.sources.T
@@ -321,6 +475,11 @@ do
 	assert(counts.S1 + counts.S3 >= 3000, "S1 + S3 must be >= 3000")
 	assert(counts.S6 >= 200, "S6 unique entity zh names must be >= 200")
 	assert(counts.S6_core_defs > 0 and counts.S6_dlc_defs > 0, "S6 must find definitions in both core and DLCs")
+	assert(#rules.fixed_name_tokens == 105 and #live_collision.fixed_name_tokens == 105, "expected 105 fixed_name_tokens")
+	local baked_ex_count, live_ex_count = 0, 0
+	for _ in pairs(rules.excluded_exact) do baked_ex_count = baked_ex_count + 1 end
+	for _ in pairs(live_collision.excluded_exact) do live_ex_count = live_ex_count + 1 end
+	assert(baked_ex_count == 817 and live_ex_count == 817, "expected 817 excluded_exact entries")
 
 	-- B4 verification: all-context translations included, unided_name excluded, missing/duplicate sources rejected
 	assert(D["炎华月"] and D["霜华月"] and D["种族灭绝"], "S6 must include all translation contexts from S1-S4")
@@ -413,7 +572,7 @@ do
 	assert(not ok_forged and tostring(err_forged):find("is not a valid Ashes/Cults/Orcs DLC locale", 1, true),
 		"B4: collect_sources must reject forged empty DLC section header with foreign entity entries, got: " .. tostring(err_forged))
 
-	-- Verify baked tables in data/chn_randboss_names.lua are supersets of live computation
+	-- Verify baked tables in data/chn_randboss_names.lua are exact matches with live computation
 	local baked_tokens_set = {}
 	for _, tok in ipairs(rules.fixed_name_tokens) do
 		baked_tokens_set[tok] = true
@@ -468,13 +627,14 @@ do
 		end
 	end
 
-	-- T04: Deterministic sample of 208,000 VALID epic candidates (16,000 valid outputs per epic cohort x 13 cohorts)
+	-- T04: Deterministic sample of 240,000 VALID epic candidates (16,000 valid outputs per epic cohort x 15 cohorts)
 	local epic_slots_probed = 0
 	local epic_valid_checked = 0
-	for _, co in ipairs(cohorts_26) do
+	for _, co in ipairs(cohorts_30) do
 		if co.tier == "epic" then
 			local total = BossNames.cohort_total(co.culture, co.sex, "epic")
 			local stride = BossNames.stride_for(total)
+			local matcher = culture_banned_matchers[co.culture]
 			local k = 0
 			local valid_in_cohort = 0
 			while valid_in_cohort < 16000 do
@@ -487,19 +647,15 @@ do
 					epic_valid_checked = epic_valid_checked + 1
 					local unsep = personal:gsub(rules.separator, "")
 					assert(not D[personal] and not D[core] and not D[unsep], "epic R1 collision: " .. personal)
-					for _, bsub in ipairs(rules.banned_substrings) do
-						assert(not personal:find(bsub, 1, true) and not unsep:find(bsub, 1, true) and not core:find(bsub, 1, true),
-							"epic banned substring in " .. personal)
-					end
-					for _, tok in ipairs(rules.fixed_name_tokens) do
-						assert(not unsep:find(tok, 1, true) and not core:find(tok, 1, true),
-							"epic R2 collision in " .. personal .. " with " .. tok)
-					end
+					assert(not matcher(personal) and not matcher(unsep) and not matcher(core),
+						"epic banned substring (" .. co.culture .. ") in " .. personal)
+					assert(not match_tokens(unsep) and not match_tokens(core),
+						"epic R2 collision in " .. personal)
 				end
 			end
 		end
 	end
-	assert(epic_valid_checked == 208000, "T04 must audit 208,000 valid epic candidates")
+	assert(epic_valid_checked == 240000, "T04 must audit 240,000 valid epic candidates across 15 epic cohorts")
 	print(string.format("[PASS] T04 & T05: 0 R1-R3 collisions across %d unique given/surname segments and %d valid epic names (%d slots probed)",
 		(function() local c = 0; for _ in pairs(checked_segments) do c = c + 1 end; return c end)(),
 		epic_valid_checked, epic_slots_probed))
@@ -520,6 +676,10 @@ local locale_dict = {
 		["halfling slinger"] = "半身人投石手",
 		["yeek mindslayer"] = "夺心魔心灵杀手",
 		["snow giant"] = "雪巨人",
+		["lich"] = "巫妖",
+		["eldritch horror"] = "恐魔",
+		["fire elemental"] = "火元素",
+		["naga tide huntress"] = "娜迦潮汐猎手",
 		["actor"] = "生物",
 	},
 	tformat = {
@@ -891,7 +1051,7 @@ local function run_lifecycle_tests(fn_name)
 	local p_chars = utf8_chars(personal)
 	assert(#p_chars >= 2 and #p_chars <= 3 and not personal:find("·", 1, true), "expected 2-3 char rare personal name: " .. personal)
 	local meta = assert(rawget(m_boss, "__chn_randboss_name"))
-	assert(meta.version == 1 and meta.tier == "rare" and meta.culture == "human" and meta.sex == "male" and meta.recorded == true)
+	assert(meta.version == rules.version and meta.version == 2 and meta.tier == "rare" and meta.culture == "human" and meta.sex == "male" and meta.recorded == true)
 	assert(meta.original == v_boss.name and meta.text == m_boss.name)
 
 	-- T09: Identity invariance
@@ -1055,6 +1215,31 @@ do
 	assert(saved_actor:getName() == b1.name)
 	BossNames.rename(saved_actor, base, {}, saved_state)
 	assert(saved_actor.name == b1.name and saved_state.__chn_randboss_ledger.count == 1, "E15: repeated rename must be idempotent")
+
+	-- V1 save compatibility (§6 / §8.1 E case): a boss already renamed under V1 (meta.version == 1) must not be renamed under V1.1
+	local v1_saved_undead = make_base_actor{
+		name = "巫妖 格罗兹",
+		unique = "巫妖 Morgor",
+		define_as = "RND_BOSS_______MORGOR",
+		randboss = true,
+		rank = 3.2,
+		type = "undead",
+		subtype = "lich",
+		__chn_randboss_name = {
+			version = 1,
+			original = "巫妖 Morgor",
+			text = "巫妖 格罗兹",
+			core = "格罗兹",
+			tier = "rare",
+			culture = "monster",
+			sex = "none",
+			recorded = true,
+		},
+	}
+	BossNames.rename(v1_saved_undead, make_base_actor{ name = "lich", type = "undead", subtype = "lich" }, { rank = 3.2 }, saved_state)
+	assert(v1_saved_undead.name == "巫妖 格罗兹" and v1_saved_undead.__chn_randboss_name.version == 1 and v1_saved_undead.__chn_randboss_name.culture == "monster",
+		"V1 saved boss with meta.version == 1 must remain untouched under V1.1")
+	assert(saved_state.__chn_randboss_ledger.count == 1)
 
 	-- T12: Legacy randboss without meta in old save is untouched
 	local legacy_boss = make_base_actor{
@@ -1829,18 +2014,20 @@ run_edge_case_tests("createRandomBossNew")
 print("[PASS] T14 & T17: All edge cases (E01–E32, B1–B3) and createRandomBossNew equivalence verified")
 
 -- ============================================================================
--- T15: Mixed Stress Test (1,000 spawns across all 26 cohorts x 8 templates = 208 combinations)
+-- T15: Mixed Stress Test (1,000 spawns across all 30 cohorts + undead/horror/elemental/naga x 8 templates)
 -- ============================================================================
 do
 	local t0 = orig_os_clock()
 	local st = {}
 	_G.game = { state = st }
 
+	-- 17 base archetypes covering all 30 cohorts plus undead, horror, elemental, and naga bases (§8.1 T15)
 	local culture_bases = {
 		{ culture = "human", sex = "male", name = "human", type = "humanoid", subtype = "human", random_name_def = "cornac_#sex#", female = false },
 		{ culture = "human", sex = "female", name = "human", type = "humanoid", subtype = "human", random_name_def = "higher_#sex#", female = true },
 		{ culture = "elf", sex = "male", name = "eternal elf", type = "humanoid", subtype = "shalore", random_name_def = "shalore_#sex#", female = false },
 		{ culture = "elf", sex = "female", name = "eternal elf", type = "humanoid", subtype = "thalore", random_name_def = "thalore_#sex#", female = true },
+		{ culture = "elf", sex = "female", name = "naga tide huntress", type = "humanoid", subtype = "naga", random_name_def = nil, female = true },
 		{ culture = "dwarf", sex = "male", name = "dwarven earthwarden", type = "humanoid", subtype = "dwarf", random_name_def = "dwarf_#sex#", female = false },
 		{ culture = "dwarf", sex = "female", name = "dwarven earthwarden", type = "humanoid", subtype = "dwarf", random_name_def = "dwarf_#sex#", female = true },
 		{ culture = "halfling", sex = "male", name = "halfling slinger", type = "humanoid", subtype = "halfling", random_name_def = "halfling_#sex#", female = false },
@@ -1850,6 +2037,9 @@ do
 		{ culture = "orc", sex = "none", name = "orc archer", type = "humanoid", subtype = "orc", random_name_def = nil },
 		{ culture = "demon", sex = "none", name = "major demon", type = "demon", subtype = "major", random_name_def = "demon" },
 		{ culture = "monster", sex = "none", name = "brown bear", type = "animal", subtype = "bear", random_name_def = nil },
+		{ culture = "undead", sex = "none", name = "lich", type = "undead", subtype = "lich", random_name_def = nil },
+		{ culture = "eldritch", sex = "none", name = "eldritch horror", type = "horror", subtype = "eldritch", random_name_def = nil },
+		{ culture = "eldritch", sex = "none", name = "fire elemental", type = "elemental", subtype = "fire", random_name_def = nil },
 	}
 	local templates = {
 		false, -- default "%s the %s" template
@@ -1866,7 +2056,7 @@ do
 		{ tier = "epic", rank = 4.0 },
 	}
 
-	-- Build all 13 x 2 x 8 = 208 (cohort x template) combinations and step with coprime stride 53
+	-- Build all 17 x 2 x 8 = 272 (base x tier x template) combinations and step with coprime stride 53
 	local combos = {}
 	for _, cb in ipairs(culture_bases) do
 		for _, tr in ipairs(tier_ranks) do
@@ -1881,7 +2071,7 @@ do
 			end
 		end
 	end
-	assert(#combos == 208)
+	assert(#combos == 272 and gcd(53, #combos) == 1)
 
 	local lcg = 314159265
 	local function next_token_num()
@@ -1893,6 +2083,7 @@ do
 	local hit_cohorts = {}
 	local hit_templates = {}
 	local hit_combos = {}
+	local hit_base_names = {}
 	local D = live_collision.sources.D
 
 	for i = 1, 1000 do
@@ -1901,6 +2092,7 @@ do
 		hit_combos[c_idx] = true
 		hit_cohorts[entry.cb.culture .. ":" .. entry.cb.sex .. ":" .. entry.tier] = true
 		hit_templates[entry.t_idx] = (hit_templates[entry.t_idx] or 0) + 1
+		hit_base_names[entry.cb.name] = true
 
 		local base = make_base_actor(entry.cb)
 		local tmpl = entry.tmpl or nil
@@ -1938,6 +2130,12 @@ do
 		for _, bsub in ipairs(rules.banned_substrings) do
 			assert(not personal:find(bsub, 1, true) and not meta.core:find(bsub, 1, true))
 		end
+		local c_banned = rules.banned_substrings_by_culture[meta.culture]
+		if type(c_banned) == "table" then
+			for _, bsub in ipairs(c_banned) do
+				assert(not personal:find(bsub, 1, true) and not meta.core:find(bsub, 1, true))
+			end
+		end
 	end
 	local elapsed = orig_os_clock() - t0
 	local n_cohorts_hit = 0
@@ -1946,46 +2144,48 @@ do
 	for _ in pairs(hit_templates) do n_templates_hit = n_templates_hit + 1 end
 	local n_combos_hit = 0
 	for _ in pairs(hit_combos) do n_combos_hit = n_combos_hit + 1 end
-	assert(n_cohorts_hit == 26, "T15 must hit all 26 cohorts, hit " .. tostring(n_cohorts_hit))
+	assert(n_cohorts_hit == 30, "T15 must hit all 30 cohorts, hit " .. tostring(n_cohorts_hit))
+	assert(hit_base_names["lich"] and hit_base_names["eldritch horror"] and hit_base_names["fire elemental"] and hit_base_names["naga tide huntress"],
+		"T15 must exercise undead, horror, elemental, and naga bases")
 	assert(n_templates_hit == #templates, "T15 must hit all 8 templates (including default), hit " .. tostring(n_templates_hit))
-	assert(n_combos_hit == 208, "T15 must hit all 208 cohort x template combinations, hit " .. tostring(n_combos_hit))
+	assert(n_combos_hit == 272, "T15 must hit all 272 base x tier x template combinations, hit " .. tostring(n_combos_hit))
 	assert(st.__chn_randboss_ledger.count == 1000)
 	assert(elapsed < 3.0, string.format("T15 mixed stress test took %.3fs (>= 3.0s limit)", elapsed))
 
-	-- Full 26 cohorts x (32 live templates + default = 33) = 858 combinations through real createRandomBoss
+	-- Full 17 bases x 2 tiers x (32 live templates + default = 33) = 1,122 combinations (including all 30 cohorts x 33) through real createRandomBoss
 	rng_seed = 20260858
 	_G.rng = make_recording_rng()
-	local st_858 = make_gamestate(true)
-	_G.game = { state = st_858 }
+	local st_mat = make_gamestate(true)
+	_G.game = { state = st_mat }
 	local live_33 = { false }
 	for _, zh_t in ipairs(verified_real_templates) do
 		live_33[#live_33 + 1] = zh_t
 	end
 	assert(#live_33 == 33, "expected 33 templates (default + 32 live locale templates), got " .. tostring(#live_33))
-	local seen_858 = {}
-	local count_858 = 0
+	local seen_mat = {}
+	local count_mat = 0
 	for _, cb in ipairs(culture_bases) do
 		for _, tr in ipairs(tier_ranks) do
 			for _, tmpl in ipairs(live_33) do
 				local base_i = make_base_actor(cb)
-				local b_i, id_i = st_858:createRandomBoss(base_i, {
+				local b_i, id_i = st_mat:createRandomBoss(base_i, {
 					level = 10,
 					rank = tr.rank,
 					name_scheme = tmpl or nil,
 				})
-				local m_i = assert(rawget(b_i, "__chn_randboss_name"), "858 matrix failed on " .. cb.culture .. "/" .. cb.sex .. "/" .. tr.tier)
+				local m_i = assert(rawget(b_i, "__chn_randboss_name"), "live matrix failed on " .. cb.culture .. "/" .. cb.sex .. "/" .. tr.tier)
 				assert(m_i.culture == cb.culture and m_i.sex == cb.sex and m_i.tier == tr.tier)
 				assert(b_i:getName() == m_i.text and id_i == b_i.define_as)
-				assert(not seen_858[m_i.core], "duplicate core in 858 matrix: " .. m_i.core)
-				seen_858[m_i.core] = true
-				count_858 = count_858 + 1
+				assert(not seen_mat[m_i.core], "duplicate core in live template matrix: " .. m_i.core)
+				seen_mat[m_i.core] = true
+				count_mat = count_mat + 1
 			end
 		end
 	end
 	forbid_random_and_time()
-	assert(count_858 == 858 and st_858.__chn_randboss_ledger.count == 858)
-	print(string.format("[PASS] T15: 1,000 mixed spawns (%d combos) + all 26 x 33 = %d live template matrix -> 0 collisions, elapsed=%.3fs (< 3s)",
-		n_combos_hit, count_858, elapsed))
+	assert(count_mat == 1122 and st_mat.__chn_randboss_ledger.count == 1122)
+	print(string.format("[PASS] T15: 1,000 mixed spawns (30 cohorts, %d combos) + all 17x2x33 = %d live template matrix -> 0 collisions, elapsed=%.3fs (< 3s)",
+		n_combos_hit, count_mat, elapsed))
 end
 
 -- ============================================================================
@@ -2000,9 +2200,12 @@ do
 		random_name_def = worst.culture == "elf" and "shalore_#sex#" or (worst.culture .. "_#sex#"),
 		female = worst.sex == "female",
 	}
-	if worst.culture == "orc" or worst.culture == "demon" or worst.culture == "monster" then
+	if worst.culture == "orc" or worst.culture == "demon" or worst.culture == "monster" or worst.culture == "undead" or worst.culture == "eldritch" then
 		base_props.random_name_def = worst.culture == "demon" and "demon" or nil
-		base_props.type = worst.culture == "demon" and "demon" or (worst.culture == "orc" and "humanoid" or "animal")
+		base_props.type = (worst.culture == "demon" and "demon")
+			or (worst.culture == "undead" and "undead")
+			or (worst.culture == "eldritch" and "horror")
+			or (worst.culture == "orc" and "humanoid" or "animal")
 		base_props.subtype = worst.culture
 	end
 	local base = make_base_actor(base_props)
@@ -2015,7 +2218,7 @@ do
 	local total_steps = 0
 	local max_steps = 0
 	local identical_key = table.concat({
-		"rb", tostring(rules.version), "rare", worst.culture, worst.sex,
+		"rb", tostring(rules.seed_version or rules.version), "rare", worst.culture, worst.sex,
 		"永恒精灵 IdenticalSeed", base.name, "RND_BOSS____IDENTICALSEED", "default",
 	}, "\0")
 
@@ -2072,8 +2275,15 @@ do
 end
 
 -- ============================================================================
--- T18: Sample Generation for Naturalness Review (26 cohorts x 40 = 1,040 lines)
+-- T18: Sample Generation for Naturalness Review (Old 26 cohorts x 40 = 1,040 lines, SHA-256 frozen)
 -- ============================================================================
+local function compute_file_sha256(path)
+	local p = assert(io.popen(string.format("sha256sum -- %q", path), "r"))
+	local line = p:read("*l") or ""
+	p:close()
+	return line:match("^([0-9a-fA-F]+)")
+end
+
 do
 	local sample_out = os.getenv("RANDBOSS_SAMPLE_OUT") or "/tmp/tome4-randboss-samples.txt"
 	local rep_bases = {
@@ -2116,7 +2326,10 @@ do
 	end
 	f:close()
 	assert(total_written == 1040, "expected 1040 sample lines, got " .. tostring(total_written))
-	print(string.format("[PASS] T18: Wrote %d sample names across 26 cohorts to %s", total_written, sample_out))
+	local old_sha = compute_file_sha256(sample_out)
+	local expected_old_sha = "a1aa2203b3f566095c7e665fd2b43b2298a45b88a3010ac1e632bbf471a9b75d"
+	assert(old_sha == expected_old_sha, string.format("T18: old 1,040 sample SHA-256 mismatch: expected %s, got %s", expected_old_sha, tostring(old_sha)))
+	print(string.format("[PASS] T18: Wrote %d sample names across 26 cohorts to %s (SHA-256=%s)", total_written, sample_out, old_sha))
 end
 
 -- ============================================================================
@@ -2146,12 +2359,526 @@ do
 	print("[PASS] T19: Coexistence with GameState:generateRandart verified")
 end
 
+-- ============================================================================
+-- T20: Old 8 Culture Pools Freeze & Effective Banned Substring Isolation (§8.2 T20)
+-- ============================================================================
+do
+	local frozen_61d7142_pools = {
+		["human"] = {
+			gendered = true,
+			["given.initials"] = "阿,艾,奥,巴,贝,布,卡,凯,达,德,弗,加,格,哈,赫,杰,柯,兰,莱,罗,马,莫,内,诺,佩,奎,萨,塞,托,维,沃,泽,欧,伊",
+			["given.middles"] = "德,里,拉,尔,文,贝,蒙,伦,利,斯,塔,瑟,加,洛,米,纳,罗,温,西,巴,多,莱,奥",
+			["given.finals.male"] = "克,德,斯,恩,尔,特,姆,多,隆,格,曼,森,文,洛,伦,顿,安,奥,托,里,尼,茨,夫,兹,林",
+			["given.finals.female"] = "娜,拉,雅,丝,琳,薇,妮,黛,莉,蒂,菲,娅,妲,蕾,茜,珊,丽,婕,芙,萝,伊,玛,莎,嘉",
+			["surname.initials"] = "阿,布,卡,达,杜,埃,弗,格,哈,霍,杰,柯,兰,罗,马,莫,诺,佩,拉,斯,索,托,温,维,沃",
+			["surname.middles"] = "德,尔,兰,里,伦,洛,蒙,纳,普,瑞,塞,斯,塔,维,伯,克",
+			["surname.finals"] = "德,恩,尔,斯,森,顿,特,姆,克,格,尼,曼,维,伍,夫,林,伯,朗,茨,洛",
+		},
+		["elf"] = {
+			gendered = true,
+			["given.initials"] = "埃,艾,伊,瑟,弗,莱,拉,希,塔,阿,洛,瑞,西,涅,斐,芬,加,凯,米,纳,诺,欧,佩,萨,塞,索,维,温,亚,卡,勒,伦",
+			["given.middles"] = "拉,瑞,兰,里,恩,斯,瑟,尔,莱,洛,米,纳,西,塔,维,伊,亚,芬,迪,艾,诺,希",
+			["given.finals.male"] = "尔,恩,斯,安,里,兰,迪,隆,洛,德,文,昂,赛,翁,林,诺,瑟,斐,尼,温,勒,西,奥,维",
+			["given.finals.female"] = "娅,拉,丽,娜,薇,琳,妮,莉,蒂,丝,雅,伊,黛,芙,萝,茜,蕾,珊,妲,婕,菈,莎,安,嘉",
+			["surname.initials"] = "埃,艾,伊,瑟,弗,莱,希,塔,洛,瑞,西,斐,芬,加,米,纳,诺,萨,塞,维,温,亚,卡,伦",
+			["surname.middles"] = "拉,瑞,兰,里,恩,斯,瑟,尔,莱,洛,米,纳,西,维,迪,亚",
+			["surname.finals"] = "尔,恩,斯,安,兰,迪,隆,洛,德,文,昂,林,诺,瑟,斐,温,勒,西,维,里",
+		},
+		["dwarf"] = {
+			gendered = true,
+			["given.initials"] = "布,博,杜,格,古,索,托,巴,鲁,戈,德,冈,霍,克,莫,纳,达,卡,贡,哈,加,拉,罗,穆,欧,塔,乌,沃,扎,兹,斯,奥",
+			["given.middles"] = "鲁,林,拉,隆,达,尔,格,古,姆,罗,巴,多,恩,杜,索,瓦,莫,克,里,丁,洛,冈",
+			["given.finals.male"] = "林,鲁,姆,克,格,恩,丁,尔,德,多,隆,斯,夫,巴,根,尼,罗,特,冈,顿,瓦,穆,布,索",
+			["given.finals.female"] = "达,拉,娜,妲,琳,蒂,嘉,丽,莎,娅,莉,玛,黛,蕾,雅,妮,茜,珊,丝,薇,萝,芙,婕,菈",
+			["surname.initials"] = "布,博,杜,格,古,索,托,巴,鲁,戈,德,冈,霍,克,莫,纳,达,卡,贡,哈,罗,穆,乌,斯",
+			["surname.middles"] = "鲁,林,拉,隆,达,尔,格,古,姆,罗,巴,多,恩,杜,索,瓦",
+			["surname.finals"] = "林,鲁,姆,克,格,恩,丁,尔,德,多,隆,斯,夫,根,尼,罗,特,冈,顿,瓦",
+		},
+		["halfling"] = {
+			gendered = true,
+			["given.initials"] = "波,比,米,皮,弗,托,本,宾,莫,罗,佩,默,温,贝,卡,拉,迪,多,斐,哈,杰,凯,利,马,内,诺,帕,萨,塔,威,维,泰",
+			["given.middles"] = "比,波,多,尔,利,皮,米,弗,拉,西,提,贝,巴,罗,吉,林,茨,恩,宾,莫,纳,帕",
+			["given.finals.male"] = "波,多,比,弗,宾,戈,罗,姆,克,尔,特,恩,德,托,普,斯,洛,伯,西,林,茨,尼,博,默",
+			["given.finals.female"] = "莉,娜,拉,蒂,妮,莎,丽,茜,珀,菲,琳,萝,雅,娅,妲,蕾,黛,薇,芙,婕,嘉,丝,玛,珊",
+			["surname.initials"] = "波,比,米,皮,弗,托,本,宾,莫,罗,佩,默,温,贝,卡,拉,迪,多,斐,哈,杰,凯,利,马",
+			["surname.middles"] = "比,波,多,尔,利,皮,米,弗,拉,西,提,贝,巴,罗,吉,林",
+			["surname.finals"] = "波,多,比,弗,宾,戈,罗,姆,克,尔,特,恩,德,托,普,斯,洛,伯,西,林",
+		},
+		["yeek"] = {
+			gendered = true,
+			["given.initials"] = "伊,基,齐,奇,维,泰,克,普,皮,米,西,希,吉,利,尼,提,茨,兹,卡,库,阿,艾,比,迪,斐,奎,里,洛,诺,塔,泽,祖",
+			["given.middles"] = "伊,克,奇,普,皮,齐,基,维,西,提,米,吉,利,尼,库,塔,卡,茨,兹,比,迪,里",
+			["given.finals.male"] = "克,普,伊,奇,齐,基,特,茨,兹,利,尼,皮,维,西,库,卡,斯,姆,恩,格,德,多,尔,托",
+			["given.finals.female"] = "琪,妮,蒂,莉,娅,茜,丝,薇,菲,娜,拉,雅,丽,萝,珊,黛,蕾,芙,婕,嘉,妲,莎,玛,琳",
+			["surname.initials"] = "伊,基,齐,奇,维,泰,克,普,皮,米,西,希,吉,利,尼,提,茨,兹,卡,库,阿,艾,比,迪",
+			["surname.middles"] = "伊,克,奇,普,皮,齐,基,维,西,提,米,吉,利,尼,库,塔",
+			["surname.finals"] = "克,普,伊,奇,齐,基,特,茨,兹,利,尼,皮,维,西,库,卡,斯,姆,恩,格",
+		},
+		["orc"] = {
+			gendered = false,
+			["given.initials"] = "格,鲁,乌,戈,兹,祖,卡,加,莫,拉,布,纳,克,萨,塔,哈,古,巴,达,杜,扎,托,沃,霍,贡,斯,罗,博,穆,奥,阿,冈",
+			["given.middles"] = "鲁,什,格,尔,兹,卡,拉,纳,克,祖,戈,姆,巴,塔,达,古,扎,罗,萨,乌,霍,莫",
+			["given.finals.none"] = "克,格,什,尔,兹,姆,卡,加,戈,鲁,斯,塔,达,巴,祖,扎,托,罗,纳,古,霍,穆,冈,卢",
+			["surname.initials"] = "格,鲁,乌,戈,兹,祖,卡,加,莫,拉,布,纳,克,萨,塔,哈,古,巴,达,杜,扎,托,沃,霍",
+			["surname.middles"] = "鲁,什,格,尔,兹,卡,拉,纳,克,祖,戈,姆,巴,塔,达,古",
+			["surname.finals"] = "克,格,什,尔,兹,姆,卡,加,戈,鲁,斯,塔,达,巴,祖,扎,托,罗,纳,古",
+		},
+		["demon"] = {
+			gendered = false,
+			["given.initials"] = "阿,巴,贝,卡,达,厄,弗,格,哈,伊,穆,莫,纳,奥,拉,萨,撒,塔,乌,瓦,扎,佐,克,祖,兹,索,维,泽,沙,赫,尤,加",
+			["given.middles"] = "兹,尔,拉,克,斯,萨,赫,卡,穆,莫,纳,戈,巴,扎,罗,塔,祖,乌,格,撒,维,奥",
+			["given.finals.none"] = "斯,兹,尔,克,赫,隆,拉,姆,恩,格,罗,萨,扎,戈,卡,托,祖,莫,巴,塔,霍,乌,达,瓦",
+			["surname.initials"] = "阿,巴,贝,卡,达,厄,弗,格,哈,伊,穆,莫,纳,奥,拉,萨,撒,塔,乌,瓦,扎,佐,克,祖",
+			["surname.middles"] = "兹,尔,拉,克,斯,萨,赫,卡,穆,莫,纳,戈,巴,扎,罗,塔",
+			["surname.finals"] = "斯,兹,尔,克,赫,隆,拉,姆,恩,格,罗,萨,扎,戈,卡,托,祖,莫,巴,塔",
+		},
+		["monster"] = {
+			gendered = false,
+			["given.initials"] = "格,罗,克,祖,扎,卡,兹,古,德,斯,霍,莫,戈,鲁,萨,巴,布,达,杜,哈,加,拉,纳,奥,乌,沃,塔,托,贡,冈,穆,博",
+			["given.middles"] = "罗,克,祖,扎,卡,兹,古,尔,斯,霍,莫,戈,鲁,萨,巴,达,姆,格,拉,纳,塔,乌",
+			["given.finals.none"] = "克,格,兹,尔,斯,姆,赫,卡,戈,鲁,罗,达,祖,扎,巴,塔,霍,莫,萨,古,冈,托,穆,加",
+			["surname.initials"] = "格,罗,克,祖,扎,卡,兹,古,德,斯,霍,莫,戈,鲁,萨,巴,布,达,杜,哈,加,拉,纳,奥",
+			["surname.middles"] = "罗,克,祖,扎,卡,兹,古,尔,斯,霍,莫,戈,鲁,萨,巴,达",
+			["surname.finals"] = "克,格,兹,尔,斯,姆,赫,卡,戈,鲁,罗,达,祖,扎,巴,塔,霍,莫,萨,古",
+		},
+	}
+
+	for _, cname in ipairs(old_culture_order) do
+		local exp = assert(frozen_61d7142_pools[cname])
+		local cur = assert(rules.cultures[cname])
+		assert(cur.gendered == exp.gendered, cname .. ".gendered changed from 61d7142")
+		assert(table.concat(cur.given.initials, ",") == exp["given.initials"], cname .. ".given.initials changed from 61d7142")
+		assert(table.concat(cur.given.middles, ",") == exp["given.middles"], cname .. ".given.middles changed from 61d7142")
+		if exp.gendered then
+			assert(table.concat(cur.given.finals.male, ",") == exp["given.finals.male"], cname .. ".given.finals.male changed from 61d7142")
+			assert(table.concat(cur.given.finals.female, ",") == exp["given.finals.female"], cname .. ".given.finals.female changed from 61d7142")
+		else
+			assert(table.concat(cur.given.finals.none, ",") == exp["given.finals.none"], cname .. ".given.finals.none changed from 61d7142")
+		end
+		assert(table.concat(cur.surname.initials, ",") == exp["surname.initials"], cname .. ".surname.initials changed from 61d7142")
+		assert(table.concat(cur.surname.middles, ",") == exp["surname.middles"], cname .. ".surname.middles changed from 61d7142")
+		assert(table.concat(cur.surname.finals, ",") == exp["surname.finals"], cname .. ".surname.finals changed from 61d7142")
+		assert(rules.banned_substrings_by_culture[cname] == nil, "old culture " .. cname .. " must not have banned_substrings_by_culture entries")
+	end
+
+	-- Verify global banned_substrings is exactly V1 (125) + G1 (14) + G2 (15) = 154 in exact order
+	local expected_v1_g1_g2 = table.concat({
+		"卡死,克死,尼玛,妮玛,沙比,傻比,撒比,西巴,达比,马桶,巴士,沙拉,拉丁,比萨,吉他,米兰,罗马,巴黎,伦敦,莫斯科,埃及,希腊,阿门,哈哈,嘻嘻,嘿嘿,呵呵,拿破仑,希特勒,斯大林,列宁,耶稣,摩西,撒旦,路西法,甘道夫,阿拉贡,弗罗多,萨鲁曼,索伦,比尔波,比尔博,皮尔波,皮尔博,古鲁姆,咕噜,莱戈拉斯,金雳,博罗米尔,法拉米尔,埃尔隆德,加拉德瑞尔,凯兰崔尔,亚玟,阿尔温,斯塔克,兰尼斯特,坦格利安,哈利,赫敏,伏地,罗恩,邓布利多,斯内普,德古拉,布丁,马达,比基尼,尼古丁,萨克斯,诺贝尔,奥斯卡,布尔什维克,纳粹,法西斯,古巴,巴西,波兰,芬兰,伊朗,伊拉克,卡塔尔,索马里,利比亚,纳米比亚,博茨瓦纳,马拉维,西德,阿曼,巴林,加纳,马里,托里多,纳米,丁克,塔林,吉林,达卡,拉萨,利马,波恩,伯尔尼,基辅,明斯克,达拉斯,莫莎,莫萝,贡多拉,马文,林珊,丁嘉,加嘉,嘉加,里莉,莉里,里利,利里,莉利,利莉,茨兹,兹茨,妮尼,尼妮,蒂提,提蒂",
+		"摩托,摩卡,摩斯,摩洛,摩纳,萨摩,昆特,昆德拉,奈斯,奈亚,喀斯特,喀什,摩洛哥,摩纳哥",
+		"伊斯兰,塞尔维,奥斯曼,撒哈拉,伊西斯,阿撒托斯,索托斯,哈斯塔,阿萨姆,诺基亚,克苏鲁,撒托斯,亚撒托,哈斯特,哈斯托",
+	}, ",")
+	assert(table.concat(rules.banned_substrings, ",") == expected_v1_g1_g2, "global banned_substrings does not match V1 + G1 + G2")
+	print("[PASS] T20: Old 8 culture pools frozen to 61d7142 and global banned_substrings == V1 + G1 + G2 verified")
+end
+
+-- ============================================================================
+-- T21: Routing Matrix & Live Non-Unique Entity Audit (§5.2, §5.3, §8.2 T21)
+-- ============================================================================
+do
+	-- (1) Every row of §5.3 synthetic matrix
+	local matrix_cases = {
+		-- Row 1: Any type/subtype with known random_name_def prefix -> def culture
+		{ base = { type = "undead", subtype = "lich", random_name_def = "cornac_#sex#", female = true }, exp_c = "human", exp_s = "female" },
+		{ base = { type = "humanoid", subtype = "ogre", random_name_def = "shalore_#sex#", female = false }, exp_c = "elf", exp_s = "male" },
+		{ base = { type = "humanoid", subtype = "krog", random_name_def = "thalore_#sex#", female = true }, exp_c = "elf", exp_s = "female" },
+		-- Row 2: demon/* -> demon (via type layer)
+		{ base = { type = "demon", subtype = "major" }, exp_c = "demon", exp_s = "none" },
+		{ base = { type = "demon", subtype = "minor", female = true }, exp_c = "demon", exp_s = "none" },
+		-- Row 3: aquatic/demon -> demon (via any_subtype_to_culture layer)
+		{ base = { type = "aquatic", subtype = "demon" }, exp_c = "demon", exp_s = "none" },
+		-- Row 4: undead/* (including dragon, horror, giant, minotaur, rodent, ghost, shadow...) -> undead
+		{ base = { type = "undead", subtype = "dragon" }, exp_c = "undead", exp_s = "none" },
+		{ base = { type = "undead", subtype = "horror" }, exp_c = "undead", exp_s = "none" },
+		{ base = { type = "undead", subtype = "giant" }, exp_c = "undead", exp_s = "none" },
+		{ base = { type = "undead", subtype = "minotaur" }, exp_c = "undead", exp_s = "none" },
+		{ base = { type = "undead", subtype = "rodent" }, exp_c = "undead", exp_s = "none" },
+		{ base = { type = "undead", subtype = "ghost", female = true }, exp_c = "undead", exp_s = "none" },
+		{ base = { type = "undead", subtype = "shadow" }, exp_c = "undead", exp_s = "none" },
+		-- Row 5: horror/* (eldritch, corrupted, aquatic, temporal, shertul, Sher'Tul) -> eldritch
+		{ base = { type = "horror", subtype = "eldritch" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "horror", subtype = "corrupted" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "horror", subtype = "aquatic" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "horror", subtype = "temporal" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "horror", subtype = "shertul" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "horror", subtype = "Sher'Tul" }, exp_c = "eldritch", exp_s = "none" },
+		-- Row 6: elemental/* (air, fire, ice, light, temporal, vapour, void, xorn) -> eldritch
+		{ base = { type = "elemental", subtype = "air" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "elemental", subtype = "fire" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "elemental", subtype = "ice" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "elemental", subtype = "light" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "elemental", subtype = "temporal" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "elemental", subtype = "vapour" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "elemental", subtype = "void" }, exp_c = "eldritch", exp_s = "none" },
+		{ base = { type = "elemental", subtype = "xorn" }, exp_c = "eldritch", exp_s = "none" },
+		-- Row 7: humanoid/orc, human, elf, thalore, shalore, doomelf, dwarf, halfling, yeek, yaech
+		{ base = { type = "humanoid", subtype = "orc" }, exp_c = "orc", exp_s = "none" },
+		{ base = { type = "humanoid", subtype = "human", female = false }, exp_c = "human", exp_s = "male" },
+		{ base = { type = "humanoid", subtype = "elf", female = true }, exp_c = "elf", exp_s = "female" },
+		{ base = { type = "humanoid", subtype = "thalore", female = false }, exp_c = "elf", exp_s = "male" },
+		{ base = { type = "humanoid", subtype = "shalore", female = true }, exp_c = "elf", exp_s = "female" },
+		{ base = { type = "humanoid", subtype = "doomelf", female = true }, exp_c = "elf", exp_s = "female" },
+		{ base = { type = "humanoid", subtype = "dwarf", female = false }, exp_c = "dwarf", exp_s = "male" },
+		{ base = { type = "humanoid", subtype = "halfling", female = true }, exp_c = "halfling", exp_s = "female" },
+		{ base = { type = "humanoid", subtype = "yeek", female = false }, exp_c = "yeek", exp_s = "male" },
+		{ base = { type = "humanoid", subtype = "yaech", female = true }, exp_c = "yeek", exp_s = "female" },
+		-- Row 8 & (5): humanoid/naga -> elf (gendered: female=true -> elf/female, female=nil -> elf/male)
+		{ base = { type = "humanoid", subtype = "naga", female = true }, exp_c = "elf", exp_s = "female" },
+		{ base = { type = "humanoid", subtype = "naga", female = nil }, exp_c = "elf", exp_s = "male" },
+		-- Row 9: humanoid/other without def (e.g. krog without def) -> monster
+		{ base = { type = "humanoid", subtype = "krog" }, exp_c = "monster", exp_s = "none" },
+		-- Row 10 & (6): giant/ogre (including female=true), giant/krog -> monster/none
+		{ base = { type = "giant", subtype = "ogre", female = true }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "giant", subtype = "ogre", female = false }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "giant", subtype = "krog" }, exp_c = "monster", exp_s = "none" },
+		-- Row 11: giant/troll, titan, yeti, steam, ice, minotaur, treant -> monster
+		{ base = { type = "giant", subtype = "troll" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "giant", subtype = "titan" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "giant", subtype = "yeti" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "giant", subtype = "steam" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "giant", subtype = "ice" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "giant", subtype = "minotaur" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "giant", subtype = "treant" }, exp_c = "monster", exp_s = "none" },
+		-- Row 12: animal, dragon, insect, vermin, spiderkin, construct, immovable, aquatic/critter, reptile -> monster
+		{ base = { type = "animal", subtype = "bear" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "dragon", subtype = "fire" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "insect", subtype = "ant" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "vermin", subtype = "worm" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "spiderkin", subtype = "spider" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "construct", subtype = "golem" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "immovable", subtype = "crystal" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "aquatic", subtype = "critter" }, exp_c = "monster", exp_s = "none" },
+		{ base = { type = "reptile", subtype = "snake" }, exp_c = "monster", exp_s = "none" },
+	}
+	for idx, mc in ipairs(matrix_cases) do
+		-- (3) 2-arg call must match 3-arg call with actor=nil
+		local c2, s2 = BossNames.culture_of(mc.base, {})
+		local c3, s3 = BossNames.culture_of(mc.base, {}, nil)
+		assert(c2 == mc.exp_c and s2 == mc.exp_s,
+			string.format("T21 matrix case #%d failed: expected %s/%s, got %s/%s", idx, mc.exp_c, mc.exp_s, tostring(c2), tostring(s2)))
+		assert(c3 == c2 and s3 == s2, "T21: 2-arg and 3-arg (actor=nil) culture_of results diverged at case #" .. idx)
+	end
+
+	-- (4) Actor vs base type conflict -> actor wins; non-string actor.type (resolver table) -> falls back to base.type
+	local c_conflict, s_conflict = BossNames.culture_of(
+		{ type = "animal", subtype = "bear" },
+		{},
+		{ type = "undead", subtype = "skeleton" }
+	)
+	assert(c_conflict == "undead" and s_conflict == "none", "T21: actor.type must override base.type")
+
+	local c_res_type, s_res_type = BossNames.culture_of(
+		{ type = "horror", subtype = "eldritch" },
+		{},
+		{ type = { __resolver = "rngtable", "horror", "elemental" }, subtype = "eldritch" }
+	)
+	assert(c_res_type == "eldritch" and s_res_type == "none", "T21: non-string actor.type (resolver table) must fall back to base.type")
+
+	-- (2) Scan real non-unique NPC definitions from TOME_DATA_DIR and DLC_ROOT
+	local function tokenize_npc_lua(s)
+		local tokens, vals = {}, {}
+		local n, i = #s, 1
+		local function match_long_bracket(pos)
+			if s:byte(pos) ~= 91 then return nil end
+			local k = pos + 1
+			while s:byte(k) == 61 do k = k + 1 end
+			if s:byte(k) ~= 91 then return nil end
+			local close_pat = "]" .. string.rep("=", k - pos - 1) .. "]"
+			local cs, ce = s:find(close_pat, k + 1, true)
+			if not cs then return #s + 1, s:sub(k + 1) end
+			return ce + 1, s:sub(k + 1, cs - 1)
+		end
+		while i <= n do
+			local b = s:byte(i)
+			if b == 32 or b == 9 or b == 10 or b == 13 or b == 11 or b == 12 then
+				i = i + 1
+			elseif b == 45 and s:byte(i + 1) == 45 then
+				local ni = match_long_bracket(i + 2)
+				if ni then i = ni else local nl = s:find("\n", i + 2, true); i = nl and (nl + 1) or (n + 1) end
+			elseif b == 91 and (s:byte(i + 1) == 91 or s:byte(i + 1) == 61) then
+				local ni, body = match_long_bracket(i)
+				if ni then tokens[#tokens + 1] = "STRING"; vals[#vals + 1] = body; i = ni
+				else tokens[#tokens + 1] = "["; vals[#vals + 1] = "["; i = i + 1 end
+			elseif b == 34 or b == 39 then
+				local q, j, buf = b, i + 1, {}
+				while j <= n do
+					local cj = s:byte(j)
+					if cj == q then j = j + 1; break
+					elseif cj == 92 then buf[#buf + 1] = s:sub(j + 1, j + 1); j = j + 2
+					else buf[#buf + 1] = s:sub(j, j); j = j + 1 end
+				end
+				tokens[#tokens + 1] = "STRING"; vals[#vals + 1] = table.concat(buf); i = j
+			elseif (b >= 65 and b <= 90) or (b >= 97 and b <= 122) or b == 95 then
+				local j = i + 1
+				while j <= n do
+					local cj = s:byte(j)
+					if (cj >= 65 and cj <= 90) or (cj >= 97 and cj <= 122) or (cj >= 48 and cj <= 57) or cj == 95 then j = j + 1 else break end
+				end
+				local w = s:sub(i, j - 1)
+				tokens[#tokens + 1] = w; vals[#vals + 1] = w; i = j
+			else
+				local ch = s:sub(i, i)
+				tokens[#tokens + 1] = ch; vals[#vals + 1] = ch; i = i + 1
+			end
+		end
+		return tokens, vals
+	end
+
+	local function extract_npcs_from_file(path)
+		local f = assert(io.open(path, "rb"))
+		local src = f:read("*a")
+		f:close()
+		local tokens, vals = tokenize_npc_lua(src)
+		local nt = #tokens
+		local idx = 1
+		local bases = {}
+		local entities = {}
+		while idx <= nt do
+			if tokens[idx] == "newEntity" then
+				local j = idx + 1
+				if tokens[j] == "(" then j = j + 1 end
+				if tokens[j] == "{" then
+					local depth = 1
+					local k = j + 1
+					local ent = {}
+					while k <= nt and depth > 0 do
+						local tk = tokens[k]
+						if tk == "{" or tk == "(" or tk == "[" then
+							depth = depth + 1
+							k = k + 1
+						elseif tk == "}" or tk == ")" or tk == "]" then
+							depth = depth - 1
+							k = k + 1
+						elseif depth == 1 then
+							local is_field = (k == j + 1) or (tokens[k - 1] == ",") or (tokens[k - 1] == ";")
+							if is_field and tokens[k + 1] == "=" then
+								local key = tk
+								local vk = k + 2
+								local vtok = tokens[vk]
+								if key == "define_as" or key == "base" or key == "name" or key == "type" or key == "subtype" or key == "random_name_def" then
+									local str_val = nil
+									if vtok == "STRING" then
+										str_val = vals[vk]
+									elseif (vtok == "_t" or vtok == "t") and tokens[vk + 1] == "STRING" then
+										str_val = vals[vk + 1]
+									elseif (vtok == "_t" or vtok == "t") and tokens[vk + 1] == "(" and tokens[vk + 2] == "STRING" then
+										str_val = vals[vk + 2]
+									end
+									if str_val then ent[key] = str_val end
+								elseif key == "unique" or key == "female" then
+									local next_tok = tokens[vk + 1]
+									local is_end = (next_tok == nil or next_tok == "," or next_tok == ";" or next_tok == "}")
+									if is_end and (vtok == "true" or vtok == "false") then
+										ent[key] = (vtok == "true")
+									elseif is_end and vtok == "STRING" and key == "unique" then
+										ent[key] = true
+									end
+								end
+							end
+							k = k + 1
+						else
+							k = k + 1
+						end
+					end
+					if ent.define_as then bases[ent.define_as] = ent end
+					entities[#entities + 1] = ent
+					idx = k
+				else
+					idx = idx + 1
+				end
+			else
+				idx = idx + 1
+			end
+		end
+		local resolved = {}
+		for _, e in ipairs(entities) do
+			local r = {}
+			local cur = e
+			local seen = {}
+			local chain = {}
+			while cur and not seen[cur] do
+				seen[cur] = true
+				chain[#chain + 1] = cur
+				cur = cur.base and bases[cur.base] or nil
+			end
+			for ci = #chain, 1, -1 do
+				for fk, fv in pairs(chain[ci]) do r[fk] = fv end
+			end
+			if r.name and not r.unique then
+				resolved[#resolved + 1] = r
+			end
+		end
+		return resolved
+	end
+
+	local tome_data = os.getenv("TOME_DATA_DIR") or "/workspace/t-engine4/game/modules/tome/data"
+	local dlc_root = os.getenv("DLC_ROOT") or "/workspace/tome4-dlcs"
+	local scan_dirs = {
+		tome_data .. "/general/npcs",
+		tome_data .. "/zones",
+		dlc_root .. "/ashes-urhrok/tome-ashes-urhrok/data",
+		dlc_root .. "/cults/tome-cults/data",
+		dlc_root .. "/orcs/tome-orcs/data",
+	}
+	local live_counts = { undead = 0, horror = 0, elemental = 0, naga = 0, ogre = 0, krog = 0 }
+	for _, d in ipairs(scan_dirs) do
+		local p = assert(io.popen(string.format("find %q -type f -name \"*.lua\" 2>/dev/null", d), "r"))
+		for fpath in p:lines() do
+			for _, ent in ipairs(extract_npcs_from_file(fpath)) do
+				local c, s = BossNames.culture_of(ent, {}, ent)
+				if ent.type == "undead" then
+					assert(c == "undead" and s == "none", "T21 live undead mismatch: " .. fpath .. " " .. tostring(ent.name) .. " -> " .. tostring(c))
+					live_counts.undead = live_counts.undead + 1
+				elseif ent.type == "horror" then
+					assert(c == "eldritch" and s == "none", "T21 live horror mismatch: " .. fpath .. " " .. tostring(ent.name) .. " -> " .. tostring(c))
+					live_counts.horror = live_counts.horror + 1
+				elseif ent.type == "elemental" then
+					assert(c == "eldritch" and s == "none", "T21 live elemental mismatch: " .. fpath .. " " .. tostring(ent.name) .. " -> " .. tostring(c))
+					live_counts.elemental = live_counts.elemental + 1
+				elseif ent.subtype == "naga" then
+					assert(c == "elf" and s == (ent.female and "female" or "male"), "T21 live naga mismatch: " .. fpath .. " " .. tostring(ent.name))
+					live_counts.naga = live_counts.naga + 1
+				elseif ent.subtype == "ogre" then
+					if ent.random_name_def == "shalore_#sex#" then
+						assert(c == "elf", "T21 live humanoid ogre with shalore_#sex# must map to elf")
+					else
+						assert(c == "monster" and s == "none", "T21 live wild ogre must map to monster/none: " .. fpath .. " " .. tostring(ent.name))
+					end
+					live_counts.ogre = live_counts.ogre + 1
+				elseif ent.subtype == "krog" then
+					if ent.random_name_def == "thalore_#sex#" then
+						assert(c == "elf", "T21 live humanoid krog with thalore_#sex# must map to elf")
+					else
+						assert(c == "monster" and s == "none", "T21 live wild krog must map to monster/none: " .. fpath .. " " .. tostring(ent.name))
+					end
+					live_counts.krog = live_counts.krog + 1
+				end
+			end
+		end
+		p:close()
+	end
+	assert(live_counts.undead >= 50 and live_counts.horror >= 40 and live_counts.elemental >= 20
+		and live_counts.naga >= 6 and live_counts.ogre >= 6 and live_counts.krog >= 1,
+		"T21 live entity extraction counts unexpectedly low")
+	print(string.format("[PASS] T21: Routing matrix (§5.3) & live non-unique NPC scan verified (undead=%d, horror=%d, elemental=%d, naga=%d, ogre=%d, krog=%d)",
+		live_counts.undead, live_counts.horror, live_counts.elemental, live_counts.naga, live_counts.ogre, live_counts.krog))
+end
+
+-- ============================================================================
+-- T22: Culture-Scoped Banned Substrings & Cache Isolation (§4.3, §8.2 T22)
+-- ============================================================================
+do
+	-- (1) Verify "德里娜" is present and valid in human/female rare given pool (even though "德里" is banned in undead)
+	local found_delina = false
+	for _, gname in ipairs(rare_audits["human:female"].list) do
+		if gname == "德里娜" then
+			found_delina = true
+			break
+		end
+	end
+	assert(found_delina, "T22: '德里娜' must remain a valid human/female rare given name")
+
+	-- (2) Verify alternating queries between human and undead do not cross-contaminate compiled filter cache
+	local h_init = rules.cultures.human.given.initials
+	local h_mid = rules.cultures.human.given.middles
+	local h_fin = rules.cultures.human.given.finals.female
+	local function index_of(lst, target)
+		for idx, v in ipairs(lst) do
+			if v == target then return idx - 1 end
+		end
+		error("missing char " .. target)
+	end
+	local ni, nm, nf = #h_init, #h_mid, #h_fin
+	local n2 = ni * nf
+	local delina_slot = n2 + index_of(h_init, "德") * (nm * nf) + index_of(h_mid, "里") * nf + index_of(h_fin, "娜")
+
+	local u_init = rules.cultures.undead.given.initials
+	local u_mid = rules.cultures.undead.given.middles
+	local u_fin = rules.cultures.undead.given.finals.none
+	local uni, unm, unf = #u_init, #u_mid, #u_fin
+	local un2 = uni * unf
+	local undead_deli_slot = un2 + index_of(u_init, "德") * (unm * unf) + index_of(u_mid, "里") * unf + index_of(u_fin, "斯")
+
+	for _ = 1, 5 do
+		local p_h, c_h = BossNames.candidate_at("human", "female", "rare", delina_slot)
+		assert(p_h == "德里娜" and c_h == "德里纳", "T22: human/female slot for '德里娜' was wrongly rejected")
+		local p_u, c_u = BossNames.candidate_at("undead", "none", "rare", undead_deli_slot)
+		assert(p_u == nil and c_u == nil, "T22: undead/none slot for '德里斯' containing culture-banned '德里' must be rejected")
+	end
+
+	-- (3) Verify 300,000 deterministic epic candidates across undead and eldritch contain 0 culture-scoped or G1/G2 banned substrings
+	for _, cname in ipairs{ "undead", "eldritch" } do
+		local total = BossNames.cohort_total(cname, "none", "epic")
+		local stride = BossNames.stride_for(total)
+		local c_banned = assert(rules.banned_substrings_by_culture[cname])
+		local matcher = build_fast_sub_matcher(rules.banned_substrings, c_banned)
+		local valid_checked = 0
+		local k = 0
+		while valid_checked < 150000 do
+			k = k + 1
+			local idx = (k * stride) % total
+			local personal, core = BossNames.candidate_at(cname, "none", "epic", idx)
+			if personal then
+				valid_checked = valid_checked + 1
+				local unsep = personal:gsub(rules.separator, "")
+				local hit = matcher(personal) or matcher(unsep) or matcher(core)
+				assert(not hit, "T22: banned substring '" .. tostring(hit) .. "' leaked into " .. cname .. " epic name: " .. personal)
+			end
+		end
+	end
+	print("[PASS] T22: Culture-scoped banned substrings and per-culture cache isolation verified (300,000 epic candidates audited)")
+end
+
+-- ============================================================================
+-- T23: New Pool Sample Generation (undead & eldritch, 4 cohorts x 40 = 160 lines, §8.2 T23)
+-- ============================================================================
+do
+	local sample_out_v11 = os.getenv("RANDBOSS_SAMPLE_OUT_V11") or "/tmp/tome4-randboss-samples-v1.1-new.txt"
+	local new_cohorts = {
+		{ culture = "undead", sex = "none", tier = "rare", base_label = "巫妖" },
+		{ culture = "undead", sex = "none", tier = "epic", base_label = "巫妖" },
+		{ culture = "eldritch", sex = "none", tier = "rare", base_label = "恐魔" },
+		{ culture = "eldritch", sex = "none", tier = "epic", base_label = "恐魔" },
+	}
+	local f = assert(io.open(sample_out_v11, "wb"), "cannot open RANDBOSS_SAMPLE_OUT_V11: " .. tostring(sample_out_v11))
+	local total_written = 0
+	for _, co in ipairs(new_cohorts) do
+		local header = string.format("%s/%s/%s", co.culture, co.sex, co.tier)
+		local ledger = { version = 1, count = 0, used = {} }
+		local stdout_preview = {}
+		for i = 1, 40 do
+			local key = table.concat({
+				"sample_v1_1",
+				co.culture,
+				co.sex,
+				co.tier,
+				"BossSample_" .. tostring(i * 9973) .. "_" .. co.culture .. "_" .. tostring(i * i + 313),
+			}, "\0")
+			local personal, core = BossNames.select(co.culture, co.sex, co.tier, key, ledger, {})
+			assert(personal and core, "failed to select V1.1 sample #" .. i .. " for " .. header)
+			ledger.used[core] = true
+			ledger.count = ledger.count + 1
+			local full_disp = co.base_label .. " " .. personal
+			f:write(string.format("[%s #%02d] %s\n", header, i, full_disp))
+			total_written = total_written + 1
+			if i <= 10 then
+				stdout_preview[#stdout_preview + 1] = full_disp
+			end
+		end
+		print(string.format("       [T23 %s/%s/%s]: %s", co.culture, co.sex, co.tier, table.concat(stdout_preview, " | ")))
+	end
+	f:close()
+	assert(total_written == 160, "expected 160 V1.1 sample lines, got " .. tostring(total_written))
+	local new_sha = compute_file_sha256(sample_out_v11)
+	print(string.format("[PASS] T23: Wrote %d V1.1 new-pool sample names across 4 cohorts to %s (SHA-256=%s)",
+		total_written, sample_out_v11, tostring(new_sha)))
+end
+
 math.random = orig_math_random
 math.randomseed = orig_math_randomseed
 os.time = orig_os_time
 os.clock = orig_os_clock
 
 print(string.format(
-	"ALL 19 RANDOM BOSS NAMING V1 TESTS PASSED (cohorts=26, min_rare_core=%d [%s], min_sur_core=%d [%s], min_epic_lb=%d [%s])",
+	"ALL 23 RANDOM BOSS NAMING V1.1 TESTS PASSED (cohorts=30, min_rare_core=%d [%s], min_sur_core=%d [%s], min_epic_lb=%d [%s])",
 	min_rare_core, min_rare_cohort.key, min_sur_core, min_sur_culture, min_epic_lb, min_epic_cohort
 ))
