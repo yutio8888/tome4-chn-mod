@@ -7,7 +7,10 @@ dofile = function(path)
     return real_dofile(path)
 end
 config = { settings = { locale = "zh_hans" } }
-local damage_types = {FIRE = 1, COLD = 2, LIGHTNING = 3, LIGHT = 4, DARKNESS = 5}
+local damage_types = {
+    FIRE = "FIRE", COLD = "COLD", LIGHTNING = "LIGHTNING",
+    LIGHT = "LIGHT", DARKNESS = "DARKNESS", ARCANE = "ARCANE", PHYSICAL = "PHYSICAL",
+}
 package.loaded["engine.DamageType"] = damage_types
 local original_random = math.random
 math.random = function() error("naming used math.random") end
@@ -87,7 +90,7 @@ local function artifact(extra)
     for k,v in pairs(extra or {}) do o[k] = v end
     return setmetatable(o, {__index = Object})
 end
-local o = artifact{inc_damage = {[1] = 20}, add_name = " (#COMBAT#)", qty = 2, been_reshaped = "重塑"}
+local o = artifact{wielder = {inc_damage = {[damage_types.FIRE] = 20}}, add_name = " (#COMBAT#)", qty = 2, been_reshaped = "重塑"}
 local result, hole, tail = state:generateRandart(o, nil, "stock tail")
 assert(calls == 1 and result == o and hole == nil and tail == "stock tail")
 assert(o.name == "Iron sword of mischance" and o.define_as == "SWORD_TEST"
@@ -125,9 +128,72 @@ assert(loaded:getName() == "倒霉的铁剑")
 assert(artifact():getName() == "倒霉的铁剑")
 assert(not state:generateRandart(artifact{randart = false}).__chn_randart_name)
 assert(not state:generateRandart(artifact{subtype = "mod-unknown"}).__chn_randart_name)
-local mixed = state:generateRandart(artifact{inc_damage = {[1] = 20, [2] = 10}})
+-- Elemental equipment via wielder.inc_damage (each supported element + unsupported/invalid/zero/negative).
+for _, case in ipairs{
+    {"fire", {wielder = {inc_damage = {[damage_types.FIRE] = 15}}}},
+    {"cold", {wielder = {inc_damage = {[damage_types.COLD] = 12}}}},
+    {"lightning", {wielder = {inc_damage = {[damage_types.LIGHTNING] = 18}}}},
+    {"light", {wielder = {inc_damage = {[damage_types.LIGHT] = 10}}}},
+    {"darkness", {wielder = {inc_damage = {[damage_types.DARKNESS] = 22}}}},
+    {"neutral", {wielder = {inc_damage = {[damage_types.ARCANE] = 25, all = 10}}}},
+    {"neutral", {wielder = {inc_damage = {[damage_types.FIRE] = 0}}}},
+    {"neutral", {wielder = {inc_damage = {[damage_types.COLD] = -5}}}},
+    {"neutral", {wielder = {inc_damage = {[damage_types.LIGHTNING] = "15"}}}},
+    {"neutral", {inc_damage = {[damage_types.FIRE] = 20}}},
+} do
+    local item = state:generateRandart(artifact(case[2]))
+    assert(known[item.__chn_randart_name.text:match("「(.+)」")] == case[1])
+end
+
+-- Real 1.7.6 staff shapes: combat.element + commandStaff wielder.inc_damage (no double counting).
+local fire_staff = state:generateRandart(artifact{
+    subtype = "staff",
+    combat = {dam = 15, damtype = damage_types.PHYSICAL, element = damage_types.FIRE},
+    wielder = {inc_damage = {[damage_types.FIRE] = 15}},
+})
+assert(known[fire_staff.__chn_randart_name.text:match("「(.+)」")] == "fire")
+
+-- Staff with non-supported combat.element (ARCANE) but single supported wielder.inc_damage.
+local arcane_cold_staff = state:generateRandart(artifact{
+    subtype = "staff",
+    combat = {dam = 15, damtype = damage_types.PHYSICAL, element = damage_types.ARCANE},
+    wielder = {inc_damage = {[damage_types.ARCANE] = 15, [damage_types.COLD] = 10}},
+})
+assert(known[arcane_cold_staff.__chn_randart_name.text:match("「(.+)」")] == "cold")
+
+-- Greater staff or mixed staff (combat.element = FIRE, plus COLD in wielder.inc_damage) -> neutral.
+local greater_staff = state:generateRandart(artifact{
+    subtype = "staff",
+    combat = {dam = 15, damtype = damage_types.PHYSICAL, element = damage_types.FIRE, is_greater = true},
+    wielder = {inc_damage = {
+        [damage_types.FIRE] = 15, [damage_types.COLD] = 15,
+        [damage_types.LIGHTNING] = 15, [damage_types.ARCANE] = 15,
+    }},
+})
+assert(known[greater_staff.__chn_randart_name.text:match("「(.+)」")] == "neutral")
+
+-- Mixed / tied supported elements in wielder.inc_damage -> neutral.
+local mixed = state:generateRandart(artifact{
+    wielder = {inc_damage = {[damage_types.FIRE] = 20, [damage_types.COLD] = 20}},
+})
 assert(known[mixed.__chn_randart_name.text:match("「(.+)」")] == "neutral")
-local same = state:generateRandart(artifact{inc_damage = {[1] = 20}})
+
+-- Supported element + negative/zero other supported element -> single positive element wins.
+local single_pos = state:generateRandart(artifact{
+    wielder = {inc_damage = {[damage_types.LIGHT] = 12, [damage_types.DARKNESS] = -5, [damage_types.FIRE] = 0}},
+})
+assert(known[single_pos.__chn_randart_name.text:match("「(.+)」")] == "light")
+
+-- Old saved metadata is never recomputed even if live elemental fields change after load.
+local old_saved = artifact{wielder = {inc_damage = {[damage_types.FIRE] = 30}}}
+old_saved.__chn_randart_name = {
+    version = 1, text = "长剑「旅人的信物」",
+    original = old_saved.name, unique = old_saved.unique, define_as = old_saved.define_as,
+}
+assert(state:generateRandart(old_saved).__chn_randart_name.text == "长剑「旅人的信物」")
+assert(old_saved:getName() == "长剑「旅人的信物」")
+
+local same = state:generateRandart(artifact{wielder = {inc_damage = {[damage_types.FIRE] = 20}}})
 assert(same.__chn_randart_name.text == meta.text)
 assert(names.decorate(o, {}, "倒霉的铁剑和倒霉的铁剑") == "倒霉的铁剑和倒霉的铁剑")
 math.random = original_random

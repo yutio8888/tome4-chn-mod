@@ -16,11 +16,14 @@ end
 
 local function theme(obj, damage_types)
     local found
+    local inc = type(obj.wielder) == "table" and obj.wielder.inc_damage
+    inc = type(inc) == "table" and inc or nil
+    local combat = type(obj.combat) == "table" and obj.combat or nil
     for _, kind in ipairs{"FIRE", "COLD", "LIGHTNING", "LIGHT", "DARKNESS"} do
         local id = damage_types and damage_types[kind]
-        local bonus = id and type(obj.inc_damage) == "table" and obj.inc_damage[id]
+        local bonus = id and inc and inc[id]
         if id and (type(bonus) == "number" and bonus > 0
-            or type(obj.combat) == "table" and obj.combat.damtype == id) then
+            or combat and (combat.element == id or combat.damtype == id)) then
             if found then return "neutral" end
             found = kind:lower()
         end
