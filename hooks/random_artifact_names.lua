@@ -317,8 +317,17 @@ function M.annotate(obj, damage_types, state)
 	})
 end
 
+function M.is_enabled()
+	local s = type(config) == "table" and config.settings or nil
+	local cm = type(s) == "table" and s.chn_mod or nil
+	if type(cm) == "table" and cm.randart_names == false then
+		return false
+	end
+	return true
+end
+
 function M.decorate(obj, opts, rendered, state)
-	if not zh() or type(obj) ~= "table" or obj.randart ~= true or type(rendered) ~= "string"
+	if not zh() or not M.is_enabled() or type(obj) ~= "table" or obj.randart ~= true or type(rendered) ~= "string"
 		or opts and (type(opts) ~= "table" or opts.raw_name or opts.trans_only)
 		or type(obj.isIdentified) ~= "function" or not obj:isIdentified() then return rendered end
 	local meta = rawget(obj, "__chn_randart_name")

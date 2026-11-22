@@ -802,6 +802,116 @@ function M.surname_audit(culture)
 	}
 end
 
+function M.is_enabled()
+	local s = type(config) == "table" and config.settings or nil
+	local cm = type(s) == "table" and s.chn_mod or nil
+	if type(cm) == "table" and cm.randboss_names == false then
+		return false
+	end
+	return true
+end
+
+function M.sync_actor(b)
+	if type(b) ~= "table" or b.randboss ~= true then
+		return false
+	end
+	local meta = rawget(b, "__chn_randboss_name")
+	if type(meta) ~= "table" then
+		return false
+	end
+	local text = meta.text
+	local orig = meta.original
+	if type(text) ~= "string" or text == "" or type(orig) ~= "string" or orig == "" then
+		return false
+	end
+	if rawget(b, "unique") ~= orig then
+		return false
+	end
+	local cur = rawget(b, "name")
+	if cur ~= text and cur ~= orig then
+		return false
+	end
+	local target = (zh() and M.is_enabled()) and text or orig
+	if target == text and (not plain_label(target) or not utf8_valid(target)) then
+		return false
+	end
+	if cur ~= target then
+		b.name = target
+		return true
+	end
+	return false
+end
+
+function M.sync_all(g)
+	local changed = 0
+	local seen = {}
+	local function visit(act)
+		if type(act) ~= "table" or seen[act] then
+			return
+		end
+		seen[act] = true
+		local ok, did = pcall(M.sync_actor, act)
+		if ok and did then
+			changed = changed + 1
+		end
+	end
+	local function visit_map(tbl)
+		if type(tbl) ~= "table" then
+			return
+		end
+		for k, v in pairs(tbl) do
+			if type(v) == "table" then
+				visit(v)
+			end
+			if type(k) == "table" then
+				visit(k)
+			end
+		end
+	end
+	local function visit_memory_levels(mem)
+		if type(mem) ~= "table" then
+			return
+		end
+		for _, zone_or_lev in pairs(mem) do
+			if type(zone_or_lev) == "table" then
+				if type(zone_or_lev.entities) == "table" then
+					visit_map(zone_or_lev.entities)
+				else
+					for _, lev in pairs(zone_or_lev) do
+						if type(lev) == "table" and type(lev.entities) == "table" then
+							visit_map(lev.entities)
+						end
+					end
+				end
+			end
+		end
+	end
+
+	local uids = rawget(_G, "__uids")
+	if type(uids) == "table" then
+		visit_map(uids)
+	end
+
+	g = type(g) == "table" and g or rawget(_G, "game")
+	if type(g) == "table" then
+		if type(g.level) == "table" and type(g.level.entities) == "table" then
+			visit_map(g.level.entities)
+		end
+		if type(g.party) == "table" and type(g.party.members) == "table" then
+			for act, _ in pairs(g.party.members) do
+				visit(act)
+			end
+		end
+		if type(g.zone) == "table" then
+			visit_memory_levels(g.zone.memory_levels)
+			visit_memory_levels(g.zone.temp_memory_levels)
+		end
+		visit_memory_levels(g.memory_levels)
+	end
+
+	return changed
+end
+
 function M.rename(b, base, data, state)
 	if not zh() then return end
 	if type(b) ~= "table" or b.randboss ~= true then return end
@@ -810,7 +920,7 @@ function M.rename(b, base, data, state)
 	local expected_id = "RND_BOSS_" .. (orig:upper():gsub("[^A-Z]", "_"))
 	if b.define_as ~= expected_id then return end
 	local meta = rawget(b, "__chn_randboss_name")
-	if type(meta) == "table" and meta.text == orig then return end
+	if type(meta) == "table" and (meta.text == orig or meta.original == orig) then return end
 	local prefix, X, suffix = M.extract_personal_slot(orig, base, data)
 	if not prefix then return end
 	local affixes = prefix .. suffix
@@ -899,7 +1009,9 @@ function M.rename(b, base, data, state)
 		rawset(state, "__chn_randboss_ledger", ledger)
 	end
 	rawset(b, "__chn_randboss_name", new_meta)
-	b.name = new_name
+	if M.is_enabled() then
+		b.name = new_name
+	end
 end
 
 return M

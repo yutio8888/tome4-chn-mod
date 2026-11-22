@@ -9,7 +9,9 @@ I18N:loadLocale("/data-chn-mod/chn_supplement.lua")
 -- Chinese sentence has no whitespace around them.
 local talent_description_diff = dofile("/hooks/chn-mod/talent_description_diff.lua")
 local dynamic_desc_fixes = dofile("/hooks/chn-mod/dynamic_desc_fixes.lua")
+local chn_options = dofile("/hooks/chn-mod/chn_options.lua")
 talent_description_diff.install()
+chn_options.install()
 
 local _popup = engine.ui.Dialog.listPopup
 function engine.ui.Dialog:listPopup(title, text, list, ...)

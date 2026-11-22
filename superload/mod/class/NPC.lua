@@ -33,4 +33,18 @@ if not rawget(_M, "__chn_doEmote") then
     end
 end
 
+local ok_boss, BossNames = pcall(dofile, "/hooks/chn-mod/random_boss_names.lua")
+if not ok_boss then BossNames = dofile("hooks/random_boss_names.lua") end
+local function pack(...) return {n = select("#", ...), ...} end
+
+if not rawget(_M, "__chn_loaded") and type(_M.loaded) == "function" then
+    _M.__chn_loaded = true
+    local _loaded = _M.loaded
+    function _M:loaded(...)
+        local res = pack(_loaded(self, ...))
+        pcall(BossNames.sync_actor, self)
+        return unpack(res, 1, res.n)
+    end
+end
+
 return _M

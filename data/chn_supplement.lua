@@ -88,3 +88,19 @@ t([[You "gently" slam your saws into the wounds of a creature, dealing %d%% weap
 		效果触发时，血流将喷射而出，对半径 4 的窄锥形范围内所有生物造成 %0.2f 物理伤害。
 		效果强度和伤害受蒸汽强度加成。
 		#{italic}#科技的奇迹，如今为真正的屠戮效力！#{normal}#]], "tformat")
+
+--section "chn options"
+-- hooks/chn_options.lua: Game Options "Localization" tab and random boss / artifact Chinese naming toggles.
+t("Localization", "汉化", "_t")
+t("#GOLD##{bold}#Chinese random boss names#WHITE##{normal}#", "#GOLD##{bold}#随机怪物中文命名#WHITE##{normal}#", "_t")
+t([[Generate culturally-grouped Chinese names for random rare and epic bosses in Simplified Chinese mode.
+Default is enabled. Only takes effect when the game language is Simplified Chinese.
+When disabled, existing and newly generated random bosses immediately revert to their original names. Re-enabling restores their Chinese names (previously written combat log lines are not retroactively changed).#WHITE#]], [[在简体中文模式下，为随机生成的稀有与史诗怪物生成按种族文化分组的中文名称。
+默认开启，仅当游戏语言为简体中文时生效。
+关闭后，新生成及当前存档中已生成的随机怪物均会立即回退为原版名称；再次开启时可恢复其中文名称（已写入的历史战斗日志不会追溯更改）。#WHITE#]], "_t")
+t("#GOLD##{bold}#Chinese random artifact names#WHITE##{normal}#", "#GOLD##{bold}#随机神器中文命名#WHITE##{normal}#", "_t")
+t([[Generate thematic Chinese names for identified random artifacts in Simplified Chinese mode.
+Default is enabled. Only takes effect when the game language is Simplified Chinese.
+When disabled, all random artifacts immediately display their original names. Re-enabling immediately restores their Chinese names.#WHITE#]], [[在简体中文模式下，为已鉴定的随机神器生成契合材质与元素主题的中文名称。
+默认开启，仅当游戏语言为简体中文时生效。
+关闭后，所有随机神器将立即显示原版名称；再次开启时立即恢复中文名称。#WHITE#]], "_t")
