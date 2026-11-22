@@ -21,6 +21,8 @@
 
 local _M = loadPrevious(...)
 
+local random_artifact_names = dofile("/hooks/chn-mod/random_artifact_names.lua")
+
 local function pack(...) return {n = select("#", ...), ...} end
 
 -- add_name is appended untranslated, so the shield " (#ARMOR#, #SHIELD#)"
@@ -29,7 +31,16 @@ local function pack(...) return {n = select("#", ...), ...} end
 if not rawget(_M, "__chn_getName") then
     _M.__chn_getName = true
     local _getName = _M.getName
+    local function renderName(self, opts, res, first)
+        if res.n >= first and rawget(self, "__chn_randart_name") then
+            -- Optional presentation only; leave the stock return shape intact.
+            local ok, renamed = pcall(random_artifact_names.decorate, self, opts, res[first])
+            if ok then res[first] = renamed end
+        end
+        return unpack(res, first, res.n)
+    end
     function _M:getName(...)
+        local opts = select(1, ...)
         local add_name = self.add_name
         if type(add_name) == "string" then
             local tr = _t(add_name, "entity add_name")
@@ -39,10 +50,11 @@ if not rawget(_M, "__chn_getName") then
                 local res = pack(pcall(_getName, self, ...))
                 rawset(self, "add_name", raw)
                 if not res[1] then error(res[2], 0) end
-                return unpack(res, 2, res.n)
+                return renderName(self, opts, res, 2)
             end
         end
-        return _getName(self, ...)
+        if not rawget(self, "__chn_randart_name") then return _getName(self, ...) end
+        return renderName(self, opts, pack(_getName(self, ...)), 1)
     end
 end
 
