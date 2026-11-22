@@ -69,6 +69,7 @@ t("#rng# the Storm Terror", "风暴灾星#rng#", "_t")
 t("#rng# the Caustic Terror", "蚀毒灾星#rng#", "_t")
 t("#rng# the Tortured Mass", "受难肉团#rng#", "_t")
 t("Tortured Mass #rng#", "受难肉团#rng#", "_t")
+t("#rng# the Invoker", "祈唤者#rng#", "_t")
 
 --section "objects"
 -- Shield add_name (data/general/objects/shields.lua); the attribute parts

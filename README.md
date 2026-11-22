@@ -8,10 +8,11 @@
 
 | 部分 | 说明 |
 |---|---|
-| 核心 tome 译文 | 8,153 条覆盖/新增条目（相对官方中文 locale） |
+| 核心 tome 译文 | 8,147 条覆盖/新增条目（相对官方中文 locale） |
 | 引擎译文 | 207 条与官方中文 engine locale 不同的条目（游戏内对话框、日志、日期等；启动菜单仍为官方译文） |
 | 官方 DLC 译文 | Ashes of Urh'Rok 743、Cults of Entropy 1,569、Embers of Rage 3,149，共 5,461 条 |
 | Nullpackreloaded 支持 | 443 条译文 + 特殊物品运行时挂钩 |
+| 随机怪物/随机神器中文命名与游戏内「汉化」选项页 | 按种族文化分组的随机稀有/史诗/Boss 怪物中文命名、按材质与元素主题叙事词池生成的随机神器中文命名，以及游戏选项新增「汉化」设置页（两条独立实时开关，关闭即回退原名、重开还原中文名，不污染存档与随机数）（`data/chn_*.lua` + `hooks/random_boss_names.lua` + `hooks/random_artifact_names.lua` + `hooks/chn_options.lua`） |
 | 运行时挂钩 | 角色面板、技能、出生描述、游戏选项等文本翻译注入；商店标题、按键分组、成就分类、自动探索中断原因、使用技能窗口、生物子类型「光」等硬编码文本的翻译与显示修正，以及 Embers 血流与自动修复系统的动态说明数值修正（`data/chn_supplement.lua` + `superload/` + `hooks/dynamic_desc_fixes.lua`） |
 
 译文由 `tome4-chinese-translation` 工具链确定性构建（`tools/i18n publish`），

@@ -2872,7 +2872,7 @@ t("About what happened on the beach, I think I have found something.", "关于�
 t([[I do not know yet, my father won't let me out until I'm fully healed. I've always wanted to do so many things.
 That is why I got stuck in that crypt, I want to see the world.
 My father gave me some funds so that I can take my future into my own hands. I have some friends in Derth, maybe I will open my own little shop there. ]], [[我现在还不知道，在我完全康复之前我父亲都不准我出门。我一直想做很多事情。
-我就是因为想去看看外面的世界，才会被困在那个地宫里。
+我就是因为想去看看外面的世界，才会被困在那个地窖里。
 我父亲给了我一笔钱，让我能够自己把握未来。我在德斯镇有几个朋友，也许我会在那里开一家属于自己的小店。]], "_t")
 t("I have seen how you fought those corruptors, the way you destroyed their magic. I want to learn to do the same, so that such horrors never happen again. To anyone.", "我见过你对抗那些腐化者、摧毁他们魔法的样子。我也想学会这些，这样，可怕的惨剧就再也不会发生在任何人身上了。", "_t")
 t([[Or maybe, well I suppose I can trust you with this, I've always secretly dreamed of learning magic. Real magic I mean not alchemist tricks!
@@ -4057,8 +4057,7 @@ t("%s resists the gravity!", "%s抵抗了引力！", "logSeen")
 section "mod-tome/data/general/encounters/fareast.lua"
 
 t("Underwater Cave", "水下洞穴", "entity name")
-t("Shadow Crypt", "阴影地宫", "entity name")
-t("Entrance to a dark crypt", "阴影地宫入口", "_t")
+t("Entrance to a dark crypt", "阴影地窖入口", "_t")
 
 ------------------------------------------------
 section "mod-tome/data/general/encounters/maj-eyal-npcs.lua"
@@ -4073,10 +4072,9 @@ t("You find a hidden trap door, and hear cries for help from within...", "你发
 t("#LIGHT_RED#You carefully open the trap door and enter the underground tunnels...", "#LIGHT_RED#你小心打开地板上的活门进入了地下通道……", "logPlayer")
 t("#LIGHT_RED#As you enter you notice the trap door has no visible handle on the inside. You are stuck here!", "#LIGHT_RED#进入地道后，你发现活门内侧看不到任何把手，你被关在这里了！", "logPlayer")
 t([[You find an entrance to an old crypt. An aura of terrible evil emanates from this place. You feel threatened just standing there.
-You hear the muffled cries of a woman coming from inside.]], [[你发现了一个古老地宫的入口，里面笼罩着恐怖的邪恶气息，仅仅站在门口你就已经感受到了它的威胁。
+You hear the muffled cries of a woman coming from inside.]], [[你发现了一个古老地窖的入口，里面笼罩着恐怖的邪恶气息，仅仅站在门口你就已经感受到了它的威胁。
 你听到里面隐约传来一个女人沉闷的哭喊声。]], "_t")
-t("#LIGHT_RED#You carefully open the door and enter the underground crypt...", "#LIGHT_RED#你小心翼翼地打开门，进入了地下的地宫……", "logPlayer")
-t("Enter the crypt", "进入地宫", "_t")
+t("#LIGHT_RED#You carefully open the door and enter the underground crypt...", "#LIGHT_RED#你小心翼翼地打开门，进入了地下的地窖……", "logPlayer")
 t("Ancient Elven Ruins", "远古精灵遗迹", "entity name")
 t("Hidden compound", "隐藏的营地", "_t")
 t("Tranquil Meadow", "宁静的草地", "entity name")
@@ -12211,14 +12209,9 @@ section "mod-tome/data/maps/vaults/auto/lesser/loot-vault.lua"
 t("Mocking Note", "嘲弄字条", "_t")
 
 ------------------------------------------------
-section "mod-tome/data/maps/vaults/greater-crypt.lua"
-
-t(", and the crypt rearranges itself around you!", "，突然，你周围地宫的地形自己改变了！", "_t")
-
-------------------------------------------------
 section "mod-tome/data/maps/vaults/renegade-pyromancers.lua"
 
-t("#rng# the Invoker", "祈唤者#rng#", "_t")
+t("#rng# the Invoker", "#rng#祈唤者", "_t")
 
 ------------------------------------------------
 section "mod-tome/data/maps/vaults/renegade-wyrmics.lua"
@@ -12429,10 +12422,10 @@ t("#VIOLET#Berethh lies dead.", "#VIOLET#贝里斯死了。", "logPlayer")
 ------------------------------------------------
 section "mod-tome/data/quests/kryl-feijan-escape.lua"
 
-t("You discovered a sect worshipping a demon named Kryl-Feijan in a crypt.", "你在一个地宫中发现了一个教派，他们崇拜一个名叫卡洛·斐济的恶魔。", "_t")
+t("You discovered a sect worshipping a demon named Kryl-Feijan in a crypt.", "你在一个地窖中发现了一个教派，他们崇拜一个名叫卡洛·斐济的恶魔。", "_t")
 t("They were trying to bring it back into the world using a human sacrifice.", "他们试图用献祭活人来召唤恶魔到这个世界上。", "_t")
 t("You defeated the acolytes and saved the woman. She told you she is the daughter of a rich merchant of Last Hope.", "你打败了那些侍僧并救下了这个女人。她告诉你，她是最后的希望城中一位富商的女儿。", "_t")
-t("You failed to protect her when escorting her out of the crypt.", "你没能在护送她离开这个地宫时保护好她。", "_t")
+t("You failed to protect her when escorting her out of the crypt.", "你没能在护送她离开这个地窖时保护好她。", "_t")
 t("You failed to defeat the acolytes in time - the woman got torn apart by the demon growing inside her.", "你没能及时杀死那些侍僧，那个女人被在她体内成长的恶魔撕成了碎片。", "_t")
 
 ------------------------------------------------
@@ -18963,7 +18956,6 @@ t([[Your mastery of necromancy becomes so total that an aura of undeath radiates
 ------------------------------------------------
 section "mod-tome/data/talents/spells/master-of-bones.lua"
 
-t("Call of the Crypt", "地宫召唤", "talent name")
 t([[Call upon the battlefields of old, collecting bones, fusing them with souls, and forging them into skeletal minions.
 		Up to %d skeleton warriors of level %d are summoned, and up to %d skeletons can be controlled at once.
 		At level 3 the summons become armoured skeletons warriors.
@@ -24992,7 +24984,6 @@ t("Whispers seem to ceaselessly emanate from this writhing mass of black tentacl
 ------------------------------------------------
 section "mod-tome/data/zones/crypt-kryl-feijan/zone.lua"
 
-t("Crypt", "地宫", "_t")
 t("The woman lets out a sudden ear-splitting scream that turns from pain to horror as her stomach is ripped open from within by long dark claws. A towering black demon arises, rending her flesh to shreds, and replacing her dying scream with a terrifying roar.", "这个女人突然发出一声震耳欲聋的尖叫，叫声由痛苦转为惊恐——修长的黑色利爪从内部撕开了她的腹部。一个铁塔般的黑色恶魔站了起来，将她的血肉撕成碎片，她临终的惨叫被一声骇人的咆哮取代。", "_t")
 
 ------------------------------------------------
@@ -25731,11 +25722,6 @@ section "mod-tome/data/zones/shadow-crypt/npcs.lua"
 t("but nobody knew why they suddenly became evil", "但是没有人知道其为何突然变得邪恶了", "_t")
 t("As your shade dies, the magical veil protecting the stairs out vanishes.", "随着你的阴影死去，保护出口楼梯的魔法护罩消失了。", "logSeen")
 t("Ra'kk kor merk ZUR!!!", "拉克·科尔·默克·祖尔！！！", "_t")
-
-------------------------------------------------
-section "mod-tome/data/zones/shadow-crypt/zone.lua"
-
-t("Shadow Crypt", "阴影地宫", "_t")
 
 ------------------------------------------------
 section "mod-tome/data/zones/shertul-fortress/grids.lua"
