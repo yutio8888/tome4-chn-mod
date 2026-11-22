@@ -12218,7 +12218,7 @@ t(", and the crypt rearranges itself around you!", "，突然，你周围地宫�
 ------------------------------------------------
 section "mod-tome/data/maps/vaults/renegade-pyromancers.lua"
 
-t("#rng# the Invoker", "#rng#祈唤者", "_t")
+t("#rng# the Invoker", "祈唤者#rng#", "_t")
 
 ------------------------------------------------
 section "mod-tome/data/maps/vaults/renegade-wyrmics.lua"
