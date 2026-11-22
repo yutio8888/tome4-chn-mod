@@ -27,10 +27,10 @@ local function gcd(a, b)
 	return a
 end
 
--- 0. Full 48-cohort capacity, connector-collapsed core count (>= 2000), coprime stride,
+-- 0. Full 66-cohort capacity, connector-collapsed core count (>= 5000), coprime stride,
 --    and all 23 fixed bases x 6 pools collision audit against V1, ToME zh_hans.lua, and addon zh_hans.lua
 local pool_names = { "neutral", "fire", "cold", "lightning", "light", "darkness" }
-local family_names = { "blade", "blunt", "ranged", "focus", "shield", "garb", "gear", "jewelry" }
+local family_names = { "blade", "blunt", "cleave", "ranged", "focus", "shield", "robe", "mail", "gear", "stride", "jewelry" }
 
 local v1_titles = {}
 for _, p in ipairs(pool_names) do
@@ -111,7 +111,7 @@ for _, p in ipairs(pool_names) do
 		end
 	end
 end
-assert(total_cohorts == 48, "expected 48 cohorts")
+assert(total_cohorts == 66, "expected 66 cohorts")
 
 -- Audit all 23 fixed bases x 6 pools (138 base-pool combinations) against V1, plain entity names, and quoted inner titles
 local base_pool_combinations = 0
@@ -152,10 +152,14 @@ assert(not cohort_title_map.lightning["风暴之怒"], "风暴之怒 must be exp
 -- 0b. Subtype semantic compatibility audit across families
 local forbidden_by_family = {
 	blade = { "剑" },
-	blunt = { "锤", "斧" },
+	blunt = { "锤", "斧", "槌" },
+	cleave = { "锤", "斧", "槌" },
 	ranged = { "弓", "箭", "羽", "矢", "镝", "弦" },
-	garb = { "衣", "袍", "甲", "铠", "衫", "裳", "胄" },
-	gear = { "步", "足", "掌", "冠", "腰", "额", "顶" },
+	shield = { "盾" },
+	robe = { "衣", "袍", "甲", "铠", "衫", "裳", "胄" },
+	mail = { "衣", "袍", "甲", "铠", "衫", "裳", "胄" },
+	gear = { "步", "足", "掌", "冠", "腰", "额", "顶", "靴", "履" },
+	stride = { "掌", "冠", "腰", "额", "顶", "靴" },
 }
 for fam, bad_chars in pairs(forbidden_by_family) do
 	local audit = names.audit_cohort("neutral", fam, "长剑")
