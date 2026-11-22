@@ -27,10 +27,10 @@ local function gcd(a, b)
 	return a
 end
 
--- 0. Full 48-cohort capacity, connector-collapsed core count (>= 2000), coprime stride,
+-- 0. Full 66-cohort capacity, connector-collapsed core count (>= 5000), coprime stride,
 --    and all 23 fixed bases x 6 pools collision audit against V1, ToME zh_hans.lua, and addon zh_hans.lua
 local pool_names = { "neutral", "fire", "cold", "lightning", "light", "darkness" }
-local family_names = { "blade", "blunt", "ranged", "focus", "shield", "garb", "gear", "jewelry" }
+local family_names = { "blade", "blunt", "cleave", "ranged", "focus", "shield", "robe", "mail", "gear", "stride", "jewelry" }
 
 local v1_titles = {}
 for _, p in ipairs(pool_names) do
@@ -90,12 +90,12 @@ for _, p in ipairs(pool_names) do
 			string.format("stride %d not coprime with raw_slots %d for (%s,%s)", names.PROBE_STRIDE, audit.raw_slots, p, f)
 		)
 		assert(
-			audit.core_count >= 2000,
-			string.format("cohort (%s, %s) connector-collapsed core_count %d < 2000", p, f, audit.core_count)
+			audit.core_count >= 5000,
+			string.format("cohort (%s, %s) connector-collapsed core_count %d < 5000", p, f, audit.core_count)
 		)
 		assert(
-			audit.normalized_count >= 6000,
-			string.format("cohort (%s, %s) normalized_count %d < 6000", p, f, audit.normalized_count)
+			audit.normalized_count >= 12000,
+			string.format("cohort (%s, %s) normalized_count %d < 12000", p, f, audit.normalized_count)
 		)
 		if audit.raw_slots < min_raw then min_raw = audit.raw_slots end
 		if audit.normalized_count < min_norm then min_norm = audit.normalized_count end
@@ -111,7 +111,7 @@ for _, p in ipairs(pool_names) do
 		end
 	end
 end
-assert(total_cohorts == 48, "expected 48 cohorts")
+assert(total_cohorts == 66, "expected 66 cohorts")
 
 -- Audit all 23 fixed bases x 6 pools (138 base-pool combinations) against V1, plain entity names, and quoted inner titles
 local base_pool_combinations = 0
@@ -125,7 +125,7 @@ for typ, subs in pairs(rules.base_names) do
 		for _, p in ipairs(pool_names) do
 			base_pool_combinations = base_pool_combinations + 1
 			local audit = names.audit_cohort(p, fam, base)
-			assert(audit.core_count >= 2000, string.format("base %s (%s:%s) core_count %d < 2000", base, p, fam, audit.core_count))
+			assert(audit.core_count >= 5000, string.format("base %s (%s:%s) core_count %d < 5000", base, p, fam, audit.core_count))
 			for i = 1, #audit.list do
 				local full = audit.list[i]
 				local title = full:match("「(.-)」")
@@ -152,10 +152,14 @@ assert(not cohort_title_map.lightning["风暴之怒"], "风暴之怒 must be exp
 -- 0b. Subtype semantic compatibility audit across families
 local forbidden_by_family = {
 	blade = { "剑" },
-	blunt = { "锤", "斧" },
+	blunt = { "锤", "斧", "槌" },
+	cleave = { "锤", "斧", "槌" },
 	ranged = { "弓", "箭", "羽", "矢", "镝", "弦" },
-	garb = { "衣", "袍", "甲", "铠", "衫", "裳", "胄" },
-	gear = { "步", "足", "掌", "冠", "腰", "额", "顶" },
+	shield = { "盾" },
+	robe = { "衣", "袍", "甲", "铠", "衫", "裳", "胄" },
+	mail = { "衣", "袍", "甲", "铠", "衫", "裳", "胄" },
+	gear = { "步", "足", "掌", "冠", "腰", "额", "顶", "靴", "履" },
+	stride = { "掌", "冠", "腰", "额", "顶", "靴" },
 }
 for fam, bad_chars in pairs(forbidden_by_family) do
 	local audit = names.audit_cohort("neutral", fam, "长剑")
@@ -548,7 +552,7 @@ assert(
 )
 assert(totally_exhausted_item.__chn_randart_name.issued == false)
 
--- 11. Ledger MAX_LEDGER (4096) Capacity Boundary & 4097th Item Stock Fallback
+-- 11. Ledger MAX_LEDGER (8192) Capacity Boundary & 8193th Item Stock Fallback
 reset_ledger(nil)
 local cap_seen = {}
 for i = 1, names.MAX_LEDGER do
@@ -564,31 +568,31 @@ for i = 1, names.MAX_LEDGER do
 	})
 	local disp = item:getName{ no_add_name = true, no_count = true }
 	assert(disp ~= "倒霉的铁剑" and disp:find("「", 1, true))
-	assert(not cap_seen[disp], "duplicate V2 name before 4096 boundary at #" .. tostring(i))
+	assert(not cap_seen[disp], "duplicate V2 name before 8192 boundary at #" .. tostring(i))
 	cap_seen[disp] = true
 end
-assert(state.__chn_randart_ledger.count == 4096)
+assert(state.__chn_randart_ledger.count == 8192)
 
-local item_4097 = state:generateRandart(artifact{
-	unique = "CapUnique_4097",
-	define_as = "RANDART_CAP_4097",
+local item_8193 = state:generateRandart(artifact{
+	unique = "CapUnique_8193",
+	define_as = "RANDART_CAP_8193",
 	uid = 99999,
 })
-assert(item_4097:getName{ no_add_name = true, no_count = true } == "倒霉的铁剑", "4097th item must fall back to stock display")
-assert(item_4097.__chn_randart_name.issued == false)
-assert(state.__chn_randart_ledger.count == 4096)
+assert(item_8193:getName{ no_add_name = true, no_count = true } == "倒霉的铁剑", "8193th item must fall back to stock display")
+assert(item_8193.__chn_randart_name.issued == false)
+assert(state.__chn_randart_ledger.count == 8192)
 
--- Also verify an item annotated while unidentified before capacity is reached, then identified after capacity is 4096
+-- Also verify an item annotated while unidentified before capacity is reached, then identified after capacity is 8192
 reset_ledger(nil)
 local pre_unid = state:generateRandart(artifact{
 	identified = false,
-	unique = "PreUnid_4097",
-	define_as = "RANDART_PREUNID_4097",
+	unique = "PreUnid_8193",
+	define_as = "RANDART_PREUNID_8193",
 })
 assert(pre_unid.__chn_randart_name.issued == false and pre_unid.__chn_randart_name.text ~= "")
-state.__chn_randart_ledger.count = 4096
+state.__chn_randart_ledger.count = 8192
 pre_unid.identified = true
-assert(pre_unid:getName{ no_add_name = true, no_count = true } == "倒霉的铁剑", "unissued item identified after ledger reaches 4096 must fall back to stock")
+assert(pre_unid:getName{ no_add_name = true, no_count = true } == "倒霉的铁剑", "unissued item identified after ledger reaches 8192 must fall back to stock")
 assert(pre_unid.__chn_randart_name.issued == false)
 
 -- 12. Future Version / Corrupted Ledger Safety: never overwrite unknown ledger, unissued items fall back to stock, issued items still render
@@ -632,6 +636,42 @@ local dict_status = string.format(
 	addon_zh_count,
 	tome_zh_ok and tostring(tome_zh_count) or "SKIPPED"
 )
+
+-- 13. 3-char prefixes/nouns must never use empty connector ""
+local function utf8_len(str)
+	local n, i = 0, 1
+	while i <= #str do
+		local b = str:byte(i)
+		i = i + (b >= 240 and 4 or b >= 224 and 3 or b >= 192 and 2 or 1)
+		n = n + 1
+	end
+	return n
+end
+local saw_three_char_prefix = false
+local saw_three_char_noun = false
+for _, p in ipairs(pool_names) do
+	for _, pref in ipairs(rules.prefixes[p]) do
+		if utf8_len(pref) == 3 then saw_three_char_prefix = true end
+	end
+end
+for _, f in ipairs(family_names) do
+	for _, n in ipairs(rules.nouns_2[f]) do
+		if utf8_len(n) == 3 then saw_three_char_noun = true end
+	end
+end
+assert(saw_three_char_prefix and saw_three_char_noun, "expected 3-char phrases in both prefixes and nouns_2")
+for _, p in ipairs(pool_names) do
+	for _, f in ipairs(family_names) do
+		local audit = names.audit_cohort(p, f, "长剑")
+		for i = 1, #audit.list do
+			local title = audit.list[i]:match("「(.-)」")
+			if not title:find("之", 1, true) and not title:find("的", 1, true) then
+				assert(utf8_len(title) <= 4, "unseparated title exceeds 4 chars: " .. title)
+			end
+		end
+	end
+end
+
 print(string.format(
 	"random artifact naming V2 tests passed (cohorts=%d, base_pools=%d, min_raw=%d, min_norm=%d, min_core=%d [%s], %s)",
 	total_cohorts, base_pool_combinations, min_raw, min_norm, min_core, tostring(min_cohort), dict_status

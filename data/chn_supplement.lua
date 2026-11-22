@@ -61,6 +61,14 @@ t("pinned##bear_trap", "定身", "_t")
 t("When hit the suit's motors displace you quickly, ignoring the blow.", "受到攻击时，战服的马达会迅速将你移开，使你避开这次打击。", "_t")
 -- Only for creature tooltips and the PREDATOR effect's prey subtypes.
 t("light##creature_subtype", "光", "_t")
+-- Vault random boss title word-order fixes (mod-tome/data/maps/vaults/renegade-*.lua):
+-- Put the title before #rng# so Chinese personal names do not run into trailing nouns/adjectives.
+t("#rng# the Flame Terror", "烈焰灾星#rng#", "_t")
+t("#rng# the Frozen Terror", "寒冰灾星#rng#", "_t")
+t("#rng# the Storm Terror", "风暴灾星#rng#", "_t")
+t("#rng# the Caustic Terror", "蚀毒灾星#rng#", "_t")
+t("#rng# the Tortured Mass", "受难肉团#rng#", "_t")
+t("Tortured Mass #rng#", "受难肉团#rng#", "_t")
 
 --section "objects"
 -- Shield add_name (data/general/objects/shields.lua); the attribute parts

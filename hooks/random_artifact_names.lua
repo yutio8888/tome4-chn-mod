@@ -1,7 +1,7 @@
 local rules = dofile("/data-chn-mod/chn_random_names.lua")
 local M = {
 	rules = rules,
-	MAX_LEDGER = 4096,
+	MAX_LEDGER = 8192,
 	PROBE_STRIDE = 2971,
 }
 
@@ -37,10 +37,15 @@ local function utf8_chars(s)
 	return chars
 end
 
-local function valid_core_chars(prefix, noun)
+local function valid_core_chars(prefix, noun, conn)
 	local p_chars = utf8_chars(prefix)
 	local n_chars = utf8_chars(noun)
 	if #p_chars < 2 or #n_chars < 1 then
+		return false
+	end
+	-- Avoid 5+ char unseparated compounds (3+2, 2+3, 3+3 with empty connector);
+	-- 3-char phrases pair naturally with "之" or "的" to form rhythmic 5-7 char titles.
+	if conn == "" and (#p_chars > 2 or #n_chars > 2) then
 		return false
 	end
 	local seen = {}
@@ -200,7 +205,7 @@ local function candidate_at(pool_name, family_name, idx)
 	if not plain_label(noun) or type(conn) ~= "string" then
 		return nil
 	end
-	if not valid_core_chars(prefix, noun) then
+	if not valid_core_chars(prefix, noun, conn) then
 		return nil
 	end
 	local title = prefix .. conn .. noun
